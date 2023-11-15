@@ -18,7 +18,7 @@ Suivez les instructions sur [le site officiel de Poetry](https://python-poetry.o
 Clonez le dépôt Git :
 
 ```shell
-git clone [URL_DU_DEPOT_GIT]
+git clone [[URL_DU_DEPOT_GIT]](https://github.com/mnietona/Projet_3.git)
 cd [NOM_DU_REPO]
 ```
 

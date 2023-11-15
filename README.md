@@ -28,8 +28,7 @@ Ce projet consiste à créer une simulation interactive d'écosystèmes 2D, int�
 Clonez le dépôt Git :
 
 ```shell
-git clone (https://github.com/mnietona/Projet_3.git)
-cd Projet_3
+git clone https://github.com/mnietona/Projet_3.git && cd Projet_3
 ```
 
 Installez les dépendances du projet avec Poetry :

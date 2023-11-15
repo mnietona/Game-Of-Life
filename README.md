@@ -11,7 +11,17 @@ Ce projet consiste à créer une simulation interactive d'écosystèmes 2D, int�
 
 ### Installer Poetry
 
-Suivez les instructions sur [le site officiel de Poetry](https://python-poetry.org/docs/#installation) pour installer Poetry sur votre système.
+- **Sur Windows** : Ouvrez PowerShell ou votre terminal de commande et exécutez :
+
+  ```shell
+  (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+  ```
+
+- **Sur MacOS/Linux** : Ouvrez un terminal et exécutez :
+
+  ```shell
+  curl -sSL https://install.python-poetry.org | python3 -
+  ```
 
 ### Configurer le Projet
 

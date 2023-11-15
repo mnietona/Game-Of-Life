@@ -1,4 +1,3 @@
-Voici le contenu formaté en Markdown pour votre fichier `README.md`. Vous pouvez le copier et le coller directement :
 # Simulation d'Écosystèmes 2
 
 ### Description du Projet

@@ -98,9 +98,6 @@ class Cell(Rectangle):
 
         ...
 
-    def initialiseMap(self, matrice):
-        ...
-
     def get_info(self):
         if self.animal != None and self.climat != None:
             return f"Un {self.animal} dans un biome {self.climat}"
@@ -129,6 +126,12 @@ class Grid:
 
     def getCellInfo(self,x,y):
         return self.cells[x][y].get_info()
+    
+    def initialiseMap(self, matrice):
+        """
+        prendre une matrice de 100 x 100 d'information et transforme directement 
+        """
+        ...
     
 
 class Screen:

@@ -5,6 +5,9 @@ class MainMenu:
         self.screen = screen
         self.start_button = pygame.Rect(150, 175, 100, 50)  # Position et taille du bouton
 
+    def resize(self, new_width, new_height):
+        self.start_button = pygame.Rect(new_width / 2 - 50, new_height / 2 - 25, 100, 50)
+                                        
     def render(self):
         self.screen.fill((255, 255, 255))  # Fond blanc
         pygame.draw.rect(self.screen, (0, 0, 0), self.start_button)  # Bouton noir

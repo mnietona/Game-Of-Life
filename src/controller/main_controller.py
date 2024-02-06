@@ -8,10 +8,10 @@ from controller.controller_grid import ControllerGrid
 class MainController:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((400, 400))
+        self.screen = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
         pygame.display.set_caption("Game Of the Live")
 
-        self.grid = Grid(20)  # Taille de la grille
+        self.grid = Grid(100)  # Taille de la grille
         self.main_menu_view = MainMenu(self.screen)
         self.grid_view = GridView(self.screen, self.grid)
 
@@ -27,6 +27,9 @@ class MainController:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                elif event.type == pygame.VIDEORESIZE:
+                    self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                    self.current_view.resize(event.w, event.h)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.current_controller.handle_event(event):
                         self.current_view = self.grid_view

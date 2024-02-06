@@ -10,7 +10,7 @@ class MainController:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1200, 816))
-        pygame.display.set_caption("Game Of the Live")
+        pygame.display.set_caption("Ecosstemme Pixel")
         self.grid = Grid(50, 20)
         self.views = {
             "main_menu": MainMenu(self.screen, self.switch_to_grid_view),

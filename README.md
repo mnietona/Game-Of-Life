@@ -64,5 +64,5 @@ Poetry mettra à jour le fichier `pyproject.toml` et le fichier `poetry.lock`.
 Pour exécuter le projet, utilisez la commande suivante :
 
 ```shell
-python3 src/test.py
+python3 src/main.py
 ```

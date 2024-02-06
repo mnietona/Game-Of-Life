@@ -29,28 +29,28 @@ class MainMenu:
         self.background_image = pygame.transform.scale(self.background_image, (self.screen.get_width(), self.screen.get_height()))  # Redimensionnez l'image
 
         self.background2 = pygame.image.load("fond3.png")
-        self.background2 = pygame.transform.scale(self.background2,(1500,650))
+        self.background2 = pygame.transform.scale(self.background2,(1450,650))
 
-        self.slider_grid = Slider(self.screen, 500, 600, 200, 15, min=10, max=100, step=10, initial=50)
-        self.output_grid = TextBox(self.screen, 760, 595, 40, 40, fontSize=20)
+        self.slider_grid = Slider(self.screen, 500, 550, 200, 15, min=10, max=100, step=10, initial=50)
+        self.output_grid = TextBox(self.screen, 760, 545, 40, 40, fontSize=20)
         self.output_grid.disable()
         
-        self.slider_temperature = Slider(self.screen, 500, 700, 200, 15, min=-10, max=50, step=5, initial=20)
-        self.output_temperature = TextBox(self.screen, 760, 695, 40, 40, fontSize=20)
+        self.slider_temperature = Slider(self.screen, 500, 650, 200, 15, min=-10, max=50, step=5, initial=20)
+        self.output_temperature = TextBox(self.screen, 760, 645, 40, 40, fontSize=20)
         self.output_temperature.disable()
 
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
 
-        self.screen.blit(self.background2, (-180, 480))
+        self.screen.blit(self.background2, (-150, 430))
         #self.draw_title("Écosystème Pixel")
         #self.draw_texte("La Danse de la Vie", 595, 270, 70)
         self.button.draw()
-        self.draw_texte("Taille de la grille", 500, 570, 30)
+        self.draw_texte("Taille de la grille", 500, 520, 30)
         self.slider_grid.draw()
         self.output_grid.setText(str(self.slider_grid.getValue()))
         self.output_grid.draw()
-        self.draw_texte("Température", 500, 670, 30)
+        self.draw_texte("Température", 500, 620, 30)
         self.slider_temperature.draw()
         self.output_temperature.setText(str(self.slider_temperature.getValue()))
         self.output_temperature.draw()

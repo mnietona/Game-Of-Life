@@ -1,6 +1,6 @@
 import pygame
 
-class ControllerGrid:
+class GridController:
     def __init__(self, model, view):
         self.model = model
         self.view = view

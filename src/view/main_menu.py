@@ -1,50 +1,76 @@
+import pygame_widgets
 import pygame
-from view.slider import Slider
+from pygame_widgets.button import Button
+from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
 
 class MainMenu:
-    def __init__(self, screen):
+    def __init__(self, screen, on_start):
         self.screen = screen
-        self.start_button = pygame.Rect(500, 375, 150, 70)  # Position et taille du bouton
-
-        # Définir les polices
-        self.title_font = pygame.font.Font(None, 100)
-        self.button_font = pygame.font.Font(None, 36)
-
-        # Couleurs
-        self.background_color = (255, 218, 185)
-        self.button_color = (105, 105, 105)
-        self.text_color = (255, 255, 255)  # Blanc
+        self.on_start = on_start
+        self.button = Button(
+            screen, 500, 375, 150, 70,
+            text='Démarrer',
+            fontSize=30, margin=20,
+            inactiveColour=(105, 105, 105),
+            pressedColour=(255, 255, 255), 
+            radius=20,
+            onClick=self.on_start
+        )
         
-        # Curseurs
-        self.grid_size_slider = Slider(screen, 500, 500, 10, 100, initial_value=50)
-        self.temperature_slider = Slider(screen, 500, 600, -10, 50, initial_value=20)
-
+        self.title_font = pygame.font.Font(None, 100)
+        self.background_color = (255, 218, 185)
+        
+        self.slider_grid = Slider(self.screen, 500, 500, 200, 15, min=10, max=100, step=10, initial=50)
+        self.output_grid = TextBox(self.screen, 760, 495, 40, 40, fontSize=20)
+        self.output_grid.disable()
+        
+        self.slider_temperature = Slider(self.screen, 500, 600, 200, 15, min=-10, max=50, step=5, initial=20)
+        self.output_temperature = TextBox(self.screen, 760, 595, 40, 40, fontSize=20)
+        self.output_temperature.disable()
 
     def render(self):
         self.screen.fill(self.background_color)
         self.draw_title("Game Of The Live")
-        self.draw_rounded_button("Démarrer", self.start_button, self.button_color)
-        self.grid_size_slider.draw()
-        self.temperature_slider.draw()
+        self.button.draw()
+        self.draw_texte("Taille de la grille", 500, 470, 30)
+        self.slider_grid.draw()
+        self.output_grid.setText(str(self.slider_grid.getValue()))
+        self.output_grid.draw()
+        self.draw_texte("Température", 500, 570, 30)
+        self.slider_temperature.draw()
+        self.output_temperature.setText(str(self.slider_temperature.getValue()))
+        self.output_temperature.draw()
+        pygame_widgets.update(pygame.event.get())
 
+    def draw_texte(self, text, x, y, size):
+        font = pygame.font.Font(None, size)
+        text_surface = font.render(text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=(x, y))
+        self.screen.blit(text_surface, text_rect)
+        
     def draw_title(self, text):
-        text_surface = self.title_font.render(text, True, self.text_color)
+        text_surface = self.title_font.render(text, True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=(self.screen.get_width() / 2, 300))
         self.screen.blit(text_surface, text_rect)
-
-    def draw_rounded_button(self, text, rect, color):
-        pygame.draw.rect(self.screen, color, rect, border_radius=15)
-        text_surface = self.button_font.render(text, True, self.text_color)
-        text_rect = text_surface.get_rect(center=rect.center)
-        self.screen.blit(text_surface, text_rect)
     
+    def get_grid_size(self):
+        return self.slider_grid.getValue()
 
-    def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.start_button.collidepoint(event.pos):
-                return True  # Retourner True si le bouton est cliqué
-            
-            self.grid_size_slider.handle_event(event)
-            self.temperature_slider.handle_event(event)
-        return False
+    def get_temperature(self):
+        return self.slider_temperature.getValue()
+
+    def set_widget_active(self, active):
+        if active:
+            self.button.show()
+            self.slider_grid.show()
+            self.output_grid.show()
+            self.slider_temperature.show()
+            self.output_temperature.show()
+        else:
+            self.button.hide()
+            self.slider_grid.hide()
+            self.output_grid.hide()
+            self.slider_temperature.hide()
+            self.output_temperature.hide()
     

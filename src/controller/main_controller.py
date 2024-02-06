@@ -2,44 +2,58 @@ import pygame
 from model.grid import Grid
 from view.main_menu import MainMenu
 from view.grid_view import GridView
-from controller.controller_main_menu import ControllerMainMenu
-from controller.controller_grid import ControllerGrid
+from controller.menu_controller import MenuController
+from controller.grid_controller import GridController
+import pygame_widgets
 
 class MainController:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1200, 816))
         pygame.display.set_caption("Game Of the Live")
-        self.grid_size = 50
-        self.temperature = 20
-        self.grid = Grid(self.grid_size, self.temperature)
-        self.main_menu_view = MainMenu(self.screen)
-        self.grid_view = GridView(self.screen, self.grid)
+        self.grid = Grid(50, 20)
+        self.views = {
+            "main_menu": MainMenu(self.screen, self.switch_to_grid_view),
+            "grid": GridView(self.screen, self.grid)
+        }
+        self.controllers = {
+            "main_menu": MenuController(self.views["main_menu"]),
+            "grid": GridController(self.grid, self.views["grid"])
+        }
 
-        self.main_menu_controller = ControllerMainMenu(self.main_menu_view)
-        self.grid_controller = ControllerGrid(self.grid, self.grid_view)
+        self.current_view = self.views["main_menu"]
+        self.current_controller = self.controllers["main_menu"]
 
-        self.current_view = self.main_menu_view
-        self.current_controller = self.main_menu_controller
+    def switch_view(self, view_name):
+        if view_name == "main_menu":
+            self.views["main_menu"].set_widget_active(True)
+        else:
+            self.views["main_menu"].set_widget_active(False)
+            
+        self.current_view = self.views[view_name]
+        self.current_controller = self.controllers[view_name]
+
+    def switch_to_grid_view(self):
+        
+        grid_size = self.views["main_menu"].get_grid_size()
+        temperature = self.views["main_menu"].get_temperature()
+
+        self.grid = Grid(grid_size, temperature)
+        
+        self.views["grid"] = GridView(self.screen, self.grid)
+
+        self.switch_view("grid")
 
     def run(self):
         running = True
         while running:
-            for event in pygame.event.get():
+            events = pygame.event.get()
+            for event in events:
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.current_controller.handle_event(event):
-                        # Utiliser les valeurs des curseurs pour configurer la grille
-                        self.grid_size = self.main_menu_view.grid_size_slider.get_value()
-                        self.temperature = self.main_menu_view.temperature_slider.get_value()
-                        print(self.grid_size, self.temperature)
-                        # Mettre à jour le modèle Grid ici en fonction de ces valeurs
-                        self.current_view = self.grid_view
-                        self.current_controller = self.grid_controller
 
             self.current_view.render()
+            pygame_widgets.update(events)
             pygame.display.flip()
 
         pygame.quit()
-

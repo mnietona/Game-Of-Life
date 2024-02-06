@@ -19,7 +19,9 @@ class MainMenu:
         )
         
         self.title_font = pygame.font.Font(None, 100)
-        self.background_color = (255, 218, 185)
+        self.background_image = pygame.image.load('fond2.jpg')  # Chargez l'image de fond
+        self.background_image = pygame.transform.scale(self.background_image, (self.screen.get_width(), self.screen.get_height()))  # Redimensionnez l'image
+
         
         self.slider_grid = Slider(self.screen, 500, 500, 200, 15, min=10, max=100, step=10, initial=50)
         self.output_grid = TextBox(self.screen, 760, 495, 40, 40, fontSize=20)
@@ -30,8 +32,9 @@ class MainMenu:
         self.output_temperature.disable()
 
     def render(self):
-        self.screen.fill(self.background_color)
-        self.draw_title("Game Of The Live")
+        self.screen.blit(self.background_image, (0, 0))
+        #self.draw_title("Écosystème Pixel")
+        #self.draw_texte("La Danse de la Vie", 595, 270, 70)
         self.button.draw()
         self.draw_texte("Taille de la grille", 500, 470, 30)
         self.slider_grid.draw()
@@ -50,8 +53,8 @@ class MainMenu:
         self.screen.blit(text_surface, text_rect)
         
     def draw_title(self, text):
-        text_surface = self.title_font.render(text, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(self.screen.get_width() / 2, 300))
+        text_surface = self.title_font.render(text, True, (254, 254, 254))
+        text_rect = text_surface.get_rect(center=(self.screen.get_width() / 2, 200))
         self.screen.blit(text_surface, text_rect)
     
     def get_grid_size(self):

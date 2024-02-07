@@ -1,8 +1,8 @@
 import pygame
 from model.grid import Grid
-from view.main_menu import MainMenu
+from src.view.welcom_view import WelcomeView
 from view.grid_view import GridView
-from controller.menu_controller import MenuController
+from src.controller.welcom_controller import WelcomeController
 from controller.grid_controller import GridController
 import pygame_widgets
 
@@ -13,11 +13,11 @@ class MainController:
         pygame.display.set_caption("Ecosstemme Pixel")
         self.grid = Grid(50, 20)
         self.views = {
-            "main_menu": MainMenu(self.screen, self.switch_to_grid_view),
+            "main_menu": WelcomeView(self.screen, self.switch_to_grid_view),
             "grid": GridView(self.screen, self.grid)
         }
         self.controllers = {
-            "main_menu": MenuController(self.views["main_menu"]),
+            "main_menu": WelcomeController(self.views["main_menu"]),
             "grid": GridController(self.grid, self.views["grid"])
         }
 

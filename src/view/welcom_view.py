@@ -4,7 +4,7 @@ from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from pygame_widgets.textbox import TextBox
 
-class MainMenu:
+class WelcomeView:
     def __init__(self, screen, on_start):
         self.screen = screen
         self.on_start = on_start

@@ -61,8 +61,5 @@ class GridView:
     
     def generate_info_lines(self, i, j, info):
         return [
-            f"Cell ({i}, {j})",
-            f"Temperature: {info[0]}",
-            f"Humidity: {info[1]}",
-            # Add other info lines as needed
-        ]
+            f"Cell ({i}, {j})"        ]
+

@@ -12,7 +12,6 @@ class GridController:
             if self.is_valid_cell(i, j):
                 self.view.show_cell_info(i, j)
             
-
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
         i = (y - 10) // cell_size
@@ -21,3 +20,5 @@ class GridController:
 
     def is_valid_cell(self, i, j):
         return 0 <= i < self.model.size and 0 <= j < self.model.size
+
+    

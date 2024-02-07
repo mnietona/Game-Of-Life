@@ -13,7 +13,6 @@ class WelcomeView:
         self.background_image = self.load_image('images/background2.jpg', screen.get_width(), screen.get_height())
 
     def init_ui_elements(self):
-        # Initialiser les éléments de l'interface utilisateur ici
         self.button = Button(self.screen, 470, 375, 245, 65, text='', fontSize=30, margin=20, 
                              inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
                              radius=20, onClick=self.on_start, image=self.load_image("images/start.png", 320, 250),

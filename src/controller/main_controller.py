@@ -35,7 +35,7 @@ class MainController:
         self.current_controller = self.controllers[view_name]
 
     def switch_to_grid_view(self):
-        click_sound = pygame.mixer.Sound('a.mp3')
+        click_sound = pygame.mixer.Sound('images/a.mp3')
         click_sound.play()
         grid_size = self.views["main_menu"].get_grid_size()
         temperature = self.views["main_menu"].get_temperature()

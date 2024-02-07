@@ -41,7 +41,7 @@ class Grid:
             for j in range(self.size):
                 if self.is_safe_for_carrot(i, j):
                     potential_locations.append((i, j))
-                    break
+                    
 
         if potential_locations:
             x, y = random.choice(potential_locations)

@@ -26,15 +26,26 @@ class GridView:
             self.redraw_cell_info(*self.selected_cell_info)
         
         pygame_widgets.update(pygame.event.get())
-
-        
-        
-        
+    
     def draw_cells(self):
         for i in range(self.grid.size):
             for j in range(self.grid.size):
                 rect = pygame.Rect(10 + j * self.cell_size, 10 + i * self.cell_size, self.cell_size, self.cell_size)
-                pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)
+                cell_element = self.grid.cells[i][j].element
+
+                # Choix de la couleur en fonction du type d'élément dans la cellule
+                if cell_element.type == "Plant":
+                    color = (0, 255, 0)  # Vert pour les plantes
+                elif cell_element.type == "Carrot":
+                    color = (255, 165, 0)  # Orange pour les carottes
+                elif cell_element.type == "Rabbit":
+                    color = (128, 128, 128)  # Gris pour les lapins
+                else:
+                    color = (255, 255, 255)  # Blanc pour les cellules vides
+
+                pygame.draw.rect(self.screen, color, rect)
+                pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
+
 
     def init_info_box(self):
         self.screen.fill((220, 220, 220), self.info_box)
@@ -61,5 +72,7 @@ class GridView:
     
     def generate_info_lines(self, i, j, info):
         return [
-            f"Cell ({i}, {j})"        ]
+            f"Cell ({i}, {j})",
+            f"Element: {info[0]}"
+            ]
 

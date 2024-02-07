@@ -9,7 +9,7 @@ class MainController:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1200, 816))
-        pygame.display.set_caption("Ecosystème Pixel")
+        pygame.display.set_caption("Game Of Life")
         self.grid = Grid(50,20)
         self.init_views_and_controllers()
         self.click_sound = pygame.mixer.Sound("images/a.mp3")
@@ -17,7 +17,7 @@ class MainController:
     def init_views_and_controllers(self):
         self.views = {
             "main_menu": WelcomeView(self.screen, self.switch_to_grid_view),
-            "grid": GridView(self.screen, self.grid)  
+            "grid": GridView(self.screen, self.grid, self.switch_to_welcome_view)  
         }
         self.controllers = {
             "main_menu": WelcomeController(self.views["main_menu"]),
@@ -46,15 +46,25 @@ class MainController:
         grid_size = self.views["main_menu"].get_grid_size()
         temperature = self.views["main_menu"].get_temperature()
         self.grid = Grid(grid_size, temperature)
-        self.views["grid"] = GridView(self.screen, self.grid)
+        self.views["grid"] = GridView(self.screen, self.grid, self.switch_to_welcome_view)
         self.controllers["grid"] = GridController(self.grid, self.views["grid"])
         self.switch_view("grid")
+    
+    def switch_to_welcome_view(self):
+        self.click_sound.play()
+        self.views["main_menu"] = WelcomeView(self.screen, self.switch_to_grid_view)
+        self.controllers["main_menu"] = WelcomeController(self.views["main_menu"])
+        self.switch_view("main_menu")
+        
 
     def switch_view(self, view_name):
         if view_name == "main_menu":
             self.views["main_menu"].set_widget_active(True)
+            self.views["grid"].set_widget_active(False)
         else:
             self.views["main_menu"].set_widget_active(False)
+            self.views["grid"].set_widget_active(True)
         self.current_view = self.views[view_name]
         self.current_controller = self.controllers[view_name]
+    
         

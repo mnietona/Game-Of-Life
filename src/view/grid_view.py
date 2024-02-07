@@ -1,22 +1,35 @@
 import pygame
-from model.cell import Cell
+import pygame_widgets
+from pygame_widgets.button import Button
 
 class GridView:
-    def __init__(self, screen, grid):
+    def __init__(self, screen, grid, on_back_to_menu):
         self.screen = screen
         self.grid = grid
+        self.on_back_to_menu = on_back_to_menu
         self.cell_size = 816 // self.grid.size
         self.selected_cell_info = None
         self.info_box = pygame.Rect(880, 120, 200, 200)
         self.font = pygame.font.Font(None, 24)
+        self.init_ui_elements()
 
+
+    def init_ui_elements(self):
+        self.button = Button(self.screen, 880, 350, 200, 50, text='Retour', fontSize=30, margin=20, onClick=self.on_back_to_menu)
+        self.button.hide()
+    
     def render(self):
         self.screen.fill((255, 255, 255))  # Fond blanc
         self.draw_cells()
         self.init_info_box()
         if self.selected_cell_info:
             self.redraw_cell_info(*self.selected_cell_info)
+        
+        pygame_widgets.update(pygame.event.get())
 
+        
+        
+        
     def draw_cells(self):
         for i in range(self.grid.size):
             for j in range(self.grid.size):
@@ -25,7 +38,7 @@ class GridView:
 
     def init_info_box(self):
         self.screen.fill((220, 220, 220), self.info_box)
-
+        
     def show_cell_info(self, i, j):
         cell = self.grid.cells[i][j]
         self.selected_cell_info = (i, j, cell.info())
@@ -38,6 +51,14 @@ class GridView:
             text_surface = self.font.render(line, True, text_color)
             self.screen.blit(text_surface, (self.info_box.x + 5, self.info_box.y + 5 + (line_number * 25)))
 
+    
+    def set_widget_active(self, active):
+        if active:
+            self.button.show()
+        else:
+            self.button.hide()
+    
+    
     def generate_info_lines(self, i, j, info):
         return [
             f"Cell ({i}, {j})",

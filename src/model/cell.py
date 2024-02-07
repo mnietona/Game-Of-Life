@@ -1,7 +1,15 @@
+from model.animals import Animal, Fox, Rabbit
+
 class Cell:
-    def __init__(self, temperature):
-        self.temperature = temperature
-        self.humidity = 0
-    
+    def __init__(self):
+        self.element = None  # Ajout d'un attribut pour l'élément
+
+    def set_element(self, element):
+        self.element = element
+
     def info(self):
-        return [self.temperature, self.humidity]
+        return [self.element]
+
+    def update(self):
+        if self.element is not None:
+            self.element.update()

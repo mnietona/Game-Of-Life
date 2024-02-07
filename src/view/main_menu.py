@@ -37,10 +37,8 @@ class MainMenu:
         #self.output_temperature.disable()
 
         self.font = pygame.font.Font(None, 36)   
-        self.font.set_bold(True)    
+        self.font.set_bold(True)  #j'ai vu apres qu'il y a deja une fonction pour ecrire des textes mais flemme donc à changer  
         
-
-       
 
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
@@ -51,6 +49,8 @@ class MainMenu:
         self.button.draw()
         #self.draw_texte("Taille de la grille", 500, 520, 30)
         self.slider_grid.draw()
+
+        #utilise draw_texte ==> à changer
         self.text_grid = self.font.render(str(self.slider_grid.getValue()), True,  (0,0,0))
         self.screen.blit(self.text_grid, (730, 605)) 
 
@@ -59,8 +59,11 @@ class MainMenu:
         #self.draw_texte("Température", 500, 620, 30)
 
         self.slider_temperature.draw()
+
+        #utilise draw_texte ==> à changer
         self.text_temperature = self.font.render(str(self.slider_temperature.getValue()), True,  (0,0,0))
         self.screen.blit(self.text_temperature, (730, 695)) 
+
         #self.output_temperature.setText(str(self.slider_temperature.getValue()))
         #self.output_temperature.draw()
         pygame_widgets.update(pygame.event.get())

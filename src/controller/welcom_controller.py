@@ -1,5 +1,5 @@
 import pygame
-class MenuController:
+class WelcomeController:
     def __init__(self, view):
         self.view = view
 

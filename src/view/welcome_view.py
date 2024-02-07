@@ -17,9 +17,9 @@ class WelcomeView:
                              inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
                              radius=20, onClick=self.on_start, image=self.load_image("images/start.png", 320, 250),
                              imageHAlign='center')
-        self.slider_grid = Slider(self.screen, 500, 600, 200, 15, min=10, max=100, step=10, initial=50,
-                                  handleColour=(152, 251, 152), colour=(255, 192, 203))
-        self.slider_temperature = Slider(self.screen, 500, 700, 200, 15, min=-10, max=50, step=5, initial=20,
+        self.slider_grid = Slider(self.screen, 500, 610, 200, 15, min=10, max=100, step=10, initial=50,
+                                  colour=(152, 251, 152), handleColour=(255, 192, 203))
+        self.slider_speed = Slider(self.screen, 500, 700, 200, 15, min=1, max=10, step=1, initial=5,
                                          colour=(152, 251, 152), handleColour=(255, 192, 203))
 
     def load_image(self, path, width, height):
@@ -31,8 +31,8 @@ class WelcomeView:
         self.button.draw()
         self.slider_grid.draw()
         self.draw_text(str(self.slider_grid.getValue()), 730, 605, self.font)
-        self.slider_temperature.draw()
-        self.draw_text(str(self.slider_temperature.getValue()), 730, 695, self.font)
+        self.slider_speed.draw()
+        self.draw_text(str(self.slider_speed.getValue()), 730, 695, self.font)
         pygame_widgets.update(pygame.event.get())
 
     def draw_text(self, text, x, y, font):
@@ -42,15 +42,15 @@ class WelcomeView:
     def get_grid_size(self):
         return self.slider_grid.getValue()
 
-    def get_temperature(self):
-        return self.slider_temperature.getValue()
+    def get_speed(self):
+        return self.slider_speed.getValue()
     
     def set_widget_active(self, active):
         if active:
             self.button.show()
             self.slider_grid.show()
-            self.slider_temperature.show()
+            self.slider_speed.show()
         else:
             self.button.hide()
             self.slider_grid.hide()
-            self.slider_temperature.hide()
+            self.slider_speed.hide()

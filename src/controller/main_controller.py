@@ -10,24 +10,24 @@ class MainController:
         pygame.init()
         self.screen = pygame.display.set_mode((1200, 816))
         pygame.display.set_caption("Game Of Life")
-        self.grid = Grid(50,20)
         self.init_views_and_controllers()
         self.click_sound = pygame.mixer.Sound("images/a.mp3")
 
     def init_views_and_controllers(self):
         self.views = {
             "main_menu": WelcomeView(self.screen, self.switch_to_grid_view),
-            "grid": GridView(self.screen, self.grid, self.switch_to_welcome_view)  
+            "grid": None 
         }
         self.controllers = {
             "main_menu": WelcomeController(self.views["main_menu"]),
-            "grid": GridController(self.grid, self.views["grid"])
+            "grid": None
         }
         self.current_view = self.views["main_menu"]
         self.current_controller = self.controllers["main_menu"]
 
     def run(self):
         running = True
+        clock = pygame.time.Clock()
         while running:
             events = pygame.event.get()
             for event in events:
@@ -36,16 +36,24 @@ class MainController:
                 else:
                     self.current_controller.handle_event(event)
 
+            # Mettre à jour la grille si le contrôleur actuel est GridController
+            if isinstance(self.current_controller, GridController):
+                self.current_controller.update()
+
+
             self.current_view.render()
             pygame.display.flip()
+
+            # Limiter la vitesse de la boucle
+            clock.tick(30)  # 30 mises à jour par seconde par exemple
 
         pygame.quit()
 
     def switch_to_grid_view(self):
         self.click_sound.play()
         grid_size = self.views["main_menu"].get_grid_size()
-        temperature = self.views["main_menu"].get_temperature()
-        self.grid = Grid(grid_size, temperature)
+        speed = self.views["main_menu"].get_speed()
+        self.grid = Grid(grid_size, speed)
         self.views["grid"] = GridView(self.screen, self.grid, self.switch_to_welcome_view)
         self.controllers["grid"] = GridController(self.grid, self.views["grid"])
         self.switch_view("grid")

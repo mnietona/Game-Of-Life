@@ -1,7 +1,8 @@
 import pygame
+from src.model.grid import Grid
 
 class GridController:
-    def __init__(self, model, view):
+    def __init__(self, model, view, ):
         self.model = model
         self.view = view
 
@@ -21,4 +22,8 @@ class GridController:
     def is_valid_cell(self, i, j):
         return 0 <= i < self.model.size and 0 <= j < self.model.size
 
-    
+    def update(self):
+        # Mise à jour du modèle de grille
+        self.model.update_systeme()
+        # Rafraîchir la vue après la mise à jour du modèle
+        self.view.render()

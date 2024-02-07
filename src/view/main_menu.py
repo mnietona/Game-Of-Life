@@ -8,7 +8,7 @@ class MainMenu:
     def __init__(self, screen, on_start):
         self.screen = screen
         self.on_start = on_start
-        image_button = pygame.image.load("start.png")
+        image_button = pygame.image.load("images/start.png")
         image_button = pygame.transform.scale(image_button, (320, 250))
         self.button = Button(
             screen, 470, 375, 245, 65,
@@ -22,10 +22,10 @@ class MainMenu:
             imageHAlign = 'center'
         )
         self.title_font = pygame.font.Font(None, 100)
-        self.background_image = pygame.image.load('background2.jpg')  # Chargez l'image de fond
+        self.background_image = pygame.image.load('images/background2.jpg')  # Chargez l'image de fond
         self.background_image = pygame.transform.scale(self.background_image, (self.screen.get_width(), self.screen.get_height()))  # Redimensionnez l'image
 
-        self.background2 = pygame.image.load("setting.png")
+        self.background2 = pygame.image.load("images/setting.png")
         self.background2 = pygame.transform.scale(self.background2,(1450,650))
 
         self.slider_grid = Slider(self.screen, 500, 600, 200, 15, min=10, max=100, step=10, initial=50, handleColour = (152, 251, 152), colour = (255, 192, 203))

@@ -2,9 +2,10 @@ import pygame
 from src.model.grid import Grid
 
 class GridController:
-    def __init__(self, model, view, ):
+    def __init__(self, model, view):
         self.model = model
         self.view = view
+        self.is_paused = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -23,7 +24,8 @@ class GridController:
         return 0 <= i < self.model.size and 0 <= j < self.model.size
 
     def update(self):
-        # Mise à jour du modèle de grille
-        self.model.update_systeme()
-        # Rafraîchir la vue après la mise à jour du modèle
-        self.view.render()
+        if not self.is_paused:
+            # Mise à jour du modèle de grille
+            self.model.update_systeme()
+            # Rafraîchir la vue après la mise à jour du modèle
+            self.view.render()

@@ -56,6 +56,8 @@ class MainController:
         self.grid = Grid(grid_size, speed)
         self.views["grid"] = GridView(self.screen, self.grid, self.switch_to_welcome_view)
         self.controllers["grid"] = GridController(self.grid, self.views["grid"])
+        self.views["grid"].set_controller(self.controllers["grid"])
+        
         self.switch_view("grid")
     
     def switch_to_welcome_view(self):

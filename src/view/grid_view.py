@@ -3,7 +3,8 @@ import pygame_widgets
 from pygame_widgets.button import Button
 
 class GridView:
-    def __init__(self, screen, grid, on_back_to_menu):
+    def __init__(self, screen, grid, on_back_to_menu, controller = None):
+        self.controller = controller
         self.screen = screen
         self.grid = grid
         self.on_back_to_menu = on_back_to_menu
@@ -13,10 +14,21 @@ class GridView:
         self.font = pygame.font.Font(None, 24)
         self.init_ui_elements()
 
+    def set_controller(self, controller):
+        self.controller = controller
 
     def init_ui_elements(self):
-        self.button = Button(self.screen, 880, 350, 200, 50, text='Retour', fontSize=30, margin=20, onClick=self.on_back_to_menu)
-        self.button.hide()
+        self.button_back = Button(self.screen, 880, 350, 200, 50, text='Retour', fontSize=30, margin=20, onClick=self.on_back_to_menu)
+        self.button_back.hide()
+        
+        self.button_pause = Button(self.screen, 900, 450, 245, 65, text='Pause', fontSize=30, margin=20, 
+                                   inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
+                                   radius=20, onClick=self.on_pause)
+        self.button_pause.hide()
+    
+    def on_pause(self):
+        self.controller.is_paused = not self.controller.is_paused
+        
     
     def render(self):
         self.screen.fill((255, 255, 255))  # Fond blanc
@@ -35,11 +47,13 @@ class GridView:
 
                 # Choix de la couleur en fonction du type d'élément dans la cellule
                 if cell_element.type == "Plant":
-                    color = (0, 255, 0)  # Vert pour les plantes
+                    color = (58, 137, 35)  # Vert pour les plantes
                 elif cell_element.type == "Carrot":
                     color = (255, 165, 0)  # Orange pour les carottes
                 elif cell_element.type == "Rabbit":
-                    color = (128, 128, 128)  # Gris pour les lapins
+                    color = (253, 241, 184) # Gris pour les lapins
+                elif cell_element.type == "Fox":
+                    color = (255, 0, 0) # Rouge pour les renards
                 else:
                     color = (255, 255, 255)  # Blanc pour les cellules vides
 
@@ -65,9 +79,11 @@ class GridView:
     
     def set_widget_active(self, active):
         if active:
-            self.button.show()
+            self.button_back.show()
+            self.button_pause.show()
         else:
-            self.button.hide()
+            self.button_back.hide()
+            self.button_pause.hide()
     
     
     def generate_info_lines(self, i, j, info):

@@ -9,7 +9,7 @@ class WelcomeView:
         self.on_start = on_start
         self.init_ui_elements()
         self.font = pygame.font.Font(None, 36)
-        self.font.set_bold(True)
+        self.font.set_bold(False)
         self.background_image = self.load_image('images/background3.jpg', screen.get_width(), screen.get_height())
 
     def init_ui_elements(self):
@@ -17,9 +17,9 @@ class WelcomeView:
                              inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
                              radius=20, onClick=self.on_start, image=self.load_image("images/start.png", 320, 250),
                              imageHAlign='center')
-        self.slider_grid = Slider(self.screen, 500, 610, 200, 15, min=10, max=100, step=10, initial=50,
+        self.slider_grid = Slider(self.screen, 470, 610, 200, 15, min=10, max=100, step=10, initial=50,
                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
-        self.slider_speed = Slider(self.screen, 500, 700, 200, 15, min=1, max=10, step=1, initial=5,
+        self.slider_speed = Slider(self.screen, 470, 700, 200, 15, min=1, max=10, step=1, initial=5,
                                          colour=(152, 251, 152), handleColour=(255, 192, 203))
 
     def load_image(self, path, width, height):
@@ -30,9 +30,9 @@ class WelcomeView:
         self.screen.blit(self.background_image, (0, 0))
         self.button.draw()
         self.slider_grid.draw()
-        self.draw_text(str(self.slider_grid.getValue()), 730, 605, self.font)
+        self.draw_text(str(self.slider_grid.getValue()), 685, 605, self.font)
         self.slider_speed.draw()
-        self.draw_text(str(self.slider_speed.getValue()), 737, 695, self.font)
+        self.draw_text(str(self.slider_speed.getValue()), 685, 695, self.font)
         pygame_widgets.update(pygame.event.get())
 
     def draw_text(self, text, x, y, font):

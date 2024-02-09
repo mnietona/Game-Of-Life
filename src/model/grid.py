@@ -13,26 +13,38 @@ class Grid:
         self.init_grid()
         
     def init_grid(self):
-        # 5 lapin aléatoire
+        occupied_positions = set()
+
+        # Placer 5 lapins aléatoirement
         for _ in range(5):
-            x, y = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+            x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Rabbit())
-        
-        
+            occupied_positions.add((x, y))
+
+        # Placer 2 renards aléatoirement
+        for _ in range(2):
+            x, y = self.get_random_free_position(occupied_positions)
+            self.cells[x][y].set_element(Fox())
+            occupied_positions.add((x, y))
+
+    def get_random_free_position(self, occupied_positions):
+        x, y = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+        while (x, y) in occupied_positions:
+            x, y = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+        return x, y
     def update_systeme(self):
         self.update_count += 1
 
-        # Créer une copie pour éviter de modifier la liste pendant son itération
-        rabbits = [(i, j) for i in range(self.size) for j in range(self.size) if isinstance(self.cells[i][j].element, Rabbit)]
+        # Mise à jour des lapins et des renards
+        for i in range(self.size):
+            for j in range(self.size):
+                element = self.cells[i][j].element
+                if isinstance(element, Rabbit):
+                    element.update(self, i, j)
+                elif isinstance(element, Fox):
+                    element.update(self, i, j)
 
-        for i, j in rabbits:
-            rabbit = self.cells[i][j].element
-            rabbit.update(self, i, j)
-
-        # Logique renards...
-
-        # Si on augmente la muliplication du denominateur on diminue la fréquence d'apparition des carottes
-        if self.update_count % ((self.size // self.speed) * 1 ) == 0: 
+        if self.update_count % ((self.size // self.speed) * 1) == 0:
             self.spawn_carrot()
 
     def spawn_carrot(self):

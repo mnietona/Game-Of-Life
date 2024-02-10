@@ -8,10 +8,14 @@ class Grid:
     def __init__(self, size, speed):
         self.size = size
         self.speed = speed
+        self.rabbit_count = 0
+        self.carrot_count = 0
+        self.fox_count = 0
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.update_count = 0
         self.init_grid()
-        
+        self.max_rabbits = 15
+
     def init_grid(self):
         occupied_positions = set()
 
@@ -20,9 +24,10 @@ class Grid:
             x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Rabbit())
             occupied_positions.add((x, y))
+        self.rabbit_count += 5
 
-        # Placer 2 renards aléatoirement
-        for _ in range(2):
+            # Placer 2 renards aléatoirement
+        for _ in range(4):
             x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Fox())
             occupied_positions.add((x, y))
@@ -40,20 +45,22 @@ class Grid:
             for j in range(self.size):
                 element = self.cells[i][j].element
                 if isinstance(element, Rabbit):
-                    element.update(self, i, j)
+                    if self.rabbit_count <= self.max_rabbits:
+                        element.update(self, i, j)
                 elif isinstance(element, Fox):
                     element.update(self, i, j)
 
         if self.update_count % ((self.size // self.speed) * 1) == 0:
-            self.spawn_carrot()
-
+            if self.carrot_count <= self.max_rabbits:
+              self.spawn_carrot()
+              self.carrot_count += 1
     def spawn_carrot(self):
         potential_locations = []
         for i in range(self.size):
             for j in range(self.size):
                 if self.is_safe_for_carrot(i, j):
                     potential_locations.append((i, j))
-                    
+
 
         if potential_locations:
             x, y = random.choice(potential_locations)

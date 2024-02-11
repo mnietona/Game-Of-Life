@@ -1,70 +1,49 @@
-from model.flora import Plant
+from model.animal import Animal
 from model.rabbit import Rabbit
 import random
-
-class Fox:
+from model.flora import Plant
+class Fox(Animal):
     def __init__(self):
-        self.type = "Fox"
-        self.energy = 1000
-        self.perception_radius = 5  # Adjust the perception radius as needed
+        super().__init__("Fox", 1000)
+        self.perception_radius = 5  #distance de perception (si y'a un lapin à cette distance,
+        #                            il se dirigera vers celui-ci)
+        self.food_type = Rabbit
+        self.eat_energy = 20
 
     def update(self, grid, x, y):
-        """self.energy -= 0.5
-        if self.energy <= 0:
-            self.die(grid, x, y)
-            return"""
-
-        closest_rabbit = self.find_closest_rabbit(grid, x, y)
-        if closest_rabbit:
-            new_x, new_y = closest_rabbit
-            self.move(grid, x, y, new_x, new_y)
+        closest_food = self.find_closest_food(grid, x, y)
+        if closest_food:
+            new_x, new_y = closest_food
+            # calcule la direction vers le lapin le plus proche
+            dx = 1 if new_x > x else (-1 if new_x < x else 0)
+            dy = 1 if new_y > y else (-1 if new_y < y else 0)
+            # bouger d'une case vers le lapin
+            self.move(grid, x, y, x + dx, y + dy)
         else:
-            # If no rabbit is found, move randomly"""
             self.random_move(grid, x, y)
-        print("Fox position after random move:", x, y)
 
     def random_move(self, grid, x, y):
-        empty_cells = []
-        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        for dx, dy in directions:
-            new_x, new_y = x + dx, y + dy
-            if 0 <= new_x < grid.size and 0 <= new_y < grid.size:
-                if grid.cells[new_x][new_y].element.type =="Plant":
-                    empty_cells.append((new_x, new_y))
-                    print(" AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        print("Empty cells:", empty_cells)
-
+        empty_cells = [(x + dx, y + dy) for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]
+                       if 0 <= x + dx < grid.size and 0 <= y + dy < grid.size
+                       and grid.cells[x + dx][y + dy].element.type == "Plant"]
         if empty_cells:
             new_x, new_y = random.choice(empty_cells)
-            print("Selected new position:", new_x, new_y)
             self.move(grid, x, y, new_x, new_y)
 
-    def find_closest_rabbit(self, grid, x, y):
-        best_distance = self.perception_radius + 1  # Initialize with a distance greater than the perception radius
+    def find_closest_food(self, grid, x, y):
+        best_distance = self.perception_radius + 1  #on commence avec une distance + grande que le rayon de base
         closest_rabbit = None
 
+        # parcours des cellules dans le voisinage du point (x, y)
         for i in range(max(0, x - self.perception_radius), min(grid.size, x + self.perception_radius + 1)):
             for j in range(max(0, y - self.perception_radius), min(grid.size, y + self.perception_radius + 1)):
                 if isinstance(grid.cells[i][j].element, Rabbit):
-                    distance = abs(x - i) + abs(y - j)
+                    distance = abs(x - i) + abs(y - j)  # calcul distance Manhattan
                     if distance < best_distance:
                         best_distance = distance
                         closest_rabbit = (i, j)
 
         return closest_rabbit
-
-    def move(self, grid, old_x, old_y, new_x, new_y):
-        if grid.update_count % (grid.size // grid.speed) == 0:
-
-            new_cell = grid.cells[new_x][new_y]
-            print("Moving fox from", old_x, old_y, "to", new_x, new_y)
-            if isinstance(new_cell.element, Rabbit):
-                self.eat()
-                new_cell.set_element(Plant())  # The rabbit is eaten
-
-            # Set the new cell with the current fox object
-            new_cell.set_element(self)
-            grid.cells[old_x][old_y].set_element(Plant())
 
     def eat(self):
         self.energy += 20

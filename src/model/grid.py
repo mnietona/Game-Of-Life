@@ -15,6 +15,7 @@ class Grid:
         self.update_count = 0
         self.init_grid()
         self.max_rabbits = 15
+        #max carrot et max fox à ajouter pr les tests (pr l'instant maxrabbit est utilité pr tout)
 
     def init_grid(self):
         occupied_positions = set()
@@ -50,7 +51,7 @@ class Grid:
                 elif isinstance(element, Fox):
                     element.update(self, i, j)
 
-        if self.update_count % ((self.size // self.speed) * 1) == 0:
+        if self.update_count % ((self.size // self.speed)) == 0:
             if self.carrot_count <= self.max_rabbits:
               self.spawn_carrot()
               self.carrot_count += 1

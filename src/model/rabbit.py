@@ -1,12 +1,12 @@
 import random
 from src.model.flora import Plant, Carrot
-
-class Rabbit:
+from model.animal import Animal
+class Rabbit(Animal):
     def __init__(self):
-        self.type = "Rabbit"
-        self.energy = 100
+        super().__init__("Rabbit", 100)
         self.last_reproduction_energy = 100
         self.group = [self]  # Un groupe de lapins
+        self.food_type = Carrot
 
     def update(self, grid, x, y):
         self.energy -= 0.5
@@ -61,17 +61,7 @@ class Rabbit:
                         best_distance = distance
         return best_distance
 
-    def move(self, grid, old_x, old_y, new_x, new_y):
-        if grid.update_count % (grid.size // grid.speed) == 0:
 
-            new_cell = grid.cells[new_x][new_y]
-
-            if isinstance(new_cell.element, Carrot):
-                self.eat()
-
-            grid.cells[new_x][new_y].set_element(Rabbit())
-            grid.cells[old_x][old_y].set_element(Plant())
-    
     def reproduce(self, grid):
         
         free_cells = [(i, j) for i in range(grid.size) for j in range(grid.size) if isinstance(grid.cells[i][j].element, Plant)]

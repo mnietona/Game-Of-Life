@@ -1,4 +1,4 @@
-from src.model.flora import Plant
+from model.flora import Plant
 class Animal:
     def __init__(self, animal_type, energy):
         self.type = animal_type

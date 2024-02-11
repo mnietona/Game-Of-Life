@@ -1,7 +1,8 @@
 # Simulation d'Écosystèmes 2
 
 ### Description du Projet
-Ce projet consiste à créer une simulation interactive d'écosystèmes 2D, intégrant des éléments tels que biomes, climat, faune et flore, et permettant une visualisation en temps réel ainsi qu'une analyse quantitative de l'évolution de l'écosystème.
+Ce projet consiste à créer une simulation interactive d'écosystèmes 2D, intégrant des éléments tels que la faune et flore.
+
 ## Prérequis
 
 - Python 3.x
@@ -64,5 +65,5 @@ Poetry mettra à jour le fichier `pyproject.toml` et le fichier `poetry.lock`.
 Pour exécuter le projet, utilisez la commande suivante :
 
 ```shell
-python3 src/main.py
+make
 ```

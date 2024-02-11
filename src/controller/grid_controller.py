@@ -1,5 +1,5 @@
 import pygame
-from src.model.grid import Grid
+from model.grid import Grid
 
 class GridController:
     def __init__(self, model, view):

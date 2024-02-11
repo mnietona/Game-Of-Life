@@ -1,4 +1,4 @@
-from src.model.flora import Plant
+from model.flora import Plant
 
 class Cell:
     def __init__(self):

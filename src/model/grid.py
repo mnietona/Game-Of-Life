@@ -1,6 +1,6 @@
 import random
 from model.cell import Cell
-from src.model.flora import Carrot
+from model.flora import Carrot
 from model.rabbit import Rabbit
 from model.fox import Fox
 

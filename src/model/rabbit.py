@@ -1,5 +1,5 @@
 import random
-from src.model.flora import Plant, Carrot
+from model.flora import Plant, Carrot
 from model.animal import Animal
 class Rabbit(Animal):
     def __init__(self):

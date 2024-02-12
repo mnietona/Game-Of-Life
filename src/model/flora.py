@@ -6,8 +6,8 @@ class Plant:
         pass
 
 class Carrot:
-    def __init__(self):
+    def __init__(self, energy=50):
         self.type = "Carrot"
-
+        self.energy = energy
     def update(self):
         pass

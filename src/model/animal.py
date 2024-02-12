@@ -1,8 +1,9 @@
 from model.flora import Plant
 class Animal:
-    def __init__(self, animal_type, energy):
+    def __init__(self, animal_type, energy,reproduction_rate= 0.01): #une chance sur 100 de se reproduire par update
         self.type = animal_type
         self.energy = energy
+        self.reproduction_rate = reproduction_rate
 
     def move(self, grid, old_x, old_y, new_x, new_y):
         if grid.update_count % (grid.size // grid.speed) == 0:
@@ -14,4 +15,4 @@ class Animal:
             grid.cells[old_x][old_y].set_element(Plant())
 
     def eat(self):
-        self.energy += self.eat_energy
+        self.energy += 10

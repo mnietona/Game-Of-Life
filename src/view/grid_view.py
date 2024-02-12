@@ -90,13 +90,11 @@ class GridView:
                     case _:
                         color = (255, 255, 255)  # Blanc pour les cellules vides
 
-
                 pygame.draw.rect(self.screen, color, rect)
                 pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
 
 
     def init_info_box(self):
-        #self.screen.fill((220, 220, 220), self.info_box)
         self.fond_info = self.load_image("images/info_box_bg.png",650,600)
         self.screen.blit(self.fond_info, (680,-120))
         
@@ -132,4 +130,3 @@ class GridView:
             f"Cell ({i}, {j})",
             f"Element: {info[0]}"
             ]
-

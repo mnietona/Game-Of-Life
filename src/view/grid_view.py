@@ -12,6 +12,7 @@ class GridView:
         self.selected_cell_info = None
         self.info_box = pygame.Rect(880, 120, 200, 200)
         self.font = pygame.font.Font(None, 24)
+        self.background_image = self.load_image('images/background4.jpg', screen.get_width(), screen.get_height())
         self.init_ui_elements()
 
     def set_controller(self, controller):
@@ -24,14 +25,33 @@ class GridView:
         self.button_pause = Button(self.screen, 900, 450, 245, 65, text='Pause', fontSize=30, margin=20, 
                                    inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
                                    radius=20, onClick=self.on_pause)
+        
+        self.button_play = Button(self.screen, 900, 450, 245, 65, text='Play', fontSize=30, margin=20, 
+                                   inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
+                                   radius=20, onClick=self.on_pause)
+        
         self.button_pause.hide()
-    
+   
     def on_pause(self):
         self.controller.is_paused = not self.controller.is_paused
+        self.switch_pause_button()
+
+    def switch_pause_button(self):
+        if self.controller.is_paused == True:
+            self.button_pause.hide()
+            self.button_play.show()
+        elif self.controller.is_paused == False:
+            self.button_play.hide()
+            self.button_pause.show()
+
+    def load_image(self, path, width, height):
+        image = pygame.image.load(path)
+        return pygame.transform.scale(image, (width, height))
         
     
     def render(self):
-        self.screen.fill((255, 255, 255))  # Fond blanc
+        #self.screen.fill((255, 255, 255))  # Fond blanc
+        self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.init_info_box()
         if self.selected_cell_info:
@@ -84,6 +104,7 @@ class GridView:
         else:
             self.button_back.hide()
             self.button_pause.hide()
+            self.button_play.hide()
     
     
     def generate_info_lines(self, i, j, info):

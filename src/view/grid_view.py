@@ -19,17 +19,29 @@ class GridView:
         self.controller = controller
 
     def init_ui_elements(self):
-        self.button_back = Button(self.screen, 880, 350, 200, 50, text='Retour', fontSize=30, margin=20, onClick=self.on_back_to_menu)
+        self.button_back = Button(self.screen, 900, 350, 200, 50, text='Retour', fontSize=30, margin=20,
+                                  image =self.load_image("images/fond_pancarte.png",320,230) ,onClick=self.on_back_to_menu)
         self.button_back.hide()
         
-        self.button_pause = Button(self.screen, 900, 450, 245, 65, text='Pause', fontSize=30, margin=20, 
-                                   inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
-                                   radius=20, onClick=self.on_pause)
+        self.button_pause = Button(self.screen, 830, 450, 100, 60, fontSize=30, margin=20,
+                                   inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255),
+                                   radius=20, image = self.load_image("images/Pause.png",200,200),
+                                   onClick=self.on_pause)
         
-        self.button_play = Button(self.screen, 900, 450, 245, 65, text='Play', fontSize=30, margin=20, 
-                                   inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
-                                   radius=20, onClick=self.on_pause)
-        
+        self.button_play = Button(self.screen, 830, 450, 100, 60, fontSize=30, margin=20,
+                                   inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
+                                   radius=20, image = self.load_image("images/Play.png",200,200),
+                                  onClick=self.on_pause)
+
+        self.button_previous_step = Button(self.screen, 950, 450, 100, 60, fontSize=30, margin=20,
+                                   inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
+                                   radius=20, image = self.load_image("images/Previous.png",200,200),
+                                  onClick= None)
+
+        self.button_next_step = Button(self.screen, 1070, 450, 100, 60, fontSize=30, margin=20,
+                                   inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
+                                   radius=20, image = self.load_image("images/Next.png",200,200),
+                                  onClick= None)
         self.button_pause.hide()
    
     def on_pause(self):
@@ -37,10 +49,10 @@ class GridView:
         self.switch_pause_button()
 
     def switch_pause_button(self):
-        if self.controller.is_paused == True:
+        if self.controller.is_paused:
             self.button_pause.hide()
             self.button_play.show()
-        elif self.controller.is_paused == False:
+        else:
             self.button_play.hide()
             self.button_pause.show()
 
@@ -66,23 +78,27 @@ class GridView:
                 cell_element = self.grid.cells[i][j].element
 
                 # Choix de la couleur en fonction du type d'élément dans la cellule
-                if cell_element.type == "Plant":
-                    color = (58, 137, 35)  # Vert pour les plantes
-                elif cell_element.type == "Carrot":
-                    color = (255, 165, 0)  # Orange pour les carottes
-                elif cell_element.type == "Rabbit":
-                    color = (253, 241, 184) # Gris pour les lapins
-                elif cell_element.type == "Fox":
-                    color = (255, 0, 0) # Rouge pour les renards
-                else:
-                    color = (255, 255, 255)  # Blanc pour les cellules vides
+                match cell_element.type:
+                    case "Plant":
+                        color = (58, 137, 35)  # Vert pour les plantes
+                    case "Carrot":
+                        color = (255, 165, 0)  # Orange pour les carottes
+                    case "Rabbit":
+                        color = (253, 241, 184) # Gris pour les lapins
+                    case "Fox":
+                        color = (255, 0, 0) # Rouge pour les renards
+                    case _:
+                        color = (255, 255, 255)  # Blanc pour les cellules vides
+
 
                 pygame.draw.rect(self.screen, color, rect)
                 pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
 
 
     def init_info_box(self):
-        self.screen.fill((220, 220, 220), self.info_box)
+        #self.screen.fill((220, 220, 220), self.info_box)
+        self.fond_info = self.load_image("images/info_box_bg.png",650,600)
+        self.screen.blit(self.fond_info, (680,-120))
         
     def show_cell_info(self, i, j):
         cell = self.grid.cells[i][j]
@@ -101,10 +117,14 @@ class GridView:
         if active:
             self.button_back.show()
             self.button_pause.show()
+            self.button_previous_step.show()
+            self.button_next_step.show()
         else:
             self.button_back.hide()
             self.button_pause.hide()
             self.button_play.hide()
+            self.button_previous_step.hide()
+            self.button_next_step.hide()
     
     
     def generate_info_lines(self, i, j, info):

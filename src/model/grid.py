@@ -40,7 +40,6 @@ class Grid:
         return x, y
     def update_systeme(self):
         self.update_count += 1
-
         # Mise à jour des lapins et des renards
         for i in range(self.size):
             for j in range(self.size):

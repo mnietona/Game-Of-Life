@@ -5,19 +5,24 @@ class Rabbit(Animal):
     def __init__(self):
         super().__init__("Rabbit", 100)
         self.last_reproduction_energy = 100
+        self.energy_to_reproduce = 150
         self.group = [self]  # Un groupe de lapins
         self.food_type = Carrot
 
-    def update(self, grid, x, y):
-        self.energy -= 0.5
-        if self.energy <= 0:
-            pass
 
-        self.update_group(grid, x, y)
-        
-        if self.energy >= self.last_reproduction_energy + 100:
+    def update(self, grid, x, y):
+        self.energy -= 1
+        if self.energy <= 0:
+            grid.rabbit_count -= 1
+            self.die(grid, x, y)
+            return
+
+
+        #self.update_group(grid, x, y)
+
+        if random.random() < self.reproduction_rate:
+            print("test")
             self.reproduce(grid)
-            self.last_reproduction_energy = self.energy
 
         best_move = self.find_best_move(grid, x, y)
         if best_move:
@@ -72,13 +77,13 @@ class Rabbit(Animal):
                 new_rabbit = Rabbit()
                 grid.rabbit_count += 1
                 grid.cells[new_x][new_y].set_element(new_rabbit)
-
+                grid.rabbit_count += 1
     def eat(self):
         self.energy += 10
 
     def die(self, grid, x, y):
 
         if isinstance(grid.cells[x][y].element, Rabbit):
-            print('its a rabbit')
-            print('dead')
+            print('dead rabbit')
+            grid.cells[x][y].set_element(Plant())
     

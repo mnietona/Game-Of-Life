@@ -25,8 +25,7 @@ class Grid:
             x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Rabbit())
             occupied_positions.add((x, y))
-        self.rabbit_count += 5
-
+            self.rabbit_count += 1
             # Placer 2 renards aléatoirement
         for _ in range(4):
             x, y = self.get_random_free_position(occupied_positions)
@@ -39,21 +38,22 @@ class Grid:
             x, y = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
         return x, y
     def update_systeme(self):
+        print('rabbit count : ', self.rabbit_count)
         self.update_count += 1
+
         # Mise à jour des lapins et des renards
         for i in range(self.size):
             for j in range(self.size):
                 element = self.cells[i][j].element
-                if isinstance(element, Rabbit):
-                    if self.rabbit_count <= self.max_rabbits:
-                        element.update(self, i, j)
-                elif isinstance(element, Fox):
+                if isinstance(element, Rabbit): #or isinstance(element, Fox) <<< si je décommente, rabbit count marche plus
                     element.update(self, i, j)
+                """elif isinstance(element, Fox):
+                    element.update(self, i, j)"""
 
-        if self.update_count % ((self.size // self.speed)) == 0:
+        """if self.update_count % ((self.size // self.speed)) == 0:
             if self.carrot_count <= self.max_rabbits:
               self.spawn_carrot()
-              self.carrot_count += 1
+              self.carrot_count += 1""" # décommenté pr une question de clareté mais vous pouvez remettre si vous voulez
     def spawn_carrot(self):
         potential_locations = []
         for i in range(self.size):

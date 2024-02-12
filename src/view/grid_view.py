@@ -19,8 +19,8 @@ class GridView:
         self.controller = controller
 
     def init_ui_elements(self):
-        self.button_back = Button(self.screen, 900, 350, 200, 50, text='Retour', fontSize=30, margin=20,
-                                  image =self.load_image("images/fond_pancarte.png",320,230) ,onClick=self.on_back_to_menu)
+        self.button_back = Button(self.screen, 900, 350, 200, 50, text='', fontSize=30, margin=20,
+                                  image =self.load_image("images/retour.png",320,230) ,onClick=self.on_back_to_menu)
         self.button_back.hide()
         
         self.button_pause = Button(self.screen, 830, 450, 100, 60, fontSize=30, margin=20,
@@ -66,10 +66,16 @@ class GridView:
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.init_info_box()
+    
+        #self.draw_text(str(self.grid.update_count // self.grid.speed ), 685, 605, self.font) timer
         if self.selected_cell_info:
             self.redraw_cell_info(*self.selected_cell_info)
         
         pygame_widgets.update(pygame.event.get())
+    
+    def draw_text(self, text, x, y, font):
+        text_surface = font.render(text, True, (0, 0, 0))
+        self.screen.blit(text_surface, (x, y))
     
     def draw_cells(self):
         for i in range(self.grid.size):

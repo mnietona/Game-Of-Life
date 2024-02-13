@@ -10,7 +10,7 @@ class GridView:
         self.on_back_to_menu = on_back_to_menu
         self.cell_size = 816 // self.grid.size
         self.selected_cell_info = None
-        self.info_box = pygame.Rect(880, 120, 200, 200)
+        self.info_box = pygame.Rect(880, 160, 200, 200)
         self.font = pygame.font.Font(None, 24)
         self.background_image = self.load_image('images/background4.jpg', screen.get_width(), screen.get_height())
         self.init_ui_elements()
@@ -23,19 +23,19 @@ class GridView:
                                   image =self.load_image("images/retour.png",320,230) ,onClick=self.on_back_to_menu)
         self.button_back.hide()
         
-        self.button_pause = Button(self.screen, 900, 450, 100, 60, fontSize=30, margin=20,
+        self.button_pause = Button(self.screen, 1025, 40, 80,48, fontSize=30, margin=20,
                                    inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255),
-                                   radius=20, image = self.load_image("images/Pause.png",200,200),
+                                   radius=20, image = self.load_image("images/Pause.png",160,160),
                                    onClick=self.on_pause)
         
-        self.button_play = Button(self.screen, 900, 450, 100, 60, fontSize=30, margin=20,
+        self.button_play = Button(self.screen, 1025, 40, 80, 48, fontSize=30, margin=20,
                                    inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
-                                   radius=20, image = self.load_image("images/Play.png",200,200),
+                                   radius=20, image = self.load_image("images/Play.png",160,160),
                                   onClick=self.on_pause)
 
-        self.button_next_step = Button(self.screen, 1020, 450, 100, 60, fontSize=30, margin=20,
+        self.button_next_step = Button(self.screen, 1115, 40, 80, 48, fontSize=30, margin=20,
                                    inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
-                                   radius=20, image = self.load_image("images/Next.png",200,200),
+                                   radius=20, image = self.load_image("images/Next.png",160,160),
                                   onClick= None)
         self.button_pause.hide()
    
@@ -61,8 +61,8 @@ class GridView:
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.init_info_box()
-    
-        #self.draw_text(str(self.grid.update_count // self.grid.speed ), 685, 605, self.font) timer
+        self.drawTimer_box()
+        self.drawTimer()
         if self.selected_cell_info:
             self.redraw_cell_info(*self.selected_cell_info)
         
@@ -93,11 +93,21 @@ class GridView:
 
                 pygame.draw.rect(self.screen, color, rect)
                 pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
-
+    
+    def drawTimer_box(self):
+        self.fond_timer = self.load_image("images/timer.png",275,250)
+        self.screen.blit(self.fond_timer, (780,-50))
+    
+    def drawTimer(self):
+        t= self.grid.update_count // (self.grid.size //self.grid.speed  )
+        time =   "J: " + str(t)
+        if t > 365:
+            time = "A: "+str(t // 365)  + " J: " + str(t % 365)
+        self.draw_text(time, 882, 58, pygame.font.Font(None, 30)) 
 
     def init_info_box(self):
         self.fond_info = self.load_image("images/info_box_bg.png",650,600)
-        self.screen.blit(self.fond_info, (680,-120))
+        self.screen.blit(self.fond_info, (680,-100))
         
     def show_cell_info(self, i, j):
         cell = self.grid.cells[i][j]

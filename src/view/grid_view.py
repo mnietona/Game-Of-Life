@@ -63,6 +63,8 @@ class GridView:
         self.init_info_box()
         self.drawTimer_box()
         self.drawTimer()
+        self.drawNumber_box()
+        self.drawCounter()
         if self.selected_cell_info:
             self.redraw_cell_info(*self.selected_cell_info)
         
@@ -104,6 +106,14 @@ class GridView:
         if t > 365:
             time = "A: "+str(t // 365)  + " J: " + str(t % 365)
         self.draw_text(time, 882, 58, pygame.font.Font(None, 30)) 
+
+    def drawNumber_box(self):
+        self.fond_nb = self.load_image("images/number_box.png",550,500)
+        self.screen.blit(self.fond_nb, (700,450))
+
+    def drawCounter(self):
+        self.draw_text(str(self.grid.rabbit_count),939,665, pygame.font.Font(None, 70)) 
+        self.draw_text(str(self.grid.fox_count),939,730, pygame.font.Font(None, 70)) 
 
     def init_info_box(self):
         self.fond_info = self.load_image("images/info_box_bg.png",650,600)

@@ -9,10 +9,11 @@ class Animal:
         if grid.update_count % (grid.size // grid.speed) == 0:
             new_cell = grid.cells[new_x][new_y]
             if isinstance(new_cell.element, self.food_type):
-                self.eat()
+                self.eat(grid)
                 new_cell.set_element(Plant())  # supprime la nourriture mangée
-            new_cell.set_element(self)  # bouger l'animal vers la nv case
-            grid.cells[old_x][old_y].set_element(Plant())
+            if new_cell.element.type == "Plant":
+                new_cell.set_element(self)  # bouger l'animal vers la nv case
+                grid.cells[old_x][old_y].set_element(Plant())
 
-    def eat(self):
+    def eat(self, grid):
         self.energy += 10

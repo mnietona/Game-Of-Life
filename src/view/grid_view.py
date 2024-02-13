@@ -23,22 +23,17 @@ class GridView:
                                   image =self.load_image("images/retour.png",320,230) ,onClick=self.on_back_to_menu)
         self.button_back.hide()
         
-        self.button_pause = Button(self.screen, 830, 450, 100, 60, fontSize=30, margin=20,
+        self.button_pause = Button(self.screen, 900, 450, 100, 60, fontSize=30, margin=20,
                                    inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255),
                                    radius=20, image = self.load_image("images/Pause.png",200,200),
                                    onClick=self.on_pause)
         
-        self.button_play = Button(self.screen, 830, 450, 100, 60, fontSize=30, margin=20,
+        self.button_play = Button(self.screen, 900, 450, 100, 60, fontSize=30, margin=20,
                                    inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
                                    radius=20, image = self.load_image("images/Play.png",200,200),
                                   onClick=self.on_pause)
 
-        self.button_previous_step = Button(self.screen, 950, 450, 100, 60, fontSize=30, margin=20,
-                                   inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
-                                   radius=20, image = self.load_image("images/Previous.png",200,200),
-                                  onClick= None)
-
-        self.button_next_step = Button(self.screen, 1070, 450, 100, 60, fontSize=30, margin=20,
+        self.button_next_step = Button(self.screen, 1020, 450, 100, 60, fontSize=30, margin=20,
                                    inactiveColour=(255, 255, 255), pressedColour=(255, 255, 255),
                                    radius=20, image = self.load_image("images/Next.png",200,200),
                                   onClick= None)
@@ -121,13 +116,11 @@ class GridView:
         if active:
             self.button_back.show()
             self.button_pause.show()
-            self.button_previous_step.show()
             self.button_next_step.show()
         else:
             self.button_back.hide()
             self.button_pause.hide()
             self.button_play.hide()
-            self.button_previous_step.hide()
             self.button_next_step.hide()
     
     

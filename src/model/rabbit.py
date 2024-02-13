@@ -21,7 +21,7 @@ class Rabbit(Animal):
         #self.update_group(grid, x, y)
 
         if random.random() < self.reproduction_rate:
-            print("test")
+            print("reproduce")
             self.reproduce(grid)
 
         best_move = self.find_best_move(grid, x, y)
@@ -77,8 +77,7 @@ class Rabbit(Animal):
                 new_rabbit = Rabbit()
                 grid.rabbit_count += 1
                 grid.cells[new_x][new_y].set_element(new_rabbit)
-                grid.rabbit_count += 1
-    def eat(self):
+    def eat(self,grid):
         self.energy += 10
 
     def die(self, grid, x, y):

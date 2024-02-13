@@ -45,8 +45,10 @@ class Fox(Animal):
 
         return closest_rabbit
 
-    def eat(self):
+    def eat(self,grid):
+        print("lapin mangé")
         self.energy += 20
+        grid.rabbit_count -= 1
 
     def die(self, grid, x, y):
         grid.cells[x][y].set_element(Plant())

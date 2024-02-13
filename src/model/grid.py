@@ -47,8 +47,8 @@ class Grid:
                 element = self.cells[i][j].element
                 if isinstance(element, Rabbit): #or isinstance(element, Fox) <<< si je décommente, rabbit count marche plus
                     element.update(self, i, j)
-                """elif isinstance(element, Fox):
-                    element.update(self, i, j)"""
+                elif isinstance(element, Fox):
+                    element.update(self, i, j)
 
         """if self.update_count % ((self.size // self.speed)) == 0:
             if self.carrot_count <= self.max_rabbits:

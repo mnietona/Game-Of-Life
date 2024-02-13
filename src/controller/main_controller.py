@@ -11,7 +11,7 @@ class MainController:
         self.screen = pygame.display.set_mode((1200, 816))
         pygame.display.set_caption("Game Of Life")
         self.init_views_and_controllers()
-        self.click_sound = pygame.mixer.Sound("images/a.mp3")
+        self.click_sound = pygame.mixer.Sound("assets/sounds/click.mp3")
 
     def init_views_and_controllers(self):
         self.views = {

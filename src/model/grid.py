@@ -5,12 +5,12 @@ from model.rabbit import Rabbit
 from model.fox import Fox
 
 class Grid:
-    def __init__(self, size, speed):
+    def __init__(self, size, speed, rabbit_number, fox_number):
         self.size = size
         self.speed = speed
-        self.rabbit_count = 0
+        self.rabbit_count = rabbit_number
         self.carrot_count = 0
-        self.fox_count = 0
+        self.fox_count = fox_number
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.update_count = 0
         self.init_grid()
@@ -20,14 +20,14 @@ class Grid:
     def init_grid(self):
         occupied_positions = set()
 
-        # Placer 5 lapins aléatoirement
-        for _ in range(5):
+        # Placer un nombre de lapins choisit par l'utilisateur
+        for _ in range(self.rabbit_count):
             x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Rabbit())
             occupied_positions.add((x, y))
-            self.rabbit_count += 1
-            # Placer 2 renards aléatoirement
-        for _ in range(4):
+            #self.rabbit_count += 1
+        # Place un nombre de renards choisit par l'utilisateur
+        for _ in range(self.fox_count):
             x, y = self.get_random_free_position(occupied_positions)
             self.cells[x][y].set_element(Fox())
             occupied_positions.add((x, y))
@@ -45,15 +45,15 @@ class Grid:
         for i in range(self.size):
             for j in range(self.size):
                 element = self.cells[i][j].element
-                if isinstance(element, Rabbit): #or isinstance(element, Fox) <<< si je décommente, rabbit count marche plus
+                if isinstance(element, Rabbit):
                     element.update(self, i, j)
                 elif isinstance(element, Fox):
                     element.update(self, i, j)
 
-        """if self.update_count % ((self.size // self.speed)) == 0:
+        if self.update_count % ((self.size // self.speed)) == 0:
             if self.carrot_count <= self.max_rabbits:
               self.spawn_carrot()
-              self.carrot_count += 1""" # décommenté pr une question de clareté mais vous pouvez remettre si vous voulez
+              self.carrot_count += 1 # décommenté pr une question de clareté mais vous pouvez remettre si vous voulez
     def spawn_carrot(self):
         potential_locations = []
         for i in range(self.size):

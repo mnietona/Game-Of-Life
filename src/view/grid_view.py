@@ -57,7 +57,6 @@ class GridView:
         
     
     def render(self):
-        #self.screen.fill((255, 255, 255))  # Fond blanc
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.init_info_box()

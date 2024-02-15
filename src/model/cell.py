@@ -6,9 +6,9 @@ class Cell:
 
     def set_element(self, element):
         self.element = element
-
-    def info(self):
-        return [self.element.type]
+    
+    def get_info(self):
+        return self.element.get_info()
 
     def update(self):
         if self.element is not None:

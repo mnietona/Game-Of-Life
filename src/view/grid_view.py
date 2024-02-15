@@ -6,39 +6,53 @@ class GridView:
     def __init__(self, screen, grid):
         self.screen = screen
         self.grid = grid
-        self.cell_size = 816 // grid.size
+        self.size = grid.size
+        self.cell_size = 816 // self.size
         self.background_image = self.load_image('assets/background_grid.jpg', screen.get_width(), screen.get_height())
+        self.info_box_background = self.load_image("assets/info_box_bg.png", 650, 600)
+        self.init_ui_elements()
+        self.hide_widgets()
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
-        self.init_ui_elements()
-        self.hide_widgets()
+        self.selected_cell = None  
+        self.selected_cell_info = ""
 
     def init_ui_elements(self):
+        
         self.button_back = Button(self.screen, 900, 350, 200, 50, fontSize=30, margin=20,
                                   image=self.load_image("assets/retour.png", 320, 230),
                                   onClick=self.set_back_clicked)
 
-        self.button_pause_play = Button(self.screen, 1025, 40, 80, 48, fontSize=30, margin=20,
+        self.button_pause = Button(self.screen, 1025, 40, 80, 48, fontSize=30, margin=20,
                                         image=self.load_image("assets/Pause.png", 160, 160),
                                         onClick=self.set_pause_play_clicked)
 
+        self.button_play = Button(self.screen, 1025, 40, 80, 48, fontSize=30, margin=20,
+                                  image=self.load_image( "assets/Play.png", 160, 160),
+                                  onClick=self.set_pause_play_clicked)
+        
         self.button_next_step = Button(self.screen, 1115, 40, 80, 48, fontSize=30, margin=20,
                                        image=self.load_image("assets/Next.png", 160, 160),
                                        onClick=self.set_next_step_clicked)
-
+ 
     def set_back_clicked(self):
         self.back_clicked = True
 
     def set_pause_play_clicked(self):
-        self.pause_play_clicked = True
-
+        self.pause_play_clicked = not self.pause_play_clicked
+        if self.pause_play_clicked:
+            self.button_pause.hide()
+            self.button_play.show()
+        else:
+            self.button_play.hide()
+            self.button_pause.show()
+    
     def set_next_step_clicked(self):
         self.next_step_clicked = True
 
     def reset_button_clicks(self):
         self.back_clicked = False
-        self.pause_play_clicked = False
         self.next_step_clicked = False
 
     def load_image(self, path, width, height):
@@ -48,25 +62,46 @@ class GridView:
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
+        self.draw_info_box()
         pygame_widgets.update(pygame.event.get())
 
+    def draw_info_box(self):
+        self.screen.blit(self.info_box_background, (680, -100))
+        
+        if self.selected_cell:
+            font = pygame.font.Font(None, 24)
+            lines = self.selected_cell_info.split('\n')
+            text_y = 180 # pareil si deplacer texte vers le bas ou haut
+            
+            for line in lines:
+                text_surface = font.render(line, True, (0, 0, 0))
+                text_width = text_surface.get_width()
+                text_x = 1005 - (text_width / 2) # modif si deplacer texte vers gauche 
+                self.screen.blit(text_surface, (text_x, text_y))
+                
+                text_y += font.get_height() + 5
+
     def draw_cells(self):
-        for i in range(self.grid.size):
-            for j in range(self.grid.size):
+        for i in range(self.size):
+            for j in range(self.size):
                 rect = pygame.Rect(10 + j * self.cell_size, 10 + i * self.cell_size, self.cell_size, self.cell_size)
                 pygame.draw.rect(self.screen, self.get_cell_color(i, j), rect)
                 pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
 
     def get_cell_color(self, i, j):
-        # Cette méthode devrait retourner la couleur de la cellule basée sur son état
-        # Exemple simplifié:
-       
-        return (255, 255, 255)  # Blanc pour les cellules mortes
+        cell_element = self.grid.cells[i][j].element
 
-    def redraw_cell_info(self, i, j, info):
-        # Affiche les informations sur la cellule sélectionnée
-        # Cette méthode doit être implémentée en fonction de la structure de vos données
-        pass
+        match cell_element.type:
+            case "Plant":
+                return (58, 137, 35)  # Vert pour les plantes
+            case "Carrot":
+                return (255, 165, 0)  # Orange pour les carottes
+            case "Rabbit":
+                return (253, 241, 184) # Gris pour les lapins
+            case "Fox":
+                return (255, 0, 0) # Rouge pour les renards
+            case _:
+                return (255, 255, 255)  # Blanc pour les cellules vides
 
     def draw_text(self, text, x, y, font):
         text_surface = font.render(text, True, (0, 0, 0))
@@ -77,12 +112,13 @@ class GridView:
     
     def show_widgets(self):
         self.button_back.show()
-        self.button_pause_play.show()
+        self.button_pause.show()
         self.button_next_step.show()
 
     def hide_widgets(self):
         self.button_back.hide()
-        self.button_pause_play.hide()
+        self.button_pause.hide()
+        self.button_play.hide()
         self.button_next_step.hide()
 
     

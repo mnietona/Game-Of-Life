@@ -17,3 +17,6 @@ class Animal:
 
     def eat(self, grid):
         self.energy += 10
+    
+    def get_info(self):
+        return f"{self.type} energy: {self.energy}"

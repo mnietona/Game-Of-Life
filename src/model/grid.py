@@ -75,3 +75,6 @@ class Grid:
                     if isinstance(self.cells[i + dx][j + dy].element, (Rabbit, Fox)):
                         return False
         return True
+    
+    def get_cell_info(self, i, j):
+        return self.cells[i][j].element.get_info()

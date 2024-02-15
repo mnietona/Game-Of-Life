@@ -47,8 +47,8 @@ class GridController:
         return self.paused
         
     def next_step(self):
-       pass
-
+       self.model.update_systeme()
+       
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
         i = (y - 10) // cell_size
@@ -59,7 +59,7 @@ class GridController:
         return 0 <= i < self.model.size and 0 <= j < self.model.size
 
     def render(self):
-    
+        
         if not self.is_paused():
             print("update")
             self.model.update_systeme()

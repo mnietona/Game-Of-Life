@@ -11,7 +11,7 @@ class GridController:
 
     def activate(self):
         if self.view is None:
-            self.view = GridView(self.app.screen, self.model) # a modfi
+            self.view = GridView(self.app.screen, self.model)
         self.view.reset_button_clicks() 
         self.view.show_widgets()  
 
@@ -21,7 +21,7 @@ class GridController:
             x, y = event.pos
             i, j = self.get_cell_indices(x, y)
             if self.is_valid_cell(i, j):
-                # A ajuster 
+                # A ajuster Pour afficher les info pertinnate 
                 info = self.model.get_cell_info(i, j) 
                 self.view.selected_cell = (i, j)
                 self.view.selected_cell_info = f"Cell ({i}, {j}): \n {info}"

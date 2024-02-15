@@ -32,7 +32,6 @@ class Application:
 
     def switch_controller(self, controller_name, grid_size=None, speed=None):
         if controller_name == "grid":
-            # Créer ou reconfigurer GridController avec les valeurs des sliders
             self.controllers["grid"] = GridController(self, grid_size, speed)
         self.current_controller = self.controllers[controller_name]
         self.current_controller.activate()

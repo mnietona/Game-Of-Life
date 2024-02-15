@@ -90,7 +90,7 @@ class GridView:
             for j in range(self.size):
                 rect = pygame.Rect(10 + j * self.cell_size, 10 + i * self.cell_size, self.cell_size, self.cell_size)
                 pygame.draw.rect(self.screen, self.get_cell_color(i, j), rect)
-                pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  # Contour noir pour chaque cellule
+                pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)  
 
     def get_cell_color(self, i, j):
         cell_element = self.grid.cells[i][j].element

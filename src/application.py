@@ -1,9 +1,12 @@
+import random
+import time
 import pygame
 from controller.welcome_controller import WelcomeController
 from controller.grid_controller import GridController
 
 class Application:
     def __init__(self):
+        random.seed(int(time.time()))
         pygame.init()
         self.screen = pygame.display.set_mode((1200, 816))
         pygame.display.set_caption("Game Of Life")

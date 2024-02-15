@@ -1,35 +1,34 @@
-class Flore:
-    def __init__(self, duree_de_vie):
-        self.duree_de_vie = duree_de_vie
+class Flora:
+    def __init__(self, lifespan):
+        self.lifespan = lifespan
 
     def get_info(self):
-        if self.duree_de_vie == float('inf'):
+        if self.lifespan == float('inf'):
             return f"Flore: {self.__class__.__name__}- Durée de vie: éternelle"
         
-        return f"Flore: {self.__class__.__name__}- Durée de vie: {self.duree_de_vie}"
+        return f"Flore: {self.__class__.__name__}- Durée de vie: {self.lifespan}"
 
-    def update(self):
-        if self.duree_de_vie > 0:
-            self.duree_de_vie -= 1
-            return None
+    def update(self, i, j, grid): 
+        if self.lifespan > 0:
+            self.lifespan -= 1
         else:
-            return Plante()
-            
+            grid.remove_element(i, j)
+     
     @property
     def color(self):
-        return (255, 255, 255)  # Blanc
+        return (255, 255, 255)  # White
 
-class Plante(Flore):
-    def __init__(self, duree_de_vie=float('inf')):
-        super().__init__(duree_de_vie)
+class Plant(Flora):
+    def __init__(self, lifespan=float('inf')):
+        super().__init__(lifespan)
     
     @property
     def color(self):
-        return (58, 137, 35)  # Vert
+        return (58, 137, 35)  # Green
 
-class Carotte(Flore):
-    def __init__(self, duree_de_vie=50):
-        super().__init__(duree_de_vie)
+class Carrot(Flora):
+    def __init__(self, lifespan=50):
+        super().__init__(lifespan)
     
     @property
     def color(self):

@@ -1,7 +1,7 @@
-from model.flora import Plante
+from model.flora import Plant
 class Cell:
     def __init__(self):
-        self.element = Plante()
+        self.element = Plant()  
 
     def set_element(self, element):
         self.element = element
@@ -9,8 +9,6 @@ class Cell:
     def get_info(self):
         return self.element.get_info()
 
-    def update(self):
-        if self.element is not None:
-            result = self.element.update()
-            if result is not None:
-                self.set_element(result)
+    def update(self, i, j, grid): 
+        self.element.update(i, j, grid)
+            

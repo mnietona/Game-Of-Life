@@ -22,9 +22,7 @@ class GridController:
             i, j = self.get_cell_indices(x, y)
             if self.is_valid_cell(i, j):
                 # A ajuster Pour afficher les info pertinnate 
-                info = self.model.get_cell_info(i, j) 
                 self.view.selected_cell = (i, j)
-                self.view.selected_cell_info = f"Cell ({i}, {j})- {info}"
         
         self.view.handle_event(event)  
 
@@ -47,7 +45,8 @@ class GridController:
         return self.paused
         
     def next_step(self):
-       self.model.update_systeme()
+        print("Next step")
+        self.model.update_systeme(force_update=True)
        
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
@@ -62,4 +61,10 @@ class GridController:
         
         if not self.is_paused():
             self.model.update_systeme()
+        
+        if self.view.selected_cell:
+            i, j = self.view.selected_cell
+            info = self.model.get_cell_info(i, j)
+            self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
+            
         self.view.render()

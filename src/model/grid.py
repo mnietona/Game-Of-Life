@@ -59,23 +59,23 @@ class Grid:
         return True
 
     def update_systeme(self):
-        self.update_count += 1
+        #updates fait en batch pr plus de rapidité
+        updates = []
 
-        #on change le reproduction rate de rabbit seulement (TODO: mm logique pr les fox)
-        self.update_reproduction_rate()
-
-        # update les elem de grid
+        # Collect updates
         for i in range(self.size):
             for j in range(self.size):
                 element = self.cells[i][j].element
-                if isinstance(element, Rabbit):
-                    element.update(self, i, j)
-                elif isinstance(element, Fox):
-                    element.update(self, i, j)
+                if isinstance(element, Rabbit) or isinstance(element, Fox):
+                    updates.append((element, i, j))
 
-        # Spawn les carottes périodiquement
+        # appliquer les changements
+        for element, i, j in updates:
+            element.update(self, i, j)
+
+        # spawn les carottes regulierement (pas encore totalement bon )
         if self.update_count % (self.size // self.speed) == 0:
-            if self.carrot_count < self.max_carrots:
+            for _ in range(self.size):
                 self.spawn_carrot()
                 self.carrot_count += 1
 

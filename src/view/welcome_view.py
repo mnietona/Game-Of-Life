@@ -19,7 +19,7 @@ class WelcomeView:
                              imageHAlign='center')
         self.slider_grid = Slider(self.screen, 470, 610, 200, 15, min=10, max=100, step=10, initial=50,
                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
-        self.slider_speed = Slider(self.screen, 470, 700, 200, 15, min=1, max=10, step=1, initial=5,
+        self.slider_speed = Slider(self.screen, 470, 700, 200, 15, min=1, max=10, step=1, initial=1,
                                    colour=(152, 251, 152), handleColour=(255, 192, 203))
 
     def load_image(self, path, width, height):

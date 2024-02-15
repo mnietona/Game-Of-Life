@@ -61,7 +61,7 @@ class Grid:
     def update_systeme(self):
         #updates fait en batch pr plus de rapidité
         updates = []
-
+        self.update_count += 1
         # Collect updates
         for i in range(self.size):
             for j in range(self.size):

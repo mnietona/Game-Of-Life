@@ -40,7 +40,6 @@ class WelcomeView:
         self.screen.blit(text_surface, (x, y))
 
     def handle_event(self, event):
-        # Cette méthode est appelée par le contrôleur pour mettre à jour les widgets
         pygame_widgets.update([event])
     
     def set_start_clicked(self):
@@ -55,3 +54,13 @@ class WelcomeView:
 
     def get_speed(self):
         return self.slider_speed.getValue()
+
+    def show_widgets(self):
+        self.button.show()
+        self.slider_grid.show()
+        self.slider_speed.show()
+
+    def hide_widgets(self):
+        self.button.hide()
+        self.slider_grid.hide()
+        self.slider_speed.hide()

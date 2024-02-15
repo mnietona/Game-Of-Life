@@ -7,6 +7,7 @@ class GridController:
         self.app = app
         self.model = Grid(grid_size, speed)
         self.view = None
+        self.paused = False
 
     def activate(self):
         if self.view is None:
@@ -20,8 +21,8 @@ class GridController:
             x, y = event.pos
             i, j = self.get_cell_indices(x, y)
             if self.is_valid_cell(i, j):
-                
-                info = self.model.get_cell_info(i, j)  # Hypothétique
+                # A ajuster 
+                info = self.model.get_cell_info(i, j) 
                 self.view.selected_cell = (i, j)
                 self.view.selected_cell_info = f"Cell ({i}, {j}): \n {info}"
         
@@ -32,13 +33,18 @@ class GridController:
             self.app.switch_controller("welcome")
             self.view.reset_button_clicks()  
         elif self.view.pause_play_clicked:
-            self.is_paused()
+            self.toggle_pause() 
+            self.view.update_buttons_based_on_pause_state(self.paused)
+            self.view.reset_button_clicks()
         elif self.view.next_step_clicked:
             self.next_step()
             self.view.reset_button_clicks()
+    
+    def toggle_pause(self):
+        self.paused = not self.paused
 
     def is_paused(self):
-        print("pause/play")
+        return self.paused
         
     def next_step(self):
        pass
@@ -53,4 +59,8 @@ class GridController:
         return 0 <= i < self.model.size and 0 <= j < self.model.size
 
     def render(self):
+    
+        if not self.is_paused():
+            print("update")
+            self.model.update_systeme()
         self.view.render()

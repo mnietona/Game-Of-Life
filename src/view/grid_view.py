@@ -48,12 +48,16 @@ class GridView:
             self.button_play.hide()
             self.button_pause.show()
     
+    def update_buttons_based_on_pause_state(self, is_paused):
+        if is_paused:
+            self.button_play.show()
+            self.button_pause.hide()
+        else:
+            self.button_pause.show()
+            self.button_play.hide()
+    
     def set_next_step_clicked(self):
         self.next_step_clicked = True
-
-    def reset_button_clicks(self):
-        self.back_clicked = False
-        self.next_step_clicked = False
 
     def load_image(self, path, width, height):
         image = pygame.image.load(path)
@@ -95,7 +99,7 @@ class GridView:
             case "Plant":
                 return (58, 137, 35)  # Vert pour les plantes
             case "Carrot":
-                return (255, 165, 0)  # Orange pour les carottes
+                return (255, 165, 0)  # Orange pour les carottess
             case "Rabbit":
                 return (253, 241, 184) # Gris pour les lapins
             case "Fox":
@@ -121,4 +125,8 @@ class GridView:
         self.button_play.hide()
         self.button_next_step.hide()
 
-    
+    def reset_button_clicks(self):
+        self.back_clicked = False
+        self.next_step_clicked = False
+        self.pause_play_clicked = False
+

@@ -1,8 +1,7 @@
-from model.flora import Plant
-
+from model.flora import Plante
 class Cell:
     def __init__(self):
-        self.element = Plant()  # Par défaut chaque cell a plante
+        self.element = Plante()
 
     def set_element(self, element):
         self.element = element
@@ -12,4 +11,6 @@ class Cell:
 
     def update(self):
         if self.element is not None:
-            self.element.update()
+            result = self.element.update()
+            if result is not None:
+                self.set_element(result)

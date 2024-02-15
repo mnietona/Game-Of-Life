@@ -24,7 +24,7 @@ class GridController:
                 # A ajuster Pour afficher les info pertinnate 
                 info = self.model.get_cell_info(i, j) 
                 self.view.selected_cell = (i, j)
-                self.view.selected_cell_info = f"Cell ({i}, {j}): \n {info}"
+                self.view.selected_cell_info = f"Cell ({i}, {j})- {info}"
         
         self.view.handle_event(event)  
 
@@ -61,6 +61,5 @@ class GridController:
     def render(self):
         
         if not self.is_paused():
-            print("update")
             self.model.update_systeme()
         self.view.render()

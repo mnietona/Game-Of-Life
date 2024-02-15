@@ -74,7 +74,7 @@ class GridView:
         
         if self.selected_cell:
             font = pygame.font.Font(None, 24)
-            lines = self.selected_cell_info.split('\n')
+            lines = self.selected_cell_info.split('- ')
             text_y = 180 # pareil si deplacer texte vers le bas ou haut
             
             for line in lines:
@@ -94,18 +94,7 @@ class GridView:
 
     def get_cell_color(self, i, j):
         cell_element = self.grid.cells[i][j].element
-
-        match cell_element.type:
-            case "Plant":
-                return (58, 137, 35)  # Vert pour les plantes
-            case "Carrot":
-                return (255, 165, 0)  # Orange pour les carottess
-            case "Rabbit":
-                return (253, 241, 184) # Gris pour les lapins
-            case "Fox":
-                return (255, 0, 0) # Rouge pour les renards
-            case _:
-                return (255, 255, 255)  # Blanc pour les cellules vides
+        return cell_element.color
 
     def draw_text(self, text, x, y, font):
         text_surface = font.render(text, True, (0, 0, 0))

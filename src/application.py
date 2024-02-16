@@ -4,6 +4,7 @@ import pygame
 from constants import *
 from controller.welcome_controller import WelcomeController
 from controller.grid_controller import GridController
+from controller.setting_controller import SettingController
 
 class Application:
     def __init__(self):
@@ -13,6 +14,7 @@ class Application:
         pygame.display.set_caption("Game Of Life")
         self.controllers = {
             "welcome": WelcomeController(self),
+            "setting": SettingController(self),
         }
         self.current_controller = None
         self.switch_controller("welcome")

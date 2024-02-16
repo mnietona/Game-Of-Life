@@ -7,19 +7,26 @@ class WelcomeController:
 
     def activate(self):
         self.view.show_widgets()
-        self.view.reset_start_clicked()
+        self.view.reset_clicked()
 
     def handle_event(self, event): 
         self.view.handle_event(event)
         if self.view.start_clicked:
             self.start_game()
-            self.view.reset_start_clicked()
+            self.view.reset_clicked()
+        elif self.view.setting_clicked:
+            self.show_settings_window()
+            self.view.reset_clicked()
 
     def start_game(self):
         grid_size = self.view.get_grid_size()
         speed = self.view.get_speed()
         self.view.hide_widgets()
         self.app.switch_controller("grid", grid_size, speed)
+    
+    def show_settings_window(self):
+        self.view.hide_widgets()
+        self.app.switch_controller("setting")
 
     def render(self):
         self.view.render()

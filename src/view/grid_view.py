@@ -1,13 +1,16 @@
 import pygame
 import pygame_widgets
 from pygame_widgets.button import Button
+from pygame_widgets.slider import Slider
+from src.constants import *
 
 class GridView:
     def __init__(self, screen, grid):
         self.screen = screen
         self.grid = grid
         self.size = grid.size
-        self.cell_size = 816 // self.size
+        self.cell_size =  SCREEN_HEIGHT // self.size
+        self.font = pygame.font.Font(None, 36)
         self.background_image = self.load_image('assets/background_grid.jpg', screen.get_width(), screen.get_height())
         self.info_box_background = self.load_image("assets/info_box_bg.png", 650, 600)
         self.init_ui_elements()
@@ -35,18 +38,16 @@ class GridView:
         self.button_next_step = Button(self.screen, 1115, 40, 80, 48, fontSize=30, margin=20,
                                        image=self.load_image("assets/Next.png", 160, 160),
                                        onClick=self.set_next_step_clicked)
+        
+        self.slider_speed = Slider(self.screen, 900, 450, 200, 15, min=1, max=10, step=1, initial=1,
+                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
  
     def set_back_clicked(self):
         self.back_clicked = True
 
     def set_pause_play_clicked(self):
         self.pause_play_clicked = not self.pause_play_clicked
-        if self.pause_play_clicked:
-            self.button_pause.hide()
-            self.button_play.show()
-        else:
-            self.button_play.hide()
-            self.button_pause.show()
+        self.update_buttons_based_on_pause_state(self.pause_play_clicked)
     
     def update_buttons_based_on_pause_state(self, is_paused):
         if is_paused:
@@ -55,7 +56,7 @@ class GridView:
         else:
             self.button_pause.show()
             self.button_play.hide()
-    
+            
     def set_next_step_clicked(self):
         self.next_step_clicked = True
 
@@ -67,6 +68,8 @@ class GridView:
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.draw_info_box()
+        self.slider_speed.draw()
+        self.draw_text(str(self.slider_speed.getValue()), 1125, 450, self.font)
         pygame_widgets.update(pygame.event.get())
 
     def draw_info_box(self):
@@ -95,6 +98,9 @@ class GridView:
     def get_cell_color(self, i, j):
         cell_element = self.grid.cells[i][j].element
         return cell_element.color
+    
+    def get_speed(self):
+        return self.slider_speed.getValue()
 
     def draw_text(self, text, x, y, font):
         text_surface = font.render(text, True, (0, 0, 0))
@@ -107,12 +113,14 @@ class GridView:
         self.button_back.show()
         self.button_pause.show()
         self.button_next_step.show()
-
+        self.slider_speed.show()
+        
     def hide_widgets(self):
         self.button_back.hide()
         self.button_pause.hide()
         self.button_play.hide()
         self.button_next_step.hide()
+        self.slider_speed.hide()
 
     def reset_button_clicks(self):
         self.back_clicked = False

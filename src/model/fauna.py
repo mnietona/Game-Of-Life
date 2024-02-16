@@ -70,6 +70,5 @@ class Fauna:
     
     def eat_if_possible(self, position, grid):
         entity_at_new_position = grid.entity_positions.get(position)
-        print(entity_at_new_position)
         if entity_at_new_position and isinstance(entity_at_new_position, self.target_type):
             self.health_level += entity_at_new_position.health_level 

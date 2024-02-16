@@ -11,4 +11,3 @@ class Cell:
 
     def update(self, i, j, grid): 
         self.element.update(i, j, grid)
-            

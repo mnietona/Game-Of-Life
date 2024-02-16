@@ -1,6 +1,7 @@
 import random
 import time
 import pygame
+from src.constants import *
 from controller.welcome_controller import WelcomeController
 from controller.grid_controller import GridController
 
@@ -8,7 +9,7 @@ class Application:
     def __init__(self):
         random.seed(int(time.time()))
         pygame.init()
-        self.screen = pygame.display.set_mode((1200, 816))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) 
         pygame.display.set_caption("Game Of Life")
         self.controllers = {
             "welcome": WelcomeController(self),
@@ -29,7 +30,7 @@ class Application:
 
             self.current_controller.render()
             pygame.display.flip()
-            clock.tick(30)
+            clock.tick(FPS)
 
         pygame.quit()
 

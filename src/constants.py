@@ -1,0 +1,31 @@
+# constants.py
+
+# APPLICATION
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 816
+FPS = 30
+
+# RABBIT
+RABBIT_HEALTH = 50
+RABBIT_RADIUS = 7
+
+# FOX
+FOX_HEALTH = 100
+FOX_RADIUS = 5
+
+# CARROT
+CARROT_HEALTH = 50
+
+# GRID
+SPEED_MAX = 11
+TURN_SPAWN_CARROT = 10
+MOVES = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+# COULEUR 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (58, 137, 35)
+ORANGE = (255, 165, 0)
+RED = (255, 0, 0)
+
+# TODO Constante de la vue 

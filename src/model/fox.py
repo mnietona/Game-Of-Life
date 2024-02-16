@@ -1,8 +1,10 @@
+from src.constants import *
 from model.fauna import Fauna
 from model.rabbit import Rabbit
 
+
 class Fox(Fauna):
-    def __init__(self, health_level=100, radius=5):
+    def __init__(self, health_level=FOX_HEALTH, radius=FOX_RADIUS):
         super().__init__(health_level, radius)
         self.target_type = Rabbit
     
@@ -11,4 +13,4 @@ class Fox(Fauna):
 
     @property
     def color(self):
-        return (255, 0, 0)  # Red
+        return RED

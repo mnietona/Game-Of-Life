@@ -1,4 +1,5 @@
 import random
+from src.constants import *
 class Fauna:
     def __init__(self, health_level, radius):
         self.health_level = health_level
@@ -26,8 +27,6 @@ class Fauna:
             return self.move_towards(position, target_position, grid)
         else:
             return  self.move_randomly(i, j, grid)
-        
-
     
     def move_towards(self, current_position, target_position, grid):
         i, j = current_position
@@ -53,7 +52,7 @@ class Fauna:
 
     def move_randomly(self, i, j, grid):
         current_position = (i, j)
-        moves = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)] # 8 directions possibles
+        moves = MOVES 
         valid_moves = []
 
         for move in moves:

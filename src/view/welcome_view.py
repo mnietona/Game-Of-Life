@@ -11,17 +11,26 @@ class WelcomeView:
         self.font.set_bold(False)
         self.background_image = self.load_image('assets/background_welcome.jpg', screen.get_width(), screen.get_height())
         self.start_clicked = False
+        self.setting_clicked = False
         
     def init_ui_elements(self):
         self.button = Button(self.screen, 470, 375, 245, 65, fontSize=30, margin=20, 
                              inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
                              radius=20, onClick=self.set_start_clicked, image=self.load_image("assets/start.png", 320, 250),
                              imageHAlign='center')
+        
+        self.buton_settings = Button(self.screen, 1000, 690, 125, 60, fontSize=30, margin=20, 
+                             inactiveColour=(245, 245, 245), pressedColour=(255, 255, 255), 
+                             radius=20, onClick=self.set_setting_clicked, image=self.load_image("assets/setting.png", 320, 250),
+                             imageHAlign='center')
+        
         self.slider_grid = Slider(self.screen, 470, 610, 200, 15, min=10, max=200, step=10, initial=50,
                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
+        
         self.slider_speed = Slider(self.screen, 470, 700, 200, 15, min=1, max=10, step=1, initial=1,
                                    colour=(152, 251, 152), handleColour=(255, 192, 203))
-
+        
+        
     def load_image(self, path, width, height):
         image = pygame.image.load(path)
         return pygame.transform.scale(image, (width, height))
@@ -44,10 +53,14 @@ class WelcomeView:
     
     def set_start_clicked(self):
         self.start_clicked = True
+    
+    def set_setting_clicked(self):
+        self.setting_clicked = True
 
-    def reset_start_clicked(self):
+    def reset_clicked(self):
         self.start_clicked = False
-        return self.start_clicked
+        self.setting_clicked = False
+        
 
     def get_grid_size(self):
         return self.slider_grid.getValue()
@@ -59,8 +72,13 @@ class WelcomeView:
         self.button.show()
         self.slider_grid.show()
         self.slider_speed.show()
+        self.buton_settings.show()
 
     def hide_widgets(self):
         self.button.hide()
         self.slider_grid.hide()
         self.slider_speed.hide()
+        self.buton_settings.hide()
+        
+
+

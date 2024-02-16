@@ -45,7 +45,10 @@ class GridController:
         return self.paused
         
     def next_step(self):
-       self.model.update_systeme(force_update=True)
+        self.paused = True
+        self.model.update_systeme(force_update=True)
+        self.view.update_buttons_based_on_pause_state(self.paused)
+
        
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size

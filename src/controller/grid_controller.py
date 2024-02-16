@@ -45,8 +45,7 @@ class GridController:
         return self.paused
         
     def next_step(self):
-        print("Next step")
-        self.model.update_systeme(force_update=True)
+       self.model.update_systeme(force_update=True)
        
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
@@ -66,5 +65,7 @@ class GridController:
             i, j = self.view.selected_cell
             info = self.model.get_cell_info(i, j)
             self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
-            
+        
+        self.model.set_speed(self.view.slider_speed.getValue())
+        
         self.view.render()

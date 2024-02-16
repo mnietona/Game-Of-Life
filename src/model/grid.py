@@ -39,6 +39,9 @@ class Grid:
                 self.cells[i][j].set_element(entity)
                 self.entity_positions[(i, j)] = entity
                 added += 1
+    
+    def set_speed(self, speed):
+        self.speed = speed
   
     def update_systeme(self, force_update=False):
         if force_update or self.update_counter >= (SPEED_MAX  - self.speed):

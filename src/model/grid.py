@@ -48,6 +48,8 @@ class Grid:
             self.update_counter = 0  # Réinitialiser le compteur après la mise à jour
             self.turn += 1
 
+            #self.adjust_population_controls()
+            
             positions_to_update = list(self.entity_positions.keys())
             for position in positions_to_update:
                 i, j = position
@@ -57,8 +59,7 @@ class Grid:
             if self.turn % TURN_SPAWN_CARROT == 0:  
                 self.add_entities(Carrot, 1)
             
-            print(f"Tour: {self.turn}")
-            print(self.entity_positions)
+            print(f"Tour: {self.turn}, Lapins: {self.count_population(Rabbit)}, Renards: {self.count_population(Fox)}")
         else:
             self.update_counter += 1  
         
@@ -105,3 +106,8 @@ class Grid:
                             nearest_target = (new_i, new_j)
 
         return nearest_target  
+    
+    def count_population(self, entity_class):
+        return sum(isinstance(entity, entity_class) for entity in self.entity_positions.values())
+
+    

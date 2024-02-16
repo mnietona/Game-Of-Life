@@ -39,7 +39,7 @@ class GridView:
                                        image=self.load_image("assets/Next.png", 160, 160),
                                        onClick=self.set_next_step_clicked)
         
-        self.slider_speed = Slider(self.screen, 900, 450, 200, 15, min=1, max=10, step=1, initial=1,
+        self.slider_speed = Slider(self.screen, 900, 450, 200, 15, min=1, max=10, step=1, initial=self.grid.speed,
                                    colour=(152, 251, 152), handleColour=(255, 192, 203))
  
     def set_back_clicked(self):

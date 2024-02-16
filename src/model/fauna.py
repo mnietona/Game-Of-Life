@@ -8,16 +8,49 @@ class Fauna:
         return f"{self.__class__.__name__}- Niveau de vie: {self.health_level}"
     
     def update(self, i, j, grid):
-        self.health_level -= 1
+        position = (i, j)
+        self.health_level -= 1  
         if self.health_level <= 0:
-            grid.remove_element(i, j)
+            grid.remove_element(i, j)  
         else:
-            self.move(i, j, grid)
-    
+            new_position = self.move(i, j, grid)  
+            self.eat_if_possible(new_position, grid)
+            grid.update_entity_position(position, new_position)
+
     def move(self, i, j, grid):
-        # Modif pour aller manger sa nourriture si elle est dans son rayon
-        self.move_randomly(i, j, grid)
+        position = (i, j)
+        
+        target_position = grid.find_nearest_target(position, self.radius, self.target_type)
+
+        if target_position:
+            return self.move_towards(position, target_position, grid)
+        else:
+            return  self.move_randomly(i, j, grid)
+        
+
     
+    def move_towards(self, current_position, target_position, grid):
+        i, j = current_position
+        target_i, target_j = target_position
+        entity = grid.entity_positions.get(current_position)
+        entity_type = type(entity) if entity else None
+
+        possible_moves = [
+            (i-1, j-1), (i-1, j), (i-1, j+1),
+            (i, j-1),             (i, j+1),
+            (i+1, j-1), (i+1, j), (i+1, j+1)
+        ]
+        
+        valid_moves = [move for move in possible_moves if grid.is_cell_valid(*move, entity_type)]
+
+        if not valid_moves:
+            return current_position
+
+        closest_move = min(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
+
+        return closest_move
+
+
     def move_randomly(self, i, j, grid):
         current_position = (i, j)
         moves = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)] # 8 directions possibles
@@ -25,7 +58,7 @@ class Fauna:
 
         for move in moves:
             new_i, new_j = i + move[0], j + move[1]
-            if 0 <= new_i < grid.size and 0 <= new_j < grid.size and grid.is_cell_valid(new_i, new_j):
+            if grid.is_cell_valid(new_i, new_j):
                 valid_moves.append((new_i, new_j))
 
         if valid_moves:
@@ -34,3 +67,9 @@ class Fauna:
             return new_position
         else:
             return current_position
+    
+    def eat_if_possible(self, position, grid):
+        entity_at_new_position = grid.entity_positions.get(position)
+        print(entity_at_new_position)
+        if entity_at_new_position and isinstance(entity_at_new_position, self.target_type):
+            self.health_level += entity_at_new_position.health_level 

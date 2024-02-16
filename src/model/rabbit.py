@@ -18,7 +18,6 @@ class Rabbit(Animal):
             return
 
 
-        #self.update_group(grid, x, y)
 
         if random.random() < self.reproduction_rate:
             print("reproducen rabbit")

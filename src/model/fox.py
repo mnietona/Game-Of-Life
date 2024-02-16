@@ -1,9 +1,10 @@
 from model.fauna import Fauna
+from model.rabbit import Rabbit
 
 class Fox(Fauna):
-    def __init__(self, health_level=100, radius=10, grid=None):
+    def __init__(self, health_level=100, radius=5):
         super().__init__(health_level, radius)
-        self.grid = grid 
+        self.target_type = Rabbit
     
     def update(self, i, j, grid):
         super().update(i, j, grid)

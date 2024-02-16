@@ -17,6 +17,7 @@ class Fauna:
             new_position = self.move(i, j, grid)  
             self.eat_if_possible(new_position, grid)
             grid.update_entity_position(position, new_position)
+        
 
     def move(self, i, j, grid):
         position = (i, j)

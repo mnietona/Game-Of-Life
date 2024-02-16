@@ -1,8 +1,9 @@
+from src.constants import *
 from model.fauna import Fauna
 from model.flora import Carrot
 
 class Rabbit(Fauna):
-    def __init__(self, health_level=50, radius=7):
+    def __init__(self, health_level=RABBIT_HEALTH, radius=RABBIT_RADIUS):
         super().__init__(health_level, radius) 
         self.target_type = Carrot
     
@@ -11,4 +12,4 @@ class Rabbit(Fauna):
     
     @property
     def color(self):
-        return (255, 255, 255)  # White
+        return WHITE

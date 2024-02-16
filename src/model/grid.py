@@ -1,4 +1,5 @@
 import random
+from src.constants import *
 from model.cell import Cell
 from model.flora import Carrot, Plant
 from model.rabbit import Rabbit
@@ -22,26 +23,25 @@ class Grid:
         num_foxes = max(1, self.size // 20) 
         num_carrots = max(3, self.size // 5)
         
-        self.add_entities(Rabbit, num_rabbits, health_level=50, radius=7)
+        self.add_entities(Rabbit, num_rabbits)
 
-        self.add_entities(Fox, num_foxes, health_level=100, radius=5)
+        self.add_entities(Fox, num_foxes)
         
-        self.add_entities(Carrot, num_carrots, health_level=50)
+        self.add_entities(Carrot, num_carrots)
 
-    def add_entities(self, entity_class, num_entities, **kwargs):
+    def add_entities(self, entity_class, num_entities):
         added = 0
         while added < num_entities:
             i = random.randint(0, self.size - 1)
             j = random.randint(0, self.size - 1)
             if self.is_cell_valid(i, j):
-                entity = entity_class(**kwargs)
+                entity = entity_class()
                 self.cells[i][j].set_element(entity)
                 self.entity_positions[(i, j)] = entity
                 added += 1
   
-    
     def update_systeme(self, force_update=False):
-        if force_update or self.update_counter >= (11 - self.speed):
+        if force_update or self.update_counter >= (SPEED_MAX  - self.speed):
             self.update_counter = 0  # Réinitialiser le compteur après la mise à jour
             self.turn += 1
 
@@ -51,8 +51,8 @@ class Grid:
                 if position in self.entity_positions:
                     self.cells[i][j].update(i, j, self)
             
-            if self.turn % 10 == 0:  
-                self.add_carrot()
+            if self.turn % TURN_SPAWN_CARROT == 0:  
+                self.add_entities(Carrot, 1)
             
             print(f"Tour: {self.turn}")
             print(self.entity_positions)
@@ -78,17 +78,6 @@ class Grid:
         else:
             return False
 
-
-    def add_carrot(self):
-        i = random.randint(0, self.size - 1)
-        j = random.randint(0, self.size - 1)
-        if self.is_cell_valid(i, j):
-            carrot = Carrot(health_level=50)
-            self.cells[i][j].set_element(carrot)
-            self.entity_positions[(i, j)] = carrot
-        else:
-            self.add_carrot()
-    
     def update_entity_position(self, old_position, new_position):
         entity = self.entity_positions.pop(old_position, None)
         if entity:
@@ -112,10 +101,4 @@ class Grid:
                             min_distance = distance
                             nearest_target = (new_i, new_j)
 
-        return nearest_target
-
-
-    
-
-
-    
+        return nearest_target  

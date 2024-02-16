@@ -1,3 +1,5 @@
+from src.constants import *
+
 class Flora:
     def __init__(self, health_level):
         self.health_level = health_level
@@ -16,7 +18,7 @@ class Flora:
      
     @property
     def color(self):
-        return (0, 0, 0) # Black
+        return BLACK
 
 class Plant(Flora):
     def __init__(self, health_level=float('inf')):
@@ -24,12 +26,12 @@ class Plant(Flora):
     
     @property
     def color(self):
-        return (58, 137, 35)  # Green
+        return GREEN
 
 class Carrot(Flora):
-    def __init__(self, health_level=50):
+    def __init__(self, health_level=CARROT_HEALTH):
         super().__init__(health_level)
     
     @property
     def color(self):
-        return (255, 165, 0)  # Orange
+        return ORANGE

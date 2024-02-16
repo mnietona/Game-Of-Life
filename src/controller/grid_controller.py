@@ -15,13 +15,11 @@ class GridController:
         self.view.reset_button_clicks() 
         self.view.show_widgets()  
 
-
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             i, j = self.get_cell_indices(x, y)
             if self.is_valid_cell(i, j):
-                # A ajuster Pour afficher les info pertinnate 
                 self.view.selected_cell = (i, j)
         
         self.view.handle_event(event)  
@@ -49,7 +47,6 @@ class GridController:
         self.model.update_systeme(force_update=True)
         self.view.update_buttons_based_on_pause_state(self.paused)
 
-       
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
         i = (y - 10) // cell_size

@@ -1,5 +1,5 @@
 import random
-from src.constants import *
+from constants import *
 class Fauna:
     def __init__(self, health_level, radius):
         self.health_level = health_level

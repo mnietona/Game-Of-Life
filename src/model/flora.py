@@ -1,4 +1,4 @@
-from src.constants import *
+from constants import *
 
 class Flora:
     def __init__(self, health_level):

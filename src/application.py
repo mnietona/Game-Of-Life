@@ -1,7 +1,7 @@
 import random
 import time
 import pygame
-from src.constants import *
+from constants import *
 from controller.welcome_controller import WelcomeController
 from controller.grid_controller import GridController
 

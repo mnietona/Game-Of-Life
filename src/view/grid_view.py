@@ -2,7 +2,7 @@ import pygame
 import pygame_widgets
 from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
-from src.constants import *
+from constants import *
 
 class GridView:
     def __init__(self, screen, grid):

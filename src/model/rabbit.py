@@ -1,5 +1,5 @@
 import random
-from src.constants import *
+from constants import *
 from model.fauna import Fauna
 from model.flora import Carrot
 

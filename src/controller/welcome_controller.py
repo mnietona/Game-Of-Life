@@ -11,6 +11,7 @@ class WelcomeController:
 
     def handle_event(self, event): 
         self.view.handle_event(event)
+        
         if self.view.start_clicked:
             self.start_game()
             self.view.reset_clicked()

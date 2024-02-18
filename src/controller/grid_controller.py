@@ -49,7 +49,7 @@ class GridController:
         
     def next_step(self):
         self.paused = True
-        self.model.update_systeme(force_update=True)
+        self.model.update_system(force_update=True)
         self.view.update_buttons_based_on_pause_state(self.paused)
 
     def get_cell_indices(self, x, y):
@@ -76,7 +76,7 @@ class GridController:
     def render(self):
         
         if not self.is_paused():
-            self.model.update_systeme()
+            self.model.update_system()
         
         if self.view.selected_cell:
             i, j = self.view.selected_cell

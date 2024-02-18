@@ -27,8 +27,9 @@ class Fauna:
 
     def perform_actions(self, i, j, grid):
         new_position = self.decide_movement(i, j, grid)
-        self.eat_if_possible(new_position, grid)
-        grid.update_entity_position((i, j), new_position)
+        if new_position:
+            self.eat_if_possible(new_position, grid)
+            grid.update_entity_position((i, j), new_position)
 
     def decide_movement(self, i, j, grid):
         target_position = grid.find_nearest_target((i, j), self.radius, self.target_type)
@@ -58,9 +59,13 @@ class Fauna:
         return [move for move in self.get_possible_moves(position, grid)]
 
     def choose_closest_move(self, moves, target_position):
+        if not moves:
+            return None
         return min(moves, key=lambda move: self.calculate_distance(move, target_position))
 
     def choose_furthest_move(self, moves, target_position):
+        if not moves:
+            return None
         return max(moves, key=lambda move: self.calculate_distance(move, target_position))
 
     def calculate_distance(self, position, target_position):
@@ -75,5 +80,4 @@ class Fauna:
     
     def try_reproduce(self, grid):
         if self.health_level >= self.health_reproduction and random.random() < self.reproduction_rate:
-            grid.add_entities(type(self), 1, smart_level=self.smart_level)
-
+            grid.populate_entities(type(self), 1, smart_level=self.smart_level)

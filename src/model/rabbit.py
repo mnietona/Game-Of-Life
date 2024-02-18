@@ -4,7 +4,7 @@ from model.fauna import Fauna
 
 class Rabbit(Fauna):
     reproduction_rate = RABBIT_REPRODUCTION_RATE
-    health_reproduction = 100000000000 #RABBIT_HEALTH_REPRODUCTION
+    health_reproduction = RABBIT_HEALTH_REPRODUCTION
 
     def __init__(self, smart_level = 1):
         super().__init__(RABBIT_HEALTH, RABBIT_RADIUS) 

@@ -25,8 +25,8 @@ class Grid:
         return self.cells[i][j].element.get_info()
     
     def init_grid(self):
-        num_rabbits = 1 # max(2, self.size // 10) 
-        num_foxes = 1 #max(1, self.size // 20) 
+        num_rabbits = max(2, self.size // 10) 
+        num_foxes = max(1, self.size // 20) 
         num_carrots = max(3, self.size // 5)
 
         self.add_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)

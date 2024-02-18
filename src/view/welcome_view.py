@@ -24,7 +24,7 @@ class WelcomeView:
                              radius=20, onClick=self.set_setting_clicked, image=self.load_image("assets/setting.png", 320, 250),
                              imageHAlign='center')
         
-        self.slider_grid = Slider(self.screen, 470, 610, 200, 15, min=10, max=200, step=10, initial=50,
+        self.slider_grid = Slider(self.screen, 470, 610, 200, 15, min=30, max=140, step=10, initial=30,
                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
         
         self.slider_speed = Slider(self.screen, 470, 700, 200, 15, min=1, max=10, step=1, initial=1,

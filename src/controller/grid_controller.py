@@ -55,6 +55,15 @@ class GridController:
 
     def is_valid_cell(self, i, j):
         return 0 <= i < self.model.size and 0 <= j < self.model.size
+    
+    def update_widget_view(self):
+        self.view.set_turn(self.model.turn)
+        self.view.set_count(self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
+        
+        self.model.set_speed(self.view.slider_speed.getValue())
+        self.model.set_smart_level(self.view.slider_smart_rabbit.getValue(), self.view.slider_smart_fox.getValue())
+        
+        
 
     def render(self):
         
@@ -66,10 +75,6 @@ class GridController:
             info = self.model.get_cell_info(i, j)
             self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
         
-        self.view.set_turn(self.model.turn)
-        self.view.set_count(self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
-        
-        self.model.set_speed(self.view.slider_speed.getValue())
-        self.model.set_smart_level(self.view.slider_smart_rabbit.getValue(), self.view.slider_smart_fox.getValue())
+        self.update_widget_view()
         
         self.view.render()

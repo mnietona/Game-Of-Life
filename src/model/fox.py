@@ -8,10 +8,19 @@ class Fox(Fauna):
     reproduction_rate = FOX_REPRODUCTION_RATE
     health_reproduction = FOX_HEALTH_REPRODUCTION
     
-    def __init__(self, health_level=FOX_HEALTH, radius=FOX_RADIUS):
-        super().__init__(health_level, radius)
+    def __init__(self, smart_level = 1):
+        super().__init__(FOX_HEALTH, FOX_RADIUS)
         self.target_type = Rabbit
-        
+        self.base_radius = FOX_RADIUS
+        self.smart_level = smart_level
+        self.adjust_radius_based_on_intelligence()
+    
+    def adjust_radius_based_on_intelligence(self):
+        self.radius = self.base_radius * self.smart_level
+    
+    def set_smart_level(self, smart_level):
+        self.smart_level = smart_level
+        self.adjust_radius_based_on_intelligence()      
     
     def update(self, i, j, grid):
         super().update(i, j, grid)

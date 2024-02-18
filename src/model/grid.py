@@ -6,14 +6,20 @@ from model.rabbit import Rabbit
 from model.fox import Fox
 
 class Grid:
-    def __init__(self, size, speed):
+    def __init__(self, size, speed, smart_level_rabbit, smart_level_fox):
         self.size = size
         self.speed = speed
+        self.smart_level_rabbit = smart_level_rabbit
+        self.smart_level_fox = smart_level_fox
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.turn = 0
         self.update_counter = 0
         self.entity_positions = {}
+        self.count_rabbits = 0
+        self.count_foxes = 0
+        self.count_carrots = 0
         self.init_grid()
+        
 
     def get_cell_info(self, i, j):
         return self.cells[i][j].element.get_info()
@@ -22,26 +28,26 @@ class Grid:
         num_rabbits = max(2, self.size // 10) 
         num_foxes = max(1, self.size // 20) 
         num_carrots = max(3, self.size // 5)
-        
-        self.add_entities(Rabbit, num_rabbits)
 
-        self.add_entities(Fox, num_foxes)
-        
+        self.add_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
+        self.add_entities(Fox, num_foxes, smart_level=self.smart_level_fox)
         self.add_entities(Carrot, num_carrots)
 
-    def add_entities(self, entity_class, num_entities):
+
+    def add_entities(self, entity_class, num_entities, **kwargs):
         added = 0
         while added < num_entities:
             i = random.randint(0, self.size - 1)
             j = random.randint(0, self.size - 1)
             if self.is_cell_valid(i, j):
-                entity = entity_class()
+                entity = entity_class(**kwargs)
                 self.cells[i][j].set_element(entity)
                 self.entity_positions[(i, j)] = entity
                 added += 1
     
     def set_speed(self, speed):
         self.speed = speed
+    
   
     def update_systeme(self, force_update=False):
         if force_update or self.update_counter >= (SPEED_MAX  - self.speed):
@@ -59,7 +65,7 @@ class Grid:
             if self.turn % TURN_SPAWN_CARROT == 0:  
                 self.add_entities(Carrot, 1)
             
-            print(f"Tour: {self.turn}, Lapins: {self.count_population(Rabbit)}, Renards: {self.count_population(Fox)}")
+            self.update_count_population()
         else:
             self.update_counter += 1  
         
@@ -109,5 +115,10 @@ class Grid:
     
     def count_population(self, entity_class):
         return sum(isinstance(entity, entity_class) for entity in self.entity_positions.values())
+
+    def update_count_population(self):
+        self.count_rabbits = self.count_population(Rabbit)
+        self.count_foxes = self.count_population(Fox)
+        self.count_carrots = self.count_population(Carrot)
 
     

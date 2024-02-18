@@ -6,9 +6,9 @@ class Flora:
 
     def get_info(self):
         if self.health_level == float('inf'):
-            return f"Flore: {self.__class__.__name__}- Durée de vie: éternelle"
+            return f"{self.__class__.__name__}- Durée de vie: éternelle"
         
-        return f"Flore: {self.__class__.__name__}- Durée de vie: {self.health_level}"
+        return f"{self.__class__.__name__}- Durée de vie: {self.health_level}"
 
     def update(self, i, j, grid): 
         if self.health_level > 0:

@@ -9,6 +9,7 @@ class Fauna:
         return f"{self.__class__.__name__}- Niveau de vie: {self.health_level}"
     
     def update(self, i, j, grid):
+        
         position = (i, j)
         self.health_level -= 1  
         if self.health_level <= 0:

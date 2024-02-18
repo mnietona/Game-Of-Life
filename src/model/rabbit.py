@@ -1,15 +1,15 @@
 import random
 from constants import *
 from model.fauna import Fauna
-from model.flora import Carrot
 
 class Rabbit(Fauna):
     reproduction_rate = RABBIT_REPRODUCTION_RATE
-    health_reproduction = RABBIT_HEALTH_REPRODUCTION
+    health_reproduction = 100000000000 #RABBIT_HEALTH_REPRODUCTION
 
     def __init__(self, smart_level = 1):
         super().__init__(RABBIT_HEALTH, RABBIT_RADIUS) 
-        self.target_type = Carrot
+        self.target_type = "Carrot"
+        self.predator_type = "Fox"
         self.base_radius = RABBIT_RADIUS
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()
@@ -23,29 +23,37 @@ class Rabbit(Fauna):
         
     def update(self, i, j, grid):
         if self.smart_level > 2:
-            from model.fox import Fox
-            # voir si predateur à proximité
-            predator_position = grid.find_nearest_target((i, j), self.radius, Fox)
-            # voir si manger à proximité
-            food_position = grid.find_nearest_target((i, j), self.radius, Carrot)
-            # comparer la distance entre les deux
-            if predator_position and food_position:
-                ...
-            # si distance vers manger < distance vers predateur, alors allez vers manger
-            # sinon, fuite
-            else:
-                # Déplacer aléatoirement si rien n'est détecté
-                self.move_randomly(i, j, grid)
+            position = (i, j)
+            new_position = position
+            food_position = grid.find_nearest_target(position, self.radius, self.target_type)
+            predator_position = grid.find_nearest_target(position, self.radius, self.predator_type)
+            
+            if food_position and predator_position:
+                predator_distance = grid.calculate_distance(position, predator_position)
+                food_distance = grid.calculate_distance(position, food_position)
                 
+                if predator_distance < food_distance:
+                    new_position = self.flee(position, predator_position, grid)
+                else:
+                    new_position = self.move_towards(position, food_position, grid)
+            elif predator_position:
+                new_position = self.flee(position, predator_position, grid)
+            elif food_position:
+                new_position = self.move_towards(position, food_position, grid)
+            else:
+                new_position = self.move_randomly(i, j, grid)
+            grid.update_entity_position(position, new_position)
         else:
             super().update(i, j, grid)
-        
-        
+
         if self.health_level >= self.health_reproduction and random.random() < self.reproduction_rate:
             self.reproduce(grid)
+
         
-    def flee(self, i, j, grid, predator_position):
-        ...
+    def flee(self,current_position, predator_position, grid):
+        return self.move_towards(current_position, predator_position, grid, flee=True)
+        
+        
         
     def reproduce(self, grid):
         grid.add_entities(Rabbit, 1)

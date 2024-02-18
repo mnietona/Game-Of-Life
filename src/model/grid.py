@@ -19,14 +19,14 @@ class Grid:
         self.count_foxes = 0
         self.count_carrots = 0
         self.init_grid()
-        
+
 
     def get_cell_info(self, i, j):
         return self.cells[i][j].element.get_info()
     
     def init_grid(self):
-        num_rabbits = max(2, self.size // 10) 
-        num_foxes = max(1, self.size // 20) 
+        num_rabbits = 1 # max(2, self.size // 10) 
+        num_foxes = 1 #max(1, self.size // 20) 
         num_carrots = max(3, self.size // 5)
 
         self.add_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
@@ -48,6 +48,15 @@ class Grid:
     def set_speed(self, speed):
         self.speed = speed
     
+    def set_smart_level(self, smart_level_rabbit, smart_level_fox):
+        self.smart_level_rabbit = smart_level_rabbit
+        self.smart_level_fox = smart_level_fox
+        for entity in self.entity_positions.values():
+            if isinstance(entity, Rabbit):
+                entity.set_smart_level(smart_level_rabbit)
+            elif isinstance(entity, Fox):
+                entity.set_smart_level(smart_level_fox)
+    
   
     def update_systeme(self, force_update=False):
         if force_update or self.update_counter >= (SPEED_MAX  - self.speed):
@@ -57,6 +66,7 @@ class Grid:
             #self.adjust_population_controls()
             
             positions_to_update = list(self.entity_positions.keys())
+            random.shuffle(positions_to_update) # Mélanger les positions pour éviter les biais de mise à jour
             for position in positions_to_update:
                 i, j = position
                 if position in self.entity_positions:
@@ -66,6 +76,7 @@ class Grid:
                 self.add_entities(Carrot, 1)
             
             self.update_count_population()
+            print(f"tour {self.turn}")
         else:
             self.update_counter += 1  
         
@@ -99,19 +110,35 @@ class Grid:
         i, j = position
         nearest_target = None
         min_distance = float('inf')
+        target = self.get_entity(target_type)
         
         for di in range(-radius, radius + 1):
             for dj in range(-radius, radius + 1):
                 new_i, new_j = i + di, j + dj
                 if 0 <= new_i < self.size and 0 <= new_j < self.size:
                     cell = self.cells[new_i][new_j]
-                    if isinstance(cell.element, target_type):  
+                    if isinstance(cell.element, target):  
                         distance = abs(di) + abs(dj) 
                         if distance < min_distance:
                             min_distance = distance
                             nearest_target = (new_i, new_j)
 
         return nearest_target  
+    
+    def calculate_distance(self, position, target_position):
+        i, j = position
+        target_i, target_j = target_position
+        return abs(i - target_i) + abs(j - target_j) 
+    
+    def get_entity(self, target_type):
+        target = None
+        if target_type == "Carrot":
+            target = Carrot
+        elif target_type == "Fox":
+            target = Fox
+        elif target_type == "Rabbit":
+            target = Rabbit
+        return target
     
     def count_population(self, entity_class):
         return sum(isinstance(entity, entity_class) for entity in self.entity_positions.values())

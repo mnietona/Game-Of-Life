@@ -68,16 +68,8 @@ class GridView:
         self.update_buttons_based_on_pause_state(self.pause_play_clicked)
     
     def update_buttons_based_on_pause_state(self, is_paused):
-        if is_paused:
-            self.buttons['play'].show()
-            self.buttons['pause'].hide()
-        else:
-            self.buttons['play'].hide()
-            self.buttons['pause'].show()
-
-    # def update_buttons_based_on_pause_state(self):
-    #     self.buttons['play'].show() if self.pause_play_clicked else self.buttons['pause'].show()
-    #     self.buttons['pause'].hide() if self.pause_play_clicked else self.buttons['play'].hide()
+        self.buttons['play'].show() if is_paused else self.buttons['pause'].show()
+        self.buttons['pause'].hide() if is_paused else self.buttons['play'].hide()
 
     def load_image(self, path, width, height):
         return pygame.transform.scale(pygame.image.load(path), (width, height))
@@ -129,7 +121,7 @@ class GridView:
         self.screen.blit(self.info_box_background, (830, 40))
         
         if self.selected_cell:
-            text_y = 140  # Démarre le texte un peu plus bas dans la boîte d'informations
+            text_y = 140  
             lines = self.selected_cell_info.split('- ')
             for line in lines:
                 self.draw_text(line, 1005, text_y, font_size=24)

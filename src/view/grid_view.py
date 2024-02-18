@@ -8,108 +8,113 @@ class GridView:
     def __init__(self, screen, grid):
         self.screen = screen
         self.grid = grid
-        self.size = grid.size
-        self.cell_size =  SCREEN_HEIGHT // self.size
+        self.cell_size = SCREEN_HEIGHT // self.grid.size
         self.font = pygame.font.Font(None, 36)
-        self.background_image = self.load_image('assets/background_grid.jpg', screen.get_width(), screen.get_height())
+        self.load_background_images()
+        self.init_values()
+        self.reset_click_states()
+        self.init_ui_elements()
+        self.hide_widgets()
+
+    def load_background_images(self):
+        self.background_image = self.load_image('assets/background_grid.jpg', self.screen.get_width(), self.screen.get_height())
         self.info_box_background = self.load_image("assets/info_box.png", 340, 235)
-        self.turn_background = self.load_image("assets/tour.png", 230,120)
-        self.setting_background = self.load_image("assets/settings.png", 390,280)
-        self.legend_background = self.load_image("assets/legende.png", 390,280)
+        self.turn_background = self.load_image("assets/tour.png", 230, 120)
+        self.setting_background = self.load_image("assets/settings.png", 390, 280)
+        self.legend_background = self.load_image("assets/legende.png", 390, 280)
+
+    def reset_click_states(self):
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
+    
+    def init_values(self):
         self.selected_cell = None  
         self.selected_cell_info = ""
         self.turn = 0
         self.count_rabbit = 0
         self.count_fox = 0
         self.count_carrot = 0
-        self.init_ui_elements()
-        self.hide_widgets()
 
     def init_ui_elements(self):
+        self.buttons = {
+            'back': self.create_button(1115, 735, "assets/return.png", self.toggle_click_state, 'back_clicked'),
+            'play': self.create_button(1035, 30, "assets/play.png", self.toggle_pause_play),
+            'pause': self.create_button(1035, 30, "assets/pause.png", self.toggle_pause_play),
+            'next_step': self.create_button(1115, 30, "assets/next.png", self.toggle_click_state, 'next_step_clicked')
+        }
         
-        self.button_back = Button(self.screen, 1115, 735, 65, 65, fontSize=30, margin=20,
-                                  image=self.load_image("assets/return.png", 110, 90),
-                                  radius = 90,onClick=self.set_back_clicked)
+        self.sliders = {
+            'speed': self.create_slider(940, 287, 1, 10, self.grid.speed),
+            'smart_rabbit': self.create_slider(940, 385, 1, 3, self.grid.smart_level_rabbit),
+            'smart_fox': self.create_slider(940, 423, 1, 3, self.grid.smart_level_fox)
+        }
 
-        self.button_pause = Button(self.screen, 1035, 30, 58, 58, fontSize=30, margin=20,
-                                        image=self.load_image("assets/pause.png", 100, 80),
-                                        onClick=self.set_pause_play_clicked, radius = 90)
+    def create_button(self, x, y, image_path, onclick_function, click_state=None):
+        image = self.load_image(image_path, 100, 80)
+        if click_state is not None:
+            return Button(self.screen, x, y, 58, 58, fontSize=30, margin=20, image=image, onClick=lambda: onclick_function(click_state), radius=90)
+        else:
+            return Button(self.screen, x, y, 58, 58, fontSize=30, margin=20, image=image, onClick=onclick_function, radius=90)
 
-        self.button_play = Button(self.screen, 1035, 30, 58, 58, fontSize=30, margin=20,
-                                  image=self.load_image( "assets/play.png", 100, 80),
-                                  onClick=self.set_pause_play_clicked, radius = 90)
-        
-        self.button_next_step = Button(self.screen, 1115, 30, 58, 58, fontSize=30, margin=20,
-                                       image=self.load_image("assets/next.png", 100, 80),
-                                       onClick=self.set_next_step_clicked, radius = 90)
-        
-        self.slider_speed = Slider(self.screen, 940, 287, 160, 15, min=1, max=10, step=1, initial=self.grid.speed,
-                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
-        
-        self.slider_smart_rabbit = Slider(self.screen, 940, 385, 160, 15, min=1, max=3, step=1, initial=self.grid.smart_level_rabbit,
-                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
-        
-        self.slider_smart_fox = Slider(self.screen, 940, 423, 160, 15, min=1, max=3, step=1, initial=self.grid.smart_level_fox,
-                                   colour=(152, 251, 152), handleColour=(255, 192, 203))
-        
-    def set_turn(self, turn):
-        self.turn = turn
-    
-    def set_count(self, count_rabbit, count_fox, count_carrot):
-        self.count_rabbit = count_rabbit
-        self.count_fox = count_fox
-        self.count_carrot = count_carrot
- 
-    def set_back_clicked(self):
-        self.back_clicked = True
+    def create_slider(self, x, y, min_val, max_val, initial):
+        return Slider(self.screen, x, y, 160, 15, min=min_val, max=max_val, step=1, initial=initial, colour=(152, 251, 152), handleColour=(255, 192, 203))
 
-    def set_pause_play_clicked(self):
+    def toggle_click_state(self, state):
+        setattr(self, state, not getattr(self, state))
+
+    def toggle_pause_play(self):
         self.pause_play_clicked = not self.pause_play_clicked
         self.update_buttons_based_on_pause_state(self.pause_play_clicked)
     
     def update_buttons_based_on_pause_state(self, is_paused):
         if is_paused:
-            self.button_play.show()
-            self.button_pause.hide()
+            self.buttons['play'].show()
+            self.buttons['pause'].hide()
         else:
-            self.button_pause.show()
-            self.button_play.hide()
-            
-    def set_next_step_clicked(self):
-        self.next_step_clicked = True
+            self.buttons['play'].hide()
+            self.buttons['pause'].show()
+
+    # def update_buttons_based_on_pause_state(self):
+    #     self.buttons['play'].show() if self.pause_play_clicked else self.buttons['pause'].show()
+    #     self.buttons['pause'].hide() if self.pause_play_clicked else self.buttons['play'].hide()
 
     def load_image(self, path, width, height):
-        image = pygame.image.load(path)
-        return pygame.transform.scale(image, (width, height))
-    
-    def draw_widgets(self):
-        self.draw_info_box()
-        self.draw_turn()
-        self.draw_legend()
-        self.draw_settings()
-    
+        return pygame.transform.scale(pygame.image.load(path), (width, height))
+
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
         self.draw_cells()
         self.draw_widgets()
         pygame_widgets.update(pygame.event.get())
 
+    def draw_widgets(self):
+        self.draw_info_box()
+        self.draw_turn()
+        self.draw_legend()
+        self.draw_settings()
+
+    def draw_cells(self):
+        for i in range(self.grid.size):
+            for j in range(self.grid.size):
+                rect = pygame.Rect(10 + j * self.cell_size, 10 + i * self.cell_size, self.cell_size, self.cell_size)
+                pygame.draw.rect(self.screen, self.get_cell_color(i, j), rect)
+                pygame.draw.rect(self.screen, (0, 90, 0), rect, 1)
+
     def draw_settings(self):
         self.screen.blit(self.setting_background, (800, 210))
         
-        self.slider_speed.draw()
-        self.draw_text(str(self.slider_speed.getValue()), 1128, 293)
+        slider_positions = {
+            'speed': (1128, 293),
+            'smart_rabbit': (1128, 391),
+            'smart_fox': (1128, 429)
+        }
         
-        self.slider_smart_rabbit.draw()
-        self.draw_text(str(self.slider_smart_rabbit.getValue()), 1128, 391)
-        
-        self.slider_smart_fox.draw()
-        self.draw_text(str(self.slider_smart_fox.getValue()), 1128, 429)
-        
-        
+        for name, (x, y) in slider_positions.items():
+            slider = self.sliders[name]
+            slider.draw()
+            self.draw_text(str(slider.getValue()), x, y)
+
     def draw_legend(self):
         self.screen.blit(self.legend_background, (800, 460))
         self.draw_text(f"{self.count_carrot}", 995, 520)
@@ -130,25 +135,13 @@ class GridView:
                 self.draw_text(line, 1005, text_y, font_size=24)
                 text_y += 30
 
-    def draw_cells(self):
-        for i in range(self.size):
-            for j in range(self.size):
-                rect = pygame.Rect(10 + j * self.cell_size, 10 + i * self.cell_size, self.cell_size, self.cell_size)
-                pygame.draw.rect(self.screen, self.get_cell_color(i, j), rect)
-                pygame.draw.rect(self.screen, (0, 90, 0), rect, 1) 
-
     def get_cell_color(self, i, j):
         cell_element = self.grid.cells[i][j].element
         return cell_element.color
     
-    def get_speed(self):
-        return self.slider_speed.getValue()
-    
-    def get_smart_rabbit(self):
-        return self.slider_smart_rabbit.getValue()
-    
-    def get_smart_fox(self):
-        return self.slider_smart_fox.getValue()
+    def get_slider_value(self, slider_name):
+        return self.sliders[slider_name].getValue()
+
 
     def draw_text(self, text, x, y, font_size=36):
         font = pygame.font.Font(None, font_size)
@@ -158,27 +151,15 @@ class GridView:
     
     def handle_event(self, event):
         pygame_widgets.update([event])
-    
+
     def show_widgets(self):
-        self.button_back.show()
-        self.button_pause.show()
-        self.button_next_step.show()
-        self.slider_speed.show()
-        self.slider_smart_fox.show()
-        self.slider_smart_rabbit.show()
-        
+        for widget in self.buttons.values():
+            widget.show() 
+        for slider in self.sliders.values():
+            slider.show()
+
     def hide_widgets(self):
-        self.button_back.hide()
-        self.button_pause.hide()
-        self.button_play.hide()
-        self.button_next_step.hide()
-        self.slider_speed.hide()
-        self.slider_smart_fox.hide()
-        self.slider_smart_rabbit.hide()
-        
-
-    def reset_button_clicks(self):
-        self.back_clicked = False
-        self.next_step_clicked = False
-        self.pause_play_clicked = False
-
+        for widget in self.buttons.values():
+            widget.hide()
+        for slider in self.sliders.values():
+            slider.hide()

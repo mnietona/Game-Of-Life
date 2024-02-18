@@ -1,77 +1,79 @@
 import random
 from constants import *
+
 class Fauna:
-    def __init__(self, health_level, radius):
+    
+    def __init__(self, health_level, radius, health_reproduction, reproduction_rate):
         self.health_level = health_level
         self.radius = radius
+        self.health_reproduction = health_reproduction
+        self.reproduction_rate = reproduction_rate
 
     def get_info(self):
-        return f"{self.__class__.__name__}- Niveau de vie: {self.health_level}"
+        return f"{self.__class__.__name__} - Niveau de vie : {self.health_level}"
     
     def update(self, i, j, grid):
-        
-        position = (i, j)
-        self.health_level -= 1  
-        if self.health_level <= 0:
-            grid.remove_element(i, j)  
+        self.decrease_health()
+        if self.is_alive():
+            self.perform_actions(i, j, grid)
         else:
-            new_position = self.move(i, j, grid)  
-            self.eat_if_possible(new_position, grid)
-            grid.update_entity_position(position, new_position)
-        
+            grid.remove_element(i, j)
 
-    def move(self, i, j, grid):
-        position = (i, j)
-        
-        target_position = grid.find_nearest_target(position, self.radius, self.target_type)
+    def decrease_health(self):
+        self.health_level -= 1
 
+    def is_alive(self):
+        return self.health_level > 0
+
+    def perform_actions(self, i, j, grid):
+        new_position = self.decide_movement(i, j, grid)
+        self.eat_if_possible(new_position, grid)
+        grid.update_entity_position((i, j), new_position)
+
+    def decide_movement(self, i, j, grid):
+        target_position = grid.find_nearest_target((i, j), self.radius, self.target_type)
         if target_position:
-            return self.move_towards(position, target_position, grid)
+            return self.move_towards((i, j), target_position, grid)
         else:
-            return  self.move_randomly(i, j, grid)
-    
+            return self.move_randomly(i, j, grid)
+
     def move_towards(self, current_position, target_position, grid, flee=False):
-        i, j = current_position
-        target_i, target_j = target_position
-        entity = grid.entity_positions.get(current_position)
-        entity_type = type(entity) if entity else None
-
-        possible_moves = [
-            (i-1, j-1), (i-1, j), (i-1, j+1),
-            (i, j-1),             (i, j+1),
-            (i+1, j-1), (i+1, j), (i+1, j+1)
-        ]
-        
-        valid_moves = [move for move in possible_moves if grid.is_cell_valid(*move, entity_type)]
-
-        if not valid_moves:
-            return current_position
+        possible_moves = self.get_possible_moves(current_position, grid)
         if flee:
-            closest_move = max(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
+            chosen_move = self.choose_furthest_move(possible_moves, target_position)
         else:
-            closest_move = min(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
-
-        return closest_move
-
+            chosen_move = self.choose_closest_move(possible_moves, target_position)
+        return chosen_move
 
     def move_randomly(self, i, j, grid):
-        current_position = (i, j)
-        moves = MOVES 
-        valid_moves = []
+        valid_moves = self.get_valid_moves((i, j), grid)
+        return random.choice(valid_moves) if valid_moves else (i, j)
 
-        for move in moves:
-            new_i, new_j = i + move[0], j + move[1]
-            if grid.is_cell_valid(new_i, new_j):
-                valid_moves.append((new_i, new_j))
+    def get_possible_moves(self, position, grid):
+        i, j = position
+        entity_type = type(self)
+        return [(i + di, j + dj) for di, dj in MOVES if grid.is_cell_valid(i + di, j + dj, entity_type)]
 
-        if valid_moves:
-            new_position = random.choice(valid_moves)
-            grid.update_entity_position(current_position, new_position)
-            return new_position
-        else:
-            return current_position
-    
+    def get_valid_moves(self, position, grid):
+        return [move for move in self.get_possible_moves(position, grid)]
+
+    def choose_closest_move(self, moves, target_position):
+        return min(moves, key=lambda move: self.calculate_distance(move, target_position))
+
+    def choose_furthest_move(self, moves, target_position):
+        return max(moves, key=lambda move: self.calculate_distance(move, target_position))
+
+    def calculate_distance(self, position, target_position):
+        px, py = position
+        tx, ty = target_position
+        return abs(px - tx) + abs(py - ty)
+
     def eat_if_possible(self, position, grid):
         entity_at_new_position = grid.entity_positions.get(position)
         if entity_at_new_position and isinstance(entity_at_new_position, grid.get_entity(self.target_type)):
             self.health_level += entity_at_new_position.health_level 
+    
+    def try_reproduce(self, grid):
+        if self.health_level >= self.health_reproduction and random.random() < self.reproduction_rate:
+            grid.add_entities(type(self), 1, smart_level=self.smart_level)
+

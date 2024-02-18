@@ -1,4 +1,3 @@
-import random
 from constants import *
 from model.fauna import Fauna
 

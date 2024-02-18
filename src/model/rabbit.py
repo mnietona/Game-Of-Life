@@ -19,7 +19,11 @@ class Rabbit(Fauna):
         
     def update(self, i, j, grid):
         if self.smart_level > 1:
-            self.intelligent_behavior(i, j, grid)
+            self.decrease_health()
+            if self.is_alive():
+                self.intelligent_behavior(i, j, grid)
+            else:
+                grid.remove_element(i, j)
         else:
             super().update(i, j, grid)
 
@@ -31,7 +35,9 @@ class Rabbit(Fauna):
         predator_position = grid.find_nearest_target(position, self.radius, self.predator_type)
 
         new_position = self.decide_action(position, food_position, predator_position, grid)
-        grid.update_entity_position(position, new_position)
+        if new_position:
+            self.eat_if_possible(new_position, grid)
+            grid.update_entity_position(position, new_position)
 
     def decide_action(self, position, food_position, predator_position, grid):
         if predator_position and food_position:

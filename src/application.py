@@ -36,9 +36,9 @@ class Application:
 
         pygame.quit()
 
-    def switch_controller(self, controller_name, grid_size=None, speed=None):
+    def switch_controller(self, controller_name, grid_size=None, speed=None, smart_level_fox=None, smart_level_rabbit=None):
         if controller_name == "grid":
-            self.controllers["grid"] = GridController(self, grid_size, speed)
+            self.controllers["grid"] = GridController(self, grid_size, speed, smart_level_fox, smart_level_rabbit)
         self.current_controller = self.controllers[controller_name]
         self.current_controller.activate()
 

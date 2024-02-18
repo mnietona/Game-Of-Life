@@ -61,7 +61,6 @@ class WelcomeView:
         self.start_clicked = False
         self.setting_clicked = False
         
-
     def get_grid_size(self):
         return self.slider_grid.getValue()
 

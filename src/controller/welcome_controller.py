@@ -21,8 +21,10 @@ class WelcomeController:
     def start_game(self):
         grid_size = self.view.get_grid_size()
         speed = self.view.get_speed()
+        smart_level_rabbit = 3
+        smart_level_fox = 1
         self.view.hide_widgets()
-        self.app.switch_controller("grid", grid_size, speed)
+        self.app.switch_controller("grid", grid_size, speed, smart_level_rabbit, smart_level_fox)
     
     def show_settings_window(self):
         self.view.hide_widgets()

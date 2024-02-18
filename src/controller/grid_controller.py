@@ -3,9 +3,9 @@ from model.grid import Grid
 from view.grid_view import GridView 
 
 class GridController:
-    def __init__(self, app, grid_size, speed):
+    def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit):
         self.app = app
-        self.model = Grid(grid_size, speed)
+        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit)
         self.view = None
         self.paused = False
 
@@ -65,6 +65,9 @@ class GridController:
             i, j = self.view.selected_cell
             info = self.model.get_cell_info(i, j)
             self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
+        
+        self.view.set_turn(self.model.turn)
+        self.view.set_count(self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
         
         self.model.set_speed(self.view.slider_speed.getValue())
         

@@ -11,7 +11,10 @@ class Flora:
         return f"{self.__class__.__name__}- Durée de vie: {self.health_level}"
 
     def update(self, i, j, grid): 
-        self.health_level -= 1 if self.health_level > 0 else grid.remove_element(i, j)
+        if self.health_level > 0 :
+            self.health_level -= 1 
+        else:
+            grid.remove_element(i, j)
      
     @property
     def color(self):

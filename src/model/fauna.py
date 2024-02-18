@@ -30,7 +30,7 @@ class Fauna:
         else:
             return  self.move_randomly(i, j, grid)
     
-    def move_towards(self, current_position, target_position, grid):
+    def move_towards(self, current_position, target_position, grid, flee=False):
         i, j = current_position
         target_i, target_j = target_position
         entity = grid.entity_positions.get(current_position)
@@ -46,8 +46,10 @@ class Fauna:
 
         if not valid_moves:
             return current_position
-
-        closest_move = min(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
+        if flee:
+            closest_move = max(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
+        else:
+            closest_move = min(valid_moves, key=lambda move: (move[0] - target_i)**2 + (move[1] - target_j)**2)
 
         return closest_move
 
@@ -71,5 +73,5 @@ class Fauna:
     
     def eat_if_possible(self, position, grid):
         entity_at_new_position = grid.entity_positions.get(position)
-        if entity_at_new_position and isinstance(entity_at_new_position, self.target_type):
+        if entity_at_new_position and isinstance(entity_at_new_position, grid.get_entity(self.target_type)):
             self.health_level += entity_at_new_position.health_level 

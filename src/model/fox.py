@@ -1,7 +1,7 @@
 import random
 from constants import *
 from model.fauna import Fauna
-from model.rabbit import Rabbit
+
 
 
 class Fox(Fauna):
@@ -10,7 +10,7 @@ class Fox(Fauna):
     
     def __init__(self, smart_level = 1):
         super().__init__(FOX_HEALTH, FOX_RADIUS)
-        self.target_type = Rabbit
+        self.target_type = "Rabbit"
         self.base_radius = FOX_RADIUS
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()

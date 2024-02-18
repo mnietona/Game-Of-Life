@@ -70,5 +70,6 @@ class GridController:
         self.view.set_count(self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
         
         self.model.set_speed(self.view.slider_speed.getValue())
+        self.model.set_smart_level(self.view.slider_smart_rabbit.getValue(), self.view.slider_smart_fox.getValue())
         
         self.view.render()

@@ -16,8 +16,6 @@ class GridView:
         self.turn_background = self.load_image("assets/tour.png", 230,120)
         self.setting_background = self.load_image("assets/settings.png", 390,280)
         self.legend_background = self.load_image("assets/legende.png", 390,280)
-        self.init_ui_elements()
-        self.hide_widgets()
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
@@ -27,6 +25,8 @@ class GridView:
         self.count_rabbit = 0
         self.count_fox = 0
         self.count_carrot = 0
+        self.init_ui_elements()
+        self.hide_widgets()
 
     def init_ui_elements(self):
         
@@ -164,6 +164,8 @@ class GridView:
         self.button_pause.show()
         self.button_next_step.show()
         self.slider_speed.show()
+        self.slider_smart_fox.show()
+        self.slider_smart_rabbit.show()
         
     def hide_widgets(self):
         self.button_back.hide()
@@ -171,6 +173,9 @@ class GridView:
         self.button_play.hide()
         self.button_next_step.hide()
         self.slider_speed.hide()
+        self.slider_smart_fox.hide()
+        self.slider_smart_rabbit.hide()
+        
 
     def reset_button_clicks(self):
         self.back_clicked = False

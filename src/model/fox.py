@@ -1,8 +1,6 @@
 from constants import *
 from model.fauna import Fauna
 
-
-
 class Fox(Fauna):
     
     def __init__(self, smart_level = 1):

@@ -6,11 +6,12 @@ from model.rabbit import Rabbit
 from model.fox import Fox
 
 class Grid:
-    def __init__(self, size, speed, smart_level_rabbit=1, smart_level_fox=1, default_rabbits=None, default_foxes=None):
+    def __init__(self, size, speed, smart_level_rabbit=1, smart_level_fox=1, default_rabbits=None, default_foxes=None, default_carrot_spawn = None):
         self.size = size
         self.speed = speed
         self.smart_level_rabbit = smart_level_rabbit
         self.smart_level_fox = smart_level_fox
+        self.carrot_spawn_speed = 2 #default_carrot_spawn 
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.entity_positions = {}
         self.init_entities(default_rabbits, default_foxes)
@@ -65,11 +66,16 @@ class Grid:
                 self.cells[i][j].update(i, j, self)
 
     def spawn_carrots(self):
-        if self.turn % TURN_SPAWN_CARROT == 0:
+        if self.turn % (TURN_SPAWN_CARROT - self.carrot_spawn_speed) == 0:
             self.populate_entities(Carrot, 1)
 
     def print_turn_info(self):
-        print(f"Turn: {self.turn})")
+        print(f"Turn: {self.turn}")
+    
+    def update_count_population(self):
+        self.count_rabbits = sum(isinstance(entity, Rabbit) for entity in self.entity_positions.values())
+        self.count_foxes = sum(isinstance(entity, Fox) for entity in self.entity_positions.values())
+        self.count_carrots = sum(isinstance(entity, Carrot) for entity in self.entity_positions.values())
     
     def get_cell_info(self, i, j):
         return self.cells[i][j].element.get_info()
@@ -85,6 +91,9 @@ class Grid:
     
     def set_speed(self, speed):
         self.speed = speed
+    
+    def set_carrot_spawn_speed(self, carrot_spawn_speed):
+        self.carrot_spawn_speed = carrot_spawn_speed
 
     def set_smart_level(self, smart_level_rabbit, smart_level_fox):
         self.smart_level_rabbit, self.smart_level_fox = smart_level_rabbit, smart_level_fox
@@ -143,7 +152,3 @@ class Grid:
     def calculate_distance(self, position1, position2):
         return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
 
-    def update_count_population(self):
-        self.count_rabbits = sum(isinstance(entity, Rabbit) for entity in self.entity_positions.values())
-        self.count_foxes = sum(isinstance(entity, Fox) for entity in self.entity_positions.values())
-        self.count_carrots = sum(isinstance(entity, Carrot) for entity in self.entity_positions.values())

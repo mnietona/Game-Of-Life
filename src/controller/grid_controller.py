@@ -3,9 +3,9 @@ from model.grid import Grid
 from view.grid_view import GridView 
 
 class GridController:
-    def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit):
+    def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_rabbits=None, default_foxes=None, default_carrot_spawn = None):
         self.app = app
-        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit)
+        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit, default_rabbits, default_foxes, default_carrot_spawn)
         self.view = None
         self.paused = False
 
@@ -51,6 +51,7 @@ class GridController:
         self.paused = True
         self.model.update_system(force_update=True)
         self.view.update_buttons_based_on_pause_state(self.paused)
+        self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
 
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
@@ -66,23 +67,28 @@ class GridController:
         self.view.count_rabbit = self.model.count_rabbits
         self.view.count_fox = self.model.count_foxes
         self.view.count_carrot = self.model.count_carrots
-
         speed = self.view.get_slider_value('speed')
+        carrot_spawn_speed = self.view.get_slider_value('carrot_spawn_speed')
         smart_level_rabbit = self.view.get_slider_value('smart_rabbit')
         smart_level_fox = self.view.get_slider_value('smart_fox')
         self.model.set_speed(speed)
+        self.model.set_carrot_spawn_speed(carrot_spawn_speed)
         self.model.set_smart_level(smart_level_rabbit, smart_level_fox)
 
     def render(self):
         
         if not self.is_paused():
             self.model.update_system()
+            self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
         
         if self.view.selected_cell:
             i, j = self.view.selected_cell
             info = self.model.get_cell_info(i, j)
-            self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
+            self.view.selected_cell_info = f"Case ({i}, {j}) : {info}"
         
         self.update_widget_view()
         
         self.view.render()
+    
+    def resize_screen(self, width, height):
+        self.view.resize_screen(width, height)

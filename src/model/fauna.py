@@ -8,9 +8,10 @@ class Fauna:
         self.radius = radius
         self.health_reproduction = health_reproduction
         self.reproduction_rate = reproduction_rate
+        self.age = 0
 
     def get_info(self):
-        return f"{self.__class__.__name__} - Niveau de vie : {self.health_level}"
+        return f"{self.__class__.__name__}- Xp: {self.health_level},   Age : {self.age}- Rayon : {self.radius} - Taux de reproduction : {self.reproduction_rate * 100}%"
     
     def update(self, i, j, grid):
         self.decrease_health()
@@ -21,6 +22,7 @@ class Fauna:
 
     def decrease_health(self):
         self.health_level -= 1
+        self.age += 1
 
     def is_alive(self):
         return self.health_level > 0

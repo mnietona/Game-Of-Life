@@ -21,5 +21,8 @@ class SettingController:
         self.view.hide_widgets()
         self.app.switch_controller("welcome")
 
+    def resize_screen(self, width, height):
+        self.view.resize_screen(width, height)
+
     def render(self):
         self.view.render()

@@ -6,6 +6,7 @@ class WelcomeController:
         self.view = WelcomeView(app.screen)
 
     def activate(self):
+        self.view.resize_screen(self.app.screen.get_width(), self.app.screen.get_height())
         self.view.show_widgets()
         self.view.reset_clicked()
 

@@ -84,7 +84,7 @@ class GridController:
         if self.view.selected_cell:
             i, j = self.view.selected_cell
             info = self.model.get_cell_info(i, j)
-            self.view.selected_cell_info = f"Case selectionnée  ({i}, {j})- {info}"
+            self.view.selected_cell_info = f"Case ({i}, {j}) : {info}"
         
         self.update_widget_view()
         

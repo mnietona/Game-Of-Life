@@ -5,7 +5,6 @@ class SettingController:
         self.app = app
         self.view = None
 
-
     def activate(self):
         if self.view is None:
             self.view = SettingView(self.app.screen)

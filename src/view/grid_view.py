@@ -8,7 +8,6 @@ class GridView:
     def __init__(self, screen, grid):
         self.screen = screen
         self.grid = grid    
-        self.font = pygame.font.Font(None, 36)
         self.grid_size = 800
         self.cell_size = self.grid_size // self.grid.size
         self.load_background_images()
@@ -141,11 +140,11 @@ class GridView:
         self.screen.blit(self.info_box_background, (820 * width_ratio, -90 * height_ratio))
         
         if self.selected_cell:
-            text_y = 80 * height_ratio  
+            text_y = 65 * height_ratio  
             lines = self.selected_cell_info.split('- ')
             for line in lines:
                 self.draw_text(line, 983 * width_ratio, text_y, font_size=int(30 * height_ratio))
-                text_y += 30 * height_ratio
+                text_y += 25 * height_ratio
     
     def draw_graph_axes(self, graph_surface):
         _, graph_height = graph_surface.get_size()

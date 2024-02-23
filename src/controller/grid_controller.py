@@ -51,7 +51,7 @@ class GridController:
         self.paused = True
         self.model.update_system(force_update=True)
         self.view.update_buttons_based_on_pause_state(self.paused)
-        self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes)
+        self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
 
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
@@ -79,7 +79,7 @@ class GridController:
         
         if not self.is_paused():
             self.model.update_system()
-            self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes)
+            self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
         
         if self.view.selected_cell:
             i, j = self.view.selected_cell

@@ -16,30 +16,7 @@ class GridView:
         self.reset_click_states()
         self.init_ui_elements()
         self.hide_widgets()
-
-    def draw_graph(self, width_ratio, height_ratio):
-        # Taille et position du graphique sur l'écran Pygame
-        graph_width = 570 * width_ratio
-        graph_height = 250 * height_ratio
-        graph_origin = (835 * width_ratio, 470 * height_ratio)
-
-        # Surface pour le graphique
-        graph_surface = pygame.Surface((graph_width, graph_height))
-        graph_surface.fill((255, 167, 109))  # Fond blanc
-
-        # Blit le graphique sur l'écran principal
-        self.screen.blit(graph_surface, graph_origin)
         
-    def update_data_and_graph(self, turn, rabbits, foxes):
-        self.turns.append(turn)
-        self.rabbit_population.append(rabbits)
-        self.fox_population.append(foxes)
-        
-    def reset_click_states(self):
-        self.back_clicked = False
-        self.pause_play_clicked = False
-        self.next_step_clicked = False
-    
     def init_values(self):
         self.selected_cell = None  
         self.selected_cell_info = ""
@@ -51,6 +28,7 @@ class GridView:
         # Pour le graphique
         self.rabbit_population = []
         self.fox_population = []
+        self.carrot_population = []
         self.turns = []
         self.graph_figure = None
         self.graph_axes = None
@@ -97,17 +75,6 @@ class GridView:
         return Slider(self.screen, x, y, taille_x, taille_y, min=min_val, max=max_val, step=step, initial=initial,
                       colour=(152, 251, 152), handleColour=(255, 192, 203))
         
-    def toggle_click_state(self, state):
-        setattr(self, state, not getattr(self, state))
-
-    def toggle_pause_play(self):
-        self.pause_play_clicked = not self.pause_play_clicked
-        self.update_buttons_based_on_pause_state(self.pause_play_clicked)
-    
-    def update_buttons_based_on_pause_state(self, is_paused):
-        self.buttons['play'].show() if is_paused else self.buttons['pause'].show()
-        self.buttons['pause'].hide() if is_paused else self.buttons['play'].hide()
-
     def load_image(self, path, width, height):
         return pygame.transform.scale(pygame.image.load(path), (width, height))
 
@@ -126,7 +93,6 @@ class GridView:
         self.draw_legend(width_ratio, height_ratio)
         self.draw_graph(width_ratio, height_ratio)
         
-
     def draw_grid(self):
         width_ratio, height_ratio = self.calculate_ratios()
         square_rect = pygame.Rect((10,10), (800 * width_ratio, 800 * height_ratio))
@@ -144,7 +110,6 @@ class GridView:
                 cell_rect = pygame.Rect(cell_x, cell_y, cell_size, cell_size)
                 pygame.draw.rect(self.screen, self.get_cell_color(i, j), cell_rect, width =0)
                 pygame.draw.rect(self.screen, (0, 90, 0), cell_rect, 1)
-
 
     def draw_settings(self, width_ratio, height_ratio):
         self.screen.blit(self.setting_background, (790 * width_ratio, 190 * height_ratio))
@@ -181,6 +146,72 @@ class GridView:
             for line in lines:
                 self.draw_text(line, 983 * width_ratio, text_y, font_size=int(30 * height_ratio))
                 text_y += 30 * height_ratio
+    
+    def draw_graph_axes(self, graph_surface):
+        _, graph_height = graph_surface.get_size()
+        pygame.draw.line(graph_surface, BLACK, (40, 0), (40, graph_height), 2)
+        tick_length = 10  
+        num_ticks = 10 
+        tick_interval = graph_height / num_ticks 
+        for i in range(num_ticks + 1):
+            y = i * tick_interval
+            pygame.draw.line(graph_surface, BLACK, (40 - tick_length / 2, y), (40 + tick_length / 2, y), 2)
+        font = pygame.font.Font(None, 18)
+        label_y = font.render('Population', True, BLACK)
+        graph_surface.blit(label_y, (10, 5))
+        
+    def draw_graph(self, width_ratio, height_ratio):
+        graph_width = 570 * width_ratio
+        graph_height = 250 * height_ratio
+        graph_origin = (835 * width_ratio, 470 * height_ratio)
+        
+        graph_surface = pygame.Surface((graph_width, graph_height))
+        graph_surface.fill((255, 167, 109))
+
+        self.draw_graph_axes(graph_surface)
+        
+        max_turns = 50  
+        scale_x = graph_width / max_turns
+        scale_y = graph_height / max(100, max(self.rabbit_population + self.fox_population + self.carrot_population))
+
+
+        start_index = max(0, len(self.turns) - max_turns)
+
+        rabbit_points = [(i * scale_x + 40, graph_height - 40 - val * scale_y) for i, val in enumerate(self.rabbit_population[start_index:])]
+        fox_points = [(i * scale_x + 40, graph_height - 40 - val * scale_y) for i, val in enumerate(self.fox_population[start_index:])]
+        carrot_points = [(i * scale_x + 40, graph_height - 40 - val * scale_y) for i, val in enumerate(self.carrot_population[start_index:])]
+
+        if len(rabbit_points) > 1:
+            pygame.draw.lines(graph_surface, WHITE, False, rabbit_points, 2)
+        if len(fox_points) > 1:
+            pygame.draw.lines(graph_surface, RED, False, fox_points, 2)
+        if len(carrot_points) > 1:
+            pygame.draw.lines(graph_surface, ORANGE_GRAPH, False, carrot_points, 2)
+        
+        self.screen.blit(graph_surface, graph_origin)
+    
+    def draw_text(self, text, x, y, font_size=36):
+        font = pygame.font.Font(None, font_size)
+        text_surface = font.render(text, True, (139, 69, 19))
+        text_rect = text_surface.get_rect(center=(x, y))
+        self.screen.blit(text_surface, text_rect)
+    
+    def update_data_and_graph(self, turn, rabbits, foxes, carrot):
+        self.turns.append(turn)
+        self.rabbit_population.append(rabbits)
+        self.fox_population.append(foxes)
+        self.carrot_population.append(carrot)
+
+    def toggle_click_state(self, state):
+        setattr(self, state, not getattr(self, state))
+
+    def toggle_pause_play(self):
+        self.pause_play_clicked = not self.pause_play_clicked
+        self.update_buttons_based_on_pause_state(self.pause_play_clicked)
+    
+    def update_buttons_based_on_pause_state(self, is_paused):
+        self.buttons['play'].show() if is_paused else self.buttons['pause'].show()
+        self.buttons['pause'].hide() if is_paused else self.buttons['play'].hide()
 
     def get_cell_color(self, i, j):
         cell_element = self.grid.cells[i][j].element
@@ -189,12 +220,6 @@ class GridView:
     def get_slider_value(self, slider_name):
         return self.sliders[slider_name].getValue()
 
-    def draw_text(self, text, x, y, font_size=36):
-        font = pygame.font.Font(None, font_size)
-        text_surface = font.render(text, True, (139, 69, 19))
-        text_rect = text_surface.get_rect(center=(x, y))
-        self.screen.blit(text_surface, text_rect)
-    
     def handle_event(self, event):
         pygame_widgets.update([event])
 
@@ -209,6 +234,11 @@ class GridView:
             widget.hide()
         for slider in self.sliders.values():
             slider.hide()
+    
+    def reset_click_states(self):
+        self.back_clicked = False
+        self.pause_play_clicked = False
+        self.next_step_clicked = False
     
     def resize_screen(self, width, height):
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)

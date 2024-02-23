@@ -11,6 +11,7 @@ class Grid:
         self.speed = speed
         self.smart_level_rabbit = smart_level_rabbit
         self.smart_level_fox = smart_level_fox
+        self.carrot_spawn_speed = TURN_SPAWN_CARROT
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.entity_positions = {}
         self.init_entities(default_rabbits, default_foxes)

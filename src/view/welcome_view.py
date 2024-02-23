@@ -28,7 +28,7 @@ class WelcomeView:
         slider_x = button_x
         slider_grid_y, slider_speed_y = int(610 * height_ratio), int(700 * height_ratio)
 
-        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 30, 140, 10, 30)
+        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 40, 150, 30, 40)
         self.slider_speed = self.create_slider(slider_x, slider_speed_y, slider_width, slider_height, 1, 10, 1, 1)
 
         self.font = pygame.font.Font(None, int(36 * height_ratio))
@@ -81,6 +81,14 @@ class WelcomeView:
         self.setting_clicked = False
 
     def get_grid_size(self):
+        if self.slider_grid.getValue() == 60:
+            return 50
+        elif self.slider_grid.getValue() == 90:
+            return 80
+        elif self.slider_grid.getValue() == 120:
+            return 100
+        elif self.slider_grid.getValue() == 150:
+            return 160
         return self.slider_grid.getValue()
 
     def get_speed(self):

@@ -11,7 +11,7 @@ class Grid:
         self.speed = speed
         self.smart_level_rabbit = smart_level_rabbit
         self.smart_level_fox = smart_level_fox
-        self.carrot_spawn_speed = TURN_SPAWN_CARROT
+        self.carrot_spawn_speed = 2
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.entity_positions = {}
         self.init_entities(default_rabbits, default_foxes)
@@ -66,7 +66,7 @@ class Grid:
                 self.cells[i][j].update(i, j, self)
 
     def spawn_carrots(self):
-        if self.turn % TURN_SPAWN_CARROT == 0:
+        if self.turn % (TURN_SPAWN_CARROT - self.carrot_spawn_speed) == 0:
             self.populate_entities(Carrot, 1)
 
     def print_turn_info(self):
@@ -86,6 +86,9 @@ class Grid:
     
     def set_speed(self, speed):
         self.speed = speed
+    
+    def set_carrot_spawn_speed(self, carrot_spawn_speed):
+        self.carrot_spawn_speed = carrot_spawn_speed
 
     def set_smart_level(self, smart_level_rabbit, smart_level_fox):
         self.smart_level_rabbit, self.smart_level_fox = smart_level_rabbit, smart_level_fox

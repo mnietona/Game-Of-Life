@@ -68,9 +68,11 @@ class GridController:
         self.view.count_fox = self.model.count_foxes
         self.view.count_carrot = self.model.count_carrots
         speed = self.view.get_slider_value('speed')
+        carrot_spawn_speed = self.view.get_slider_value('carrot_spawn_speed')
         smart_level_rabbit = self.view.get_slider_value('smart_rabbit')
         smart_level_fox = self.view.get_slider_value('smart_fox')
         self.model.set_speed(speed)
+        self.model.set_carrot_spawn_speed(carrot_spawn_speed)
         self.model.set_smart_level(smart_level_rabbit, smart_level_fox)
 
     def render(self):

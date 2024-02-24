@@ -4,6 +4,11 @@ class WelcomeController:
     def __init__(self, app):
         self.app = app
         self.view = WelcomeView(app.screen)
+        self.smart_level_rabbit = 1
+        self.smart_level_fox = 1
+        self.default_rabbits = None
+        self.default_foxes = None
+        self.default_carrot_spawn = 2
 
     def activate(self):
         self.view.resize_screen(self.app.screen.get_width(), self.app.screen.get_height())
@@ -19,22 +24,26 @@ class WelcomeController:
         elif self.view.setting_clicked:
             self.show_settings_window()
             self.view.reset_clicked()
+    
+    def update_settings(self, smart_rabbit, smart_fox, start_rabbit, start_fox, spawn_carrot):
+        self.smart_level_rabbit = smart_rabbit
+        self.smart_level_fox = smart_fox
+        self.default_rabbits = start_rabbit
+        self.default_foxes = start_fox
+        self.default_carrot_spawn = spawn_carrot
 
     def start_game(self):
         grid_size = self.view.get_grid_size()
         speed = self.view.get_speed()
-        smart_level_rabbit = 1
-        smart_level_fox = 1
-        default_rabbits = None
-        default_foxes = None
-        default_carrot_spawn = None
         self.view.hide_widgets()
-        self.app.switch_controller("grid", grid_size, speed, smart_level_rabbit, smart_level_fox, default_rabbits, default_foxes, default_carrot_spawn)
+        self.app.switch_controller("grid", grid_size, speed, self.smart_level_rabbit, self.smart_level_fox, self.default_carrot_spawn, self.default_rabbits, self.default_foxes)
     
     def show_settings_window(self):
         self.view.hide_widgets()
-        self.app.switch_controller("setting")
-    
+        grid_size = self.view.get_grid_size()
+        self.app.switch_controller("setting", grid_size)
+        
+        
     def resize_screen(self, width, height):
         self.view.resize_screen(width, height)
 

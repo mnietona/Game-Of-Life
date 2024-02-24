@@ -95,7 +95,7 @@ class WelcomeView:
         return self.slider_speed.getValue()
 
     def show_widgets(self):
-        for widget in [self.button_start, self.slider_grid, self.slider_speed, self.button_settings]:
+        for widget in [self.button_start, self.button_settings, self.slider_grid, self.slider_speed]:
             widget.show()
 
     def hide_widgets(self):

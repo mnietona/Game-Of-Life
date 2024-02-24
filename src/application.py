@@ -45,6 +45,8 @@ class Application:
     def switch_controller(self, controller_name, grid_size=None, speed=None, smart_level_fox=None, smart_level_rabbit=None, default_rabbits=None, default_foxes=None, default_carrot_spawn=None):
         if controller_name == "grid":
             self.controllers["grid"] = GridController(self, grid_size, speed, smart_level_fox, smart_level_rabbit, default_rabbits, default_foxes, default_carrot_spawn)
+        elif controller_name == "setting":
+            self.controllers["setting"].update_settings(grid_size)
         self.current_controller = self.controllers[controller_name]
         self.current_controller.activate()
 

@@ -6,12 +6,12 @@ from model.rabbit import Rabbit
 from model.fox import Fox
 
 class Grid:
-    def __init__(self, size, speed, smart_level_rabbit=1, smart_level_fox=1, default_rabbits=None, default_foxes=None, default_carrot_spawn = None):
+    def __init__(self, size, speed, smart_level_rabbit, smart_level_fox, default_carrot_spawn, default_rabbits, default_foxes):
         self.size = size
         self.speed = speed
         self.smart_level_rabbit = smart_level_rabbit
         self.smart_level_fox = smart_level_fox
-        self.carrot_spawn_speed = 2 #default_carrot_spawn 
+        self.carrot_spawn_speed = default_carrot_spawn 
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.entity_positions = {}
         self.init_entities(default_rabbits, default_foxes)

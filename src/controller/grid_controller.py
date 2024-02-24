@@ -3,9 +3,9 @@ from model.grid import Grid
 from view.grid_view import GridView 
 
 class GridController:
-    def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_rabbits=None, default_foxes=None, default_carrot_spawn = None):
+    def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits=None, default_foxes=None):
         self.app = app
-        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit, default_rabbits, default_foxes, default_carrot_spawn)
+        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
         self.view = None
         self.paused = False
 

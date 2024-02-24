@@ -38,7 +38,11 @@ class Grid:
                 return i, j
 
     def add_entity(self, i, j, entity_class, smart_level=None):
-        kwargs = {'smart_level': smart_level} if smart_level is not None else {}
+        kwargs = {}
+        if entity_class != Carrot:
+            kwargs['grid_size'] = self.size
+        if smart_level is not None:
+            kwargs['smart_level'] = smart_level
         entity = entity_class(**kwargs)
         self.cells[i][j].set_element(entity)
         self.entity_positions[(i, j)] = entity

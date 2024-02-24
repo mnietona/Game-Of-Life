@@ -1,9 +1,11 @@
 from view.welcome_view import WelcomeView
 
+
 class WelcomeController:
     def __init__(self, app):
         self.app = app
         self.view = None
+        self.grid_size = 40
         self.smart_level_rabbit = 1
         self.smart_level_fox = 1
         self.default_rabbits = None
@@ -36,6 +38,9 @@ class WelcomeController:
 
     def start_game(self):
         grid_size = self.view.get_grid_size()
+        if self.grid_size != grid_size:
+            self.default_rabbits = None
+            self.default_foxes = None
         speed = self.view.get_speed()
         self.view.hide_widgets()
         self.view.set_initial_values()
@@ -43,9 +48,9 @@ class WelcomeController:
     
     def show_settings_window(self):
         self.view.hide_widgets()
-        grid_size = self.view.get_grid_size()
+        self.grid_size = self.view.get_grid_size()
         self.view.set_initial_values()
-        self.app.switch_controller("setting", grid_size)
+        self.app.switch_controller("setting", self.grid_size)
         
     def resize_screen(self, width, height):
         self.view.resize_screen(width, height)

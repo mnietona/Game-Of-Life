@@ -3,9 +3,10 @@ from constants import *
 
 class Fauna:
     
-    def __init__(self, health_level, radius, health_reproduction, reproduction_rate):
+    def __init__(self, health_level, radius, health_reproduction, reproduction_rate, grid_size, delta):
         self.health_level = health_level
-        self.radius = radius
+        self.radius_base = max(radius, round(grid_size / 10)) + delta
+        self.radius = self.radius_base
         self.health_reproduction = health_reproduction
         self.reproduction_rate = reproduction_rate
         self.age = 0
@@ -13,6 +14,13 @@ class Fauna:
     def get_info(self):
         return f"{self.__class__.__name__}- Xp: {self.health_level},   Age : {self.age}- Rayon : {self.radius} - Taux de reproduction : {self.reproduction_rate * 100}%"
     
+    def adjust_radius_based_on_intelligence(self):
+        self.radius = self.radius_base * self.smart_level
+    
+    def set_smart_level(self, smart_level):
+        self.smart_level = smart_level
+        self.adjust_radius_based_on_intelligence()    
+        
     def update(self, i, j, grid):
         self.decrease_health()
         if self.is_alive():

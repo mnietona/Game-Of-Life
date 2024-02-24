@@ -72,7 +72,7 @@ class GridView:
 
     def create_slider(self, x, y, taille_x, taille_y, min_val, max_val, step, initial):
         return Slider(self.screen, x, y, taille_x, taille_y, min=min_val, max=max_val, step=step, initial=initial,
-                      colour=(152, 251, 152), handleColour=(255, 192, 203))
+                      colour=(245,245,220), handleColour=(222,184,135))
         
     def load_image(self, path, width, height):
         return pygame.transform.scale(pygame.image.load(path), (width, height))

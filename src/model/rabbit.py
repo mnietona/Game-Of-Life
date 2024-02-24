@@ -3,19 +3,12 @@ from model.fauna import Fauna
 
 class Rabbit(Fauna):
 
-    def __init__(self, smart_level = 1):
-        super().__init__(RABBIT_HEALTH, RABBIT_RADIUS, RABBIT_HEALTH_REPRODUCTION, RABBIT_REPRODUCTION_RATE)
+    def __init__(self, grid_size, smart_level = 1):
+        super().__init__(RABBIT_HEALTH, RABBIT_RADIUS, RABBIT_HEALTH_REPRODUCTION, RABBIT_REPRODUCTION_RATE, grid_size, delta=2)
         self.target_type = "Carrot"
         self.predator_type = "Fox"
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()
-        
-    def adjust_radius_based_on_intelligence(self):
-        self.radius = RABBIT_RADIUS * self.smart_level
-        
-    def set_smart_level(self, smart_level):
-        self.smart_level = smart_level
-        self.adjust_radius_based_on_intelligence()   
         
     def update(self, i, j, grid):
         if self.smart_level > 1:

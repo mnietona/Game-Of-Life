@@ -7,6 +7,8 @@ from constants import *
 class WelcomeView:
     def __init__(self, screen):
         self.screen = screen
+        self.init_gird_size = 40
+        self.init_speed = 1
         self.create_ui_elements()
         self.load_background_images()
         self.reset_clicked()
@@ -28,8 +30,8 @@ class WelcomeView:
         slider_x = button_x
         slider_grid_y, slider_speed_y = int(610 * height_ratio), int(700 * height_ratio)
 
-        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 40, 150, 30, 40)
-        self.slider_speed = self.create_slider(slider_x, slider_speed_y, slider_width, slider_height, 1, 10, 1, 1)
+        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 40, 150, 30, self.init_gird_size)
+        self.slider_speed = self.create_slider(slider_x, slider_speed_y, slider_width, slider_height, 1, 10, 1, self.init_speed)
 
         self.font = pygame.font.Font(None, int(36 * height_ratio))
         self.draw_values_x = button_x + slider_width + 13
@@ -50,7 +52,7 @@ class WelcomeView:
 
     def create_slider(self, x, y, taille_x, taille_y, min_val, max_val, step, initial):
         return Slider(self.screen, x, y, taille_x, taille_y, min=min_val, max=max_val, step=step, initial=initial,
-                      colour=(152, 251, 152), handleColour=(255, 192, 203))
+                      colour=(245,245,220), handleColour=(222,184,135))
 
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
@@ -75,6 +77,10 @@ class WelcomeView:
     
     def set_setting_clicked(self):
         self.setting_clicked = True
+    
+    def set_initial_values(self):
+        self.init_gird_size = self.slider_grid.getValue()
+        self.init_speed = self.slider_speed.getValue()
 
     def reset_clicked(self):
         self.start_clicked = False
@@ -95,7 +101,7 @@ class WelcomeView:
         return self.slider_speed.getValue()
 
     def show_widgets(self):
-        for widget in [self.button_start, self.slider_grid, self.slider_speed, self.button_settings]:
+        for widget in [self.button_start, self.button_settings, self.slider_grid, self.slider_speed]:
             widget.show()
 
     def hide_widgets(self):

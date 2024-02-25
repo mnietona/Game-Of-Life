@@ -1,7 +1,7 @@
 import random
 from src.constants import *
 from model.cell import Cell
-from model.flora import Carrot, Plant
+from model.flora import Carrot, Plant, Burrow
 from model.rabbit import Rabbit
 from model.fox import Fox
 
@@ -14,21 +14,35 @@ class Grid:
         self.carrot_spawn_speed = default_carrot_spawn 
         self.cells = [[Cell() for _ in range(size)] for _ in range(size)]
         self.entity_positions = {}
+        self.burrow_positions = set()
         self.init_entities(default_rabbits, default_foxes)
         self.turn = 0
         self.update_counter = 0
         self.update_count_population()
 
     def init_entities(self, default_rabbits, default_foxes):
+        self.init_burrows(2, 2) # Ajuster ici par rapport a la grille
         num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.size // 10)
         num_foxes = default_foxes if default_foxes is not None else max(1, self.size // 20)
         self.populate_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
         self.populate_entities(Fox, num_foxes, smart_level=self.smart_level_fox)
         self.populate_entities(Carrot, max(3, self.size // 5))
+    
+    def init_burrows(self, num_burrows, burrow_size):
+        for _ in range(num_burrows):
+            while True:
+                center_position = (random.randint(0, self.size - 1), random.randint(0, self.size - 1))
+                if self.is_cell_valid_for_burrow(center_position, burrow_size):
+                    break
+            self.add_burrow(center_position, burrow_size)
 
-    def populate_entities(self, entity_class, num_entities, smart_level=None):
+    def populate_entities(self, entity_class, num_entities, smart_level=None, reproduce=False):
         for _ in range(num_entities):
-            i, j = self.get_random_valid_cell()
+            if reproduce and entity_class == Rabbit:
+                i, j = self.get_random_burrow_position()
+            else:
+                i, j = self.get_random_valid_cell()
+
             self.add_entity(i, j, entity_class, smart_level)
 
     def get_random_valid_cell(self):
@@ -36,6 +50,12 @@ class Grid:
             i, j = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
             if isinstance(self.cells[i][j].element, Plant):
                 return i, j
+    
+    def get_random_burrow_position(self):
+        available_burrows = [burrow_position for burrow_position in self.burrow_positions if isinstance(self.cells[burrow_position[0]][burrow_position[1]].element, Burrow)]
+        if available_burrows:
+            return random.choice(available_burrows)
+        return self.get_random_valid_cell()
 
     def add_entity(self, i, j, entity_class, smart_level=None):
         kwargs = {}
@@ -46,7 +66,24 @@ class Grid:
         entity = entity_class(**kwargs)
         self.cells[i][j].set_element(entity)
         self.entity_positions[(i, j)] = entity
-          
+    
+    def add_burrow(self, center_position, burrow_size):
+        i_center, j_center = center_position
+        for i in range(i_center - burrow_size, i_center + burrow_size + 1):
+            for j in range(j_center - burrow_size, j_center + burrow_size + 1):
+                if 0 <= i < self.size and 0 <= j < self.size:
+                    self.burrow_positions.add((i, j)) 
+                    self.cells[i][j].set_element(Burrow())
+                    self.entity_positions[(i, j)] = self.cells[i][j].element
+
+    def is_cell_valid_for_burrow(self, center_position, burrow_size):
+        i_center, j_center = center_position
+        for i in range(i_center - burrow_size, i_center + burrow_size + 1):
+            for j in range(j_center - burrow_size, j_center + burrow_size + 1):
+                if not (0 <= i < self.size and 0 <= j < self.size): # Pas dans la grille
+                    return False 
+        return True
+    
     def update_system(self, force_update=False):
         if self.should_update(force_update):
             self.update_entities()
@@ -112,9 +149,12 @@ class Grid:
     
     def remove_element(self, i, j):
         if (i, j) in self.entity_positions:
-            self.cells[i][j].set_element(Plant())
             del self.entity_positions[(i, j)]
-
+            if (i, j) in self.burrow_positions:
+                self.cells[i][j].set_element(Burrow())
+            else:
+                self.cells[i][j].set_element(Plant())
+            
     def is_cell_valid(self, i, j, entity_type=None):
         if not (0 <= i < self.size and 0 <= j < self.size):
             return False 
@@ -124,19 +164,25 @@ class Grid:
         if entity_type is None:
             return isinstance(cell_content, Plant)
         elif entity_type == Rabbit:
-            return isinstance(cell_content, (Plant, Carrot))
+            return isinstance(cell_content, (Plant, Carrot, Burrow)) 
         elif entity_type == Fox:
-            return isinstance(cell_content, (Plant, Rabbit))
+            return isinstance(cell_content, (Plant, Rabbit)) and (i, j) not in self.burrow_positions
         else:
             return False
 
     def update_entity_position(self, old_position, new_position):
         entity = self.entity_positions.pop(old_position, None)
         if entity:
+            is_leaving_burrow = old_position in self.burrow_positions
+            
             self.entity_positions[new_position] = entity
-            self.cells[old_position[0]][old_position[1]].set_element(Plant())
             self.cells[new_position[0]][new_position[1]].set_element(entity)
-    
+            
+            if is_leaving_burrow:
+                self.cells[old_position[0]][old_position[1]].set_element(Burrow()) 
+            else:
+                self.cells[old_position[0]][old_position[1]].set_element(Plant())
+                
     def find_nearest_target(self, position, radius, target_type):
         i, j = position
         nearest_target = None
@@ -156,3 +202,12 @@ class Grid:
     def calculate_distance(self, position1, position2):
         return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
 
+    def find_nearest_burrow(self, position):
+        nearest_burrow = None
+        min_distance = float('inf')
+        for burrow_position in self.burrow_positions:
+            distance = self.calculate_distance(position, burrow_position)
+            if distance < min_distance:
+                min_distance = distance
+                nearest_burrow = burrow_position
+        return nearest_burrow

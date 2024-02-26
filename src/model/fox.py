@@ -11,7 +11,8 @@ class Fox(Fauna):
     
     def update(self, i, j, grid):
         super().update(i, j, grid)
-        self.try_reproduce(grid)
+        if self.age % 10 == 0:
+            self.try_reproduce(grid)
 
     @property
     def color(self):

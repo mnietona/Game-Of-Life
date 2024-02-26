@@ -21,7 +21,10 @@ class Grid:
         self.update_count_population()
 
     def init_entities(self, default_rabbits, default_foxes):
-        self.init_burrows(2, 2) # Ajuster ici par rapport a la grille
+        num_burrows = max(1, self.size // 20)
+        burrow_size = max(1, self.size // 40)
+        
+        self.init_burrows(num_burrows, burrow_size)
         num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.size // 10)
         num_foxes = default_foxes if default_foxes is not None else max(1, self.size // 20)
         self.populate_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
@@ -29,12 +32,12 @@ class Grid:
         self.populate_entities(Carrot, max(3, self.size // 5))
     
     def init_burrows(self, num_burrows, burrow_size):
-        for _ in range(num_burrows):
+        for num in range(num_burrows):
             while True:
                 center_position = (random.randint(0, self.size - 1), random.randint(0, self.size - 1))
                 if self.is_cell_valid_for_burrow(center_position, burrow_size):
                     break
-            self.add_burrow(center_position, burrow_size)
+            self.add_burrow(center_position, burrow_size, num+1)
 
     def populate_entities(self, entity_class, num_entities, smart_level=None, reproduce=False):
         for _ in range(num_entities):
@@ -67,23 +70,31 @@ class Grid:
         self.cells[i][j].set_element(entity)
         self.entity_positions[(i, j)] = entity
     
-    def add_burrow(self, center_position, burrow_size):
+    def add_burrow(self, center_position, burrow_size, num_burrow):
         i_center, j_center = center_position
         for i in range(i_center - burrow_size, i_center + burrow_size + 1):
             for j in range(j_center - burrow_size, j_center + burrow_size + 1):
                 if 0 <= i < self.size and 0 <= j < self.size:
                     self.burrow_positions.add((i, j)) 
-                    self.cells[i][j].set_element(Burrow())
+                    self.cells[i][j].set_element(Burrow(num_burrow))
                     self.entity_positions[(i, j)] = self.cells[i][j].element
 
     def is_cell_valid_for_burrow(self, center_position, burrow_size):
         i_center, j_center = center_position
+
         for i in range(i_center - burrow_size, i_center + burrow_size + 1):
             for j in range(j_center - burrow_size, j_center + burrow_size + 1):
-                if not (0 <= i < self.size and 0 <= j < self.size): # Pas dans la grille
-                    return False 
+                if not (0 <= i < self.size and 0 <= j < self.size): 
+                    return False
+        
+        for existing_center in self.burrow_positions:
+            if self.calculate_distance_burrow(center_position, existing_center) < 20: # 20 pcq ca foncitonne le mieux
+                return False
         return True
-    
+
+    def calculate_distance_burrow(self, pos1, pos2):
+        return ((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2) ** 0.5
+
     def update_system(self, force_update=False):
         if self.should_update(force_update):
             self.update_entities()
@@ -151,7 +162,7 @@ class Grid:
         if (i, j) in self.entity_positions:
             del self.entity_positions[(i, j)]
             if (i, j) in self.burrow_positions:
-                self.cells[i][j].set_element(Burrow())
+                self.cells[i][j].set_element(Burrow(0))
             else:
                 self.cells[i][j].set_element(Plant())
             
@@ -179,7 +190,7 @@ class Grid:
             self.cells[new_position[0]][new_position[1]].set_element(entity)
             
             if is_leaving_burrow:
-                self.cells[old_position[0]][old_position[1]].set_element(Burrow()) 
+                self.cells[old_position[0]][old_position[1]].set_element(Burrow(0)) 
             else:
                 self.cells[old_position[0]][old_position[1]].set_element(Plant())
                 

@@ -8,13 +8,13 @@ FPS = 30
 # RABBIT
 RABBIT_HEALTH = 50
 RABBIT_RADIUS = 5
-RABBIT_REPRODUCTION_RATE = 0.2 # 20% de chance de se reproduire
+RABBIT_REPRODUCTION_RATE = 0.05 # 20% de chance de se reproduire
 RABBIT_HEALTH_REPRODUCTION = 100
 
 # FOX
 FOX_HEALTH = 100
 FOX_RADIUS = 3
-FOX_REPRODUCTION_RATE = 0.05 # 5% de chance de se reproduire
+FOX_REPRODUCTION_RATE = 0.02 # 5% de chance de se reproduire
 FOX_HEALTH_REPRODUCTION = 200
 
 

@@ -5,7 +5,7 @@ import random
 ALPHA = 1.1  # Taux de reproduction des lapins
 BETA = 0.4   # Taux de mortalité des lapins dû aux renards
 RABBIT_HEALTH = 100 # Santé initiale des lapins
-RABBIT_REPRODUCTION_RATE = 0.9  # Santé nécessaire pour qu'un lapin se reproduise
+RABBIT_REPRODUCTION_RATE = 10  # Santé nécessaire pour qu'un lapin se reproduise
 RABBIT_RADIUS = 5  # Rayon de déplacement des lapins
 DELTA_RADIUS = 2  # Rayon de déplacement des lapins
 

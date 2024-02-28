@@ -12,7 +12,7 @@ DELTA_RADIUS = 0  # Rayon de déplacement des renards
 class Fox(Fauna):
     def __init__(self, grid_size):
         super().__init__(grid_size, health=FOX_HEALTH, reproduction_rate=FOX_REPRODUCTION_RATE, radius=FOX_RADIUS, delta=DELTA_RADIUS)
-        self.hunger = 0  # Niveau de faim initial pour le renard
+        self.hunger = 0 
         self.prey = "Rabbit"
 
     def interact_with_environment(self, i, j, env):
@@ -31,7 +31,7 @@ class Fox(Fauna):
         rabbits_eaten = 0
         for rabbit in grid.get_prey_around(i, j, self.prey):
             if self.hunger >= HUNGER_THRESHOLD: # Il mange si rencontre 5 fois 1 lapin 
-                rabbit.health = 0  # Le lapin est mangé
+                rabbit.health = 0  # 
                 rabbits_eaten += 1
                 self.health += 10
                 self.hunger = 0

@@ -25,8 +25,8 @@ class SettingView:
             "smart_rabbit": self.create_slider(int(500 *width_ratio),int(275*height_ratio),int(450 *width_ratio), int(16*height_ratio), 1, 3, 1, 1),
             "smart_fox": self.create_slider(int(500 *width_ratio),int(345*height_ratio),int(450 *width_ratio),int( 16*height_ratio), 1, 3, 1, 1),
             "start_rabbit": self.create_slider(int(500 *width_ratio),int(485*height_ratio),int(450 *width_ratio), int(16*height_ratio),1, grid_size//2, 1, grid_size//10),
-            "start_fox": self.create_slider(int(500 *width_ratio),int(560*height_ratio),int(450 *width_ratio), int(16*height_ratio), 1, grid_size//5, 1, grid_size // 20),
-            "spawn_carrot": self.create_slider(int(500 *width_ratio),int(700*height_ratio),int(450 *width_ratio),int( 16*height_ratio), 2, 10, 2, 2)
+            "start_fox": self.create_slider(int(500 *width_ratio),int(560*height_ratio),int(450 *width_ratio), int(16*height_ratio), 0, grid_size//5, 1, grid_size // 20),
+            "spawn_carrot": self.create_slider(int(500 *width_ratio),int(700*height_ratio),int(450 *width_ratio),int( 16*height_ratio), 2, 20, 2, 10)
         }
 
     def create_slider(self, x, y, taille_x, taille_y, min_val, max_val, step, initial):

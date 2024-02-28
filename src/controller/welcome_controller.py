@@ -1,6 +1,5 @@
 from view.welcome_view import WelcomeView
 
-
 class WelcomeController:
     def __init__(self, app):
         self.app = app

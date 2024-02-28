@@ -4,9 +4,10 @@ from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from constants import *
 
-class GridView:
-    def __init__(self, screen, grid):
+class SimulationView:
+    def __init__(self, screen, grid, model):
         self.screen = screen
+        self.model = model
         self.grid = grid    
         self.grid_size = 800
         self.cell_size = self.grid_size // self.grid.size
@@ -57,10 +58,10 @@ class GridView:
         
         taille_x, taille_y = int(160 * width_ratio), int(15 * height_ratio)
         self.sliders = {
-            'speed': self.create_slider(int(920 * width_ratio), int(254 * height_ratio), taille_x, taille_y, 1, 10, 1, self.grid.speed),
-            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 2, 10, 2, self.grid.carrot_spawn_speed),
-            'smart_rabbit': self.create_slider(int(920 * width_ratio), int(362 * height_ratio), taille_x, taille_y, 1, 3, 1, self.grid.smart_level_rabbit),
-            'smart_fox': self.create_slider(int(920 * width_ratio), int(400 * height_ratio), taille_x, taille_y, 1, 3, 1, self.grid.smart_level_fox)
+            'speed': self.create_slider(int(920 * width_ratio), int(254 * height_ratio), taille_x, taille_y, 1, 10, 1, self.model.speed),
+            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 2, 10, 2, self.model.carrot_spawn_speed),
+            'smart_rabbit': self.create_slider(int(920 * width_ratio), int(362 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_rabbit),
+            'smart_fox': self.create_slider(int(920 * width_ratio), int(400 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_fox)
         }
 
     def create_button(self, x, y, taille_x, taille_y, image_path, onclick_function, click_state=None, path_taille_x=120, path_taille_y=110):

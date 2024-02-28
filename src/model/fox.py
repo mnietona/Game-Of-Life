@@ -1,29 +1,44 @@
 from constants import *
 from model.fauna import Fauna
 
-class Fox(Fauna):
-    
-    def __init__(self, grid_size, smart_level = 1):
-        super().__init__(FOX_HEALTH, FOX_RADIUS, FOX_HEALTH_REPRODUCTION, FOX_REPRODUCTION_RATE, grid_size, delta=-1)
-        self.target_type = "Rabbit"
-        self.smart_level = smart_level
-        self.adjust_radius_based_on_intelligence()  
-        self.hunger_level = 0  # Niveau de faim initial
-        self.hunger_threshold = 5  
-    
-    def update(self, i, j, grid):
-        self.hunger_level += 1
-        super().update(i, j, grid)
-        if self.age % 10 == 0:
-            self.try_reproduce(grid)
-    
-    def eat_if_possible(self, position, grid):
-        if self.hunger_level >= self.hunger_threshold:
-            entity_at_new_position = grid.entity_positions.get(position)
-            if entity_at_new_position and isinstance(entity_at_new_position, grid.get_entity(self.target_type)):
-                self.health_level += entity_at_new_position.health_level
-                self.hunger_level = 0
+GAMMA = 0.4  # Taux de mortalité des renards
+DELTA = 0.075  # Taux de reproduction des renards en fonction des lapins mangés
+HUNGER_THRESHOLD = 5  # Seuil de faim pour qu'un renard mange un lapin
+FOX_HEALTH = 100  # Santé initiale des renards
+FOX_REPRODUCTION_RATE = 60  # Santé nécessaire pour qu'un renard se reproduise
+FOX_RADIUS = 2  # Rayon de déplacement des renards
+DELTA_RADIUS = 0  # Rayon de déplacement des renards
 
+class Fox(Fauna):
+    def __init__(self, grid_size):
+        super().__init__(grid_size, health=FOX_HEALTH, reproduction_rate=FOX_REPRODUCTION_RATE, radius=FOX_RADIUS, delta=DELTA_RADIUS)
+        self.hunger = 0  # Niveau de faim initial pour le renard
+        self.prey = "Rabbit"
+
+    def interact_with_environment(self, i, j, env):
+        # Mortalité basée sur GAMMA
+        self.health -= GAMMA
+        # Reproduction et alimentation basées sur DELTA et nombre de lapins mangés
+        rabbits_eaten = self.eat_rabbits(i, j, env.grid)
+        if rabbits_eaten > 0:
+            self.health += DELTA * rabbits_eaten
+            if self.health > self.reproduction_rate:
+                self.health -= 20
+                env.populate_entities(Fox, 1)
+
+    def eat_rabbits(self, i, j, grid):
+        # Manger des lapins si possible
+        rabbits_eaten = 0
+        for rabbit in grid.get_prey_around(i, j, self.prey):
+            if self.hunger >= HUNGER_THRESHOLD: # Il mange si rencontre 5 fois 1 lapin 
+                rabbit.health = 0  # Le lapin est mangé
+                rabbits_eaten += 1
+                self.health += 10
+                self.hunger = 0
+            self.hunger += 1
+        return rabbits_eaten
+    
     @property
     def color(self):
         return RED
+    

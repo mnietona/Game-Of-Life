@@ -1,17 +1,17 @@
 import pygame
-from model.grid import Grid  
-from view.grid_view import GridView 
+from model.simulation import Simulation
+from src.view.simulation_view import SimulationView
 
-class GridController:
+class SimulationController:
     def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits=None, default_foxes=None):
         self.app = app
-        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
+        self.model = Simulation(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
         self.view = None
         self.paused = False
 
     def activate(self):
         if self.view is None:
-            self.view = GridView(self.app.screen, self.model)
+            self.view = SimulationView(self.app.screen, self.model.grid, self.model)
         self.view.reset_click_states() 
         self.view.init_values()
         self.view.show_widgets()  
@@ -60,7 +60,7 @@ class GridController:
         return i, j
 
     def is_valid_cell(self, i, j):
-        return 0 <= i < self.model.size and 0 <= j < self.model.size
+        return 0 <= i < self.model.grid.size and 0 <= j < self.model.grid.size
     
     def update_widget_view(self):
         self.view.turn = self.model.turn
@@ -83,7 +83,7 @@ class GridController:
         
         if self.view.selected_cell:
             i, j = self.view.selected_cell
-            info = self.model.get_cell_info(i, j)
+            info = self.model.grid.get_cell_info(i, j)
             self.view.selected_cell_info = f"Case ({i}, {j}) : {info}"
         
         self.update_widget_view()

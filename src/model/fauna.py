@@ -54,7 +54,8 @@ class Fauna:
             chosen_move = self.choose_furthest_move(possible_moves, target_position)
         else:
             chosen_move = self.choose_closest_move(possible_moves, target_position)
-        return chosen_move
+
+        return chosen_move if chosen_move else current_position
 
     def move_randomly(self, i, j, grid):
         valid_moves = self.get_valid_moves((i, j), grid)
@@ -89,5 +90,5 @@ class Fauna:
             self.health_level += entity_at_new_position.health_level 
     
     def try_reproduce(self, grid):
-        if self.health_level >= self.health_reproduction and random.random() < self.reproduction_rate:
-            grid.populate_entities(type(self), 1, smart_level=self.smart_level)
+        if random.random() < self.reproduction_rate:
+            grid.populate_entities(type(self), 1, smart_level=self.smart_level, reproduce=True)

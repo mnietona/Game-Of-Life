@@ -9,6 +9,10 @@ class Rabbit(Fauna):
         self.predator_type = "Fox"
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()
+    
+    @property
+    def color(self):
+        return WHITE
         
     def update(self, i, j, grid):
         if self.smart_level > 1:
@@ -19,8 +23,9 @@ class Rabbit(Fauna):
                 grid.remove_element(i, j)
         else:
             super().update(i, j, grid)
-
-        self.try_reproduce(grid)
+            
+        if self.age % 5 == 0:
+            self.try_reproduce(grid)
     
     def intelligent_behavior(self, i, j, grid):
         position = (i, j)
@@ -28,7 +33,8 @@ class Rabbit(Fauna):
         predator_position = grid.find_nearest_target(position, self.radius, self.predator_type)
 
         new_position = self.decide_action(position, food_position, predator_position, grid)
-        if new_position:
+        
+        if new_position != position:
             self.eat_if_possible(new_position, grid)
             grid.update_entity_position(position, new_position)
 
@@ -46,15 +52,32 @@ class Rabbit(Fauna):
         predator_distance = self.calculate_distance(position, predator_position)
         food_distance = self.calculate_distance(position, food_position)
 
-        if food_distance < predator_distance:
-            return self.move_towards(position, food_position, grid)
-        else:
+        if predator_distance < food_distance:
             return self.flee(position, predator_position, grid)
+        else:
+            return self.move_towards(position, food_position, grid)
+    
+    def flee(self, current_position, predator_position, grid):
+        possible_moves = self.get_possible_moves(current_position, grid)
+        best_move = None
+        best_score = float('-inf')
+        
+        burrow_position = None
+        if self.smart_level == 3:
+            burrow_position = grid.find_nearest_burrow(current_position)
 
-        
-    def flee(self,current_position, predator_position, grid):
-        return self.move_towards(current_position, predator_position, grid, flee=True)
-        
-    @property
-    def color(self):
-        return WHITE
+        for move in possible_moves:
+            distance_to_predator = self.calculate_distance(move, predator_position)
+            
+            distance_to_burrow = self.calculate_distance(move, burrow_position) if self.smart_level == 3 and burrow_position else float('inf')
+            
+            score = distance_to_predator - distance_to_burrow if self.smart_level == 3 else distance_to_predator
+            
+            if score > best_score:
+                best_score = score
+                best_move = move
+                
+        return best_move if best_move else self.move_towards(current_position, predator_position, grid, flee=True)
+
+
+

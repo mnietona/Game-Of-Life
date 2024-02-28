@@ -35,3 +35,12 @@ class Carrot(Flora):
     @property
     def color(self):
         return ORANGE
+    
+class Burrow(Flora):
+    def __init__(self, num, health_level=float('inf')):
+        super().__init__(health_level)
+        self.num = num
+
+    @property
+    def color(self):
+        return LIGHT_GREY

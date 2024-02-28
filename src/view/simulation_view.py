@@ -59,7 +59,7 @@ class SimulationView:
         taille_x, taille_y = int(160 * width_ratio), int(15 * height_ratio)
         self.sliders = {
             'speed': self.create_slider(int(920 * width_ratio), int(254 * height_ratio), taille_x, taille_y, 1, 10, 1, self.model.speed),
-            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 2, 10, 2, self.model.carrot_spawn_speed),
+            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 1, 10, 1, self.model.carrot_spawn_speed),
             'smart_rabbit': self.create_slider(int(920 * width_ratio), int(362 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_rabbit),
             'smart_fox': self.create_slider(int(920 * width_ratio), int(400 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_fox)
         }

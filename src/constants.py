@@ -17,7 +17,7 @@ CARROT_HEALTH = 50
 
 # GRID
 SPEED_MAX = 11
-TURN_SPAWN_CARROT = 12
+TURN_SPAWN_CARROT = 11
 MOVES = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
 
 # COULEUR 

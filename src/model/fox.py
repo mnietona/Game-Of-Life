@@ -1,7 +1,7 @@
 from constants import *
 from model.fauna import Fauna
 
-GAMMA = 0.4  # Taux de mortalité des renards
+GAMMA = 0.8  # Taux de mortalité des renards
 DELTA = 0.075  # Taux de reproduction des renards en fonction des lapins mangés
 HUNGER_THRESHOLD = 5  # Seuil de faim pour qu'un renard mange un lapin
 FOX_HEALTH = 100  # Santé initiale des renards

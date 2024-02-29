@@ -41,7 +41,7 @@ class SimulationController:
             self.next_step()
             self.view.reset_click_states() 
         elif self.view.graph_clicked:
-            self.view.generate_graph()
+            self.graph_clicked()
             self.view.reset_click_states()
 
     def toggle_pause(self):
@@ -56,6 +56,12 @@ class SimulationController:
         self.view.update_buttons_based_on_pause_state(self.paused)
         self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
 
+    def graph_clicked(self):
+        self.paused = True
+        self.model.update_system(force_update=True)
+        self.view.update_buttons_based_on_pause_state(self.paused)
+        self.view.generate_graph()
+        
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
         i = (y - 10) // cell_size

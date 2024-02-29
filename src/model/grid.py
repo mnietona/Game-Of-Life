@@ -89,8 +89,6 @@ class Grid:
                 return i, j 
             count += 1
             
-
-            
     def get_cell_info(self, i, j):
         return self.cells[i][j].element.get_info()
     

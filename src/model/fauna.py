@@ -2,32 +2,38 @@ import random
 from constants import *
 
 class Fauna:
-    def __init__(self, grid_size, health, reproduction_rate, radius, delta):
+    def __init__(self, grid_size, health, radius, delta):
         self.health = health
-        self.reproduction_rate = reproduction_rate
         self.radius = max(radius, round(grid_size / 10)) + delta
+        self.age = 0
         
     def get_info(self):
-        return f"{self.__class__.__name__}- Health: {self.health}- Radius: {self.radius}- Hunger: {getattr(self, 'hunger', None)}"
-
-    def is_alive(self):
-        return self.health > 0
+        return f"{self.__class__.__name__}- Santé: {self.health}, Age: {self.age}- Radius: {self.radius}"
 
     def update(self, i, j, env):
         grid = env.grid
-        self.health -= 1
+        self.age += 1
+        # Le bouge et update pos
+        new_position = self.move(i, j, grid)
+        self.update_position(i, j, new_position, grid)
+        
+        # interagie avec l'environnement
+        new_i, new_j = new_position
+        self.interact_with_environment(new_i, new_j, env)
+        
+        # enleve si mort
+        self.remove_if_dead(new_i, new_j, grid)
+
+    def is_alive(self):
+        return self.health > 0
+    
+    def remove_if_dead(self, i, j, grid):
         if not self.is_alive():
             grid.remove_element(i, j)
-        else:
-            new_position = self.move(i, j, grid)
-            if new_position:
-                self.interact_with_environment(i, j, env)
-                if not self.is_alive():
-                    grid.remove_element(i, j)
-                else:
-                    grid.update_entity_position((i, j), new_position)
-            
-    
+
+    def update_position(self, i, j, new_position, grid):
+        grid.update_entity_position((i, j), new_position)
+
     def move(self, i, j, grid):
         target_position = grid.find_nearest_target((i, j), self.radius, self.prey)
         if target_position:
@@ -56,12 +62,11 @@ class Fauna:
 
     def get_possible_moves(self, position, grid):
         i, j = position
-        entity_type = type(self)
-        return [(i + di, j + dj) for di, dj in MOVES if grid.is_cell_valid(i + di, j + dj, entity_type)]
+        return [(i + di, j + dj) for di, dj in MOVES if grid.is_cell_valid(i + di, j + dj)]
 
     def get_valid_moves(self, position, grid):
         return [move for move in self.get_possible_moves(position, grid)]
 
     def interact_with_environment(self, i, j, env):
-        # Interaction avec l'environnement à implémenter
+        # Methode a surcharger dans les classes filles
         pass

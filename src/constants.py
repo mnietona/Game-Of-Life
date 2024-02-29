@@ -6,14 +6,16 @@ SCREEN_HEIGHT = 820
 FPS = 30
 
 # RABBIT
-
+RABBIT_RADIUS = 5  # Rayon de déplacement des lapins
+RABBIT_DELTA_RADIUS = 2  # Rayon de déplacement des lapins
 
 # FOX
-
+FOX_RADIUS = 5  # Rayon de déplacement des renards
+FOX_DELTA_RADIUS = 0  # Rayon de déplacement des renards
 
 
 # CARROT
-CARROT_HEALTH = 50
+CARROT_HEALTH = 200
 
 # GRID
 SPEED_MAX = 11

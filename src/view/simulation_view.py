@@ -276,7 +276,7 @@ class SimulationView:
 
         # Create the phase plot (Rabbits vs. Foxes)
         plt.subplot(1, 2, 2)  # This is the right plot
-        plt.plot(self.rabbit_population, self.fox_population)  # '-o' creates a line with circle markers
+        plt.plot(self.rabbit_population, self.fox_population)  
         plt.xlabel('Rabbit Population')
         plt.ylabel('Fox Population')
         plt.title('Phase Plot')

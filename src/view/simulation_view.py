@@ -3,6 +3,9 @@ import pygame_widgets
 from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from constants import *
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 class SimulationView:
     def __init__(self, screen, grid, model):
@@ -51,6 +54,7 @@ class SimulationView:
         taille_x, taille_y = int(70 * width_ratio), int(70 * height_ratio)
         self.buttons = {
             'back': self.create_button(int(1050 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'back_clicked', 200, 100),
+            'generate_graph': self.create_button(int(850 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'graph_clicked', 200, 100),
             'play': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/play.png", self.toggle_pause_play),
             'pause': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/pause.png", self.toggle_pause_play),
             'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked')
@@ -239,8 +243,44 @@ class SimulationView:
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
+        self.graph_clicked=False
     
     def resize_screen(self, width, height):
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         self.load_background_images()
         self.init_ui_elements()
+    
+    
+    def generate_graph_1(self):
+        plt.plot(self.turns, self.rabbit_population, label='Rabbits')
+        plt.plot(self.turns, self.fox_population, label='Foxes')
+
+        plt.xlabel('Turns')
+        plt.ylabel('Population')
+        plt.title('Population Dynamics')
+        plt.legend()
+
+        plt.show()
+    
+    def generate_graph(self):
+        plt.figure(figsize=(12, 6))  # Set the figure size to be larger for clarity
+
+        # Plot the rabbit and fox populations over time
+        plt.subplot(1, 2, 1)  # This allows for a side-by-side subplot; this is the left plot
+        plt.plot(self.turns, self.rabbit_population, label='Rabbits')
+        plt.plot(self.turns, self.fox_population, label='Foxes')
+        plt.xlabel('Time')
+        plt.ylabel('Population')
+        plt.title('Population Dynamics Over Time')
+        plt.legend()
+
+        # Create the phase plot (Rabbits vs. Foxes)
+        plt.subplot(1, 2, 2)  # This is the right plot
+        plt.plot(self.rabbit_population, self.fox_population)  # '-o' creates a line with circle markers
+        plt.xlabel('Rabbit Population')
+        plt.ylabel('Fox Population')
+        plt.title('Phase Plot')
+
+        # Show the combined plots
+        plt.tight_layout()  # Adjust the layout so the titles and labels do not overlap
+        plt.show()

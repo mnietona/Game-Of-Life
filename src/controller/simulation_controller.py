@@ -40,7 +40,10 @@ class SimulationController:
         elif self.view.next_step_clicked:
             self.next_step()
             self.view.reset_click_states() 
-        
+        elif self.view.graph_clicked:
+            self.view.generate_graph()
+            self.view.reset_click_states()
+
     def toggle_pause(self):
         self.paused = not self.paused
 

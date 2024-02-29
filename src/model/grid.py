@@ -66,11 +66,30 @@ class Grid:
                 neighbours.append(self.cells[i + di][j + dj])
         return neighbours
     
+    def is_cell_overpopulated(self, i, j, max_neighbors=3):
+        # Compter le nombre d'entités dans les cellules adjacentes
+        count = 0
+        for di in [-1, 0, 1]:
+            for dj in [-1, 0, 1]:
+                if di == 0 and dj == 0:
+                    continue  # Skip the cell itself
+                ni, nj = i + di, j + dj
+                if 0 <= ni < self.size and 0 <= nj < self.size:
+                    if not isinstance(self.cells[ni][nj].element, Plant):  # Assurez-vous que cela correspond à votre structure de données
+                        count += 1
+        return count > max_neighbors
+
     def get_random_valid_cell(self):
+        count = 0
         while True:
             i, j = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
-            if isinstance(self.cells[i][j].element, Plant):
+            if isinstance(self.cells[i][j].element, Plant) and not self.is_cell_overpopulated(i, j):
                 return i, j
+            elif count > 5 and  isinstance(self.cells[i][j].element, Plant):
+                return i, j 
+            count += 1
+            
+
             
     def get_cell_info(self, i, j):
         return self.cells[i][j].element.get_info()

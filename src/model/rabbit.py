@@ -4,8 +4,8 @@ import random
 
 ALPHA = 1.1  # Taux de reproduction des lapins
 BETA = 0.4   # Taux de mortalité des lapins dû aux renards
-RABBIT_HEALTH = 100 # Santé initiale des lapins
-RABBIT_REPRODUCTION_RATE = 10  # Santé nécessaire pour qu'un lapin se reproduise
+RABBIT_HEALTH = 50 # Santé initiale des lapins
+RABBIT_REPRODUCTION_RATE = 20  # Santé nécessaire pour qu'un lapin se reproduise
 RABBIT_RADIUS = 5  # Rayon de déplacement des lapins
 DELTA_RADIUS = 2  # Rayon de déplacement des lapins
 
@@ -15,16 +15,17 @@ class Rabbit(Fauna):
         self.prey = "Carrot"
 
     def interact_with_environment(self, i, j, env):
-        
-        # Mortalité basée sur BETA et présence de renards
         self.health -= BETA * env.grid.count_predators_around(i, j)
         
-        #eproduction et alimentation basées sur ALPHA et nombre de carrote mangées
         carrots_eaten = self.eat_carrots(i, j, env.grid)
         if carrots_eaten > 0:
             self.health += ALPHA * carrots_eaten
+            # Vérifiez si la santé permet la reproduction
             if self.health > self.reproduction_rate:
+                self.health -= self.reproduction_rate  # Assurez-vous de diminuer la santé après la reproduction
                 env.populate_entities(Rabbit, 1)
+            
+
     
     def eat_carrots(self, i, j, grid):
         # Manger des carottes si possible

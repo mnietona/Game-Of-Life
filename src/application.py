@@ -1,7 +1,7 @@
 import random, time, pygame, sys
 from constants import *
 from controller.welcome_controller import WelcomeController
-from src.controller.simulation_controller import SimulationController
+from controller.simulation_controller import SimulationController
 from controller.setting_controller import SettingController
 
 class Application:

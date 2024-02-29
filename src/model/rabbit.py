@@ -2,8 +2,8 @@ from constants import *
 from model.fauna import Fauna
 
 # Constantes de lapin
-ALPHA = 0.35  # Taux de reproduction des lapins
-BETA = 0.02   # Taux de mortalité des lapins dû aux renards
+ALPHA = 0.08  # Taux de reproduction des lapins
+BETA = 0.05   # Taux de mortalité des lapins dû aux renards
 RABBIT_HEALTH = 50
 RABBIT_SOME_REPRODUCTION_THRESHOLD = 30
 RABBIT_COST_OF_REPRODUCTION = 10
@@ -23,7 +23,7 @@ class Rabbit(Fauna):
             self.health += ALPHA * carrots_eaten
             if self.health > RABBIT_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= RABBIT_COST_OF_REPRODUCTION
-                env.populate_entities(Rabbit, 1)
+                env.populate_entities(Rabbit, 5)
                 
     def eat_carrots(self, i, j, grid):
         l_carrots = grid.get_prey_around(i, j, "Carrot")

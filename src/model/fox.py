@@ -2,11 +2,12 @@ from constants import *
 from model.fauna import Fauna
 
 # Constantes de renard
-GAMMA = 0.01 # Taux de mortalité des renards dû à la vieillesse
-DELTA = 0.47 # Taux de gain de santé des renards dû à la chasse
+GAMMA = 0.1 # Taux de mortalité des renards dû à la vieillesse
+DELTA = 0.02 # Taux de gain de santé des renards dû à la chasse
 FOX_HEALTH = 70
 FOX_SOME_REPRODUCTION_THRESHOLD = 50
 FOX_COST_OF_REPRODUCTION = 20
+
 
 class Fox(Fauna):
     def __init__(self, grid_size):
@@ -24,7 +25,7 @@ class Fox(Fauna):
             # Se reproduire si la santé est suffisante après avoir mangé
             if self.health > FOX_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= FOX_COST_OF_REPRODUCTION
-                env.populate_entities(Fox, 1)
+                env.populate_entities(Fox, 2)
         
         else:
             # Mortalité naturelle due à la faim

@@ -18,8 +18,8 @@ class Simulation:
         self.update_count_population()
     
     def init_entities(self, default_rabbits, default_foxes):
-        num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.grid.size // 5)
-        num_foxes = default_foxes if default_foxes is not None else num_rabbits // 3
+        num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.grid.size // 3)
+        num_foxes = default_foxes if default_foxes is not None else num_rabbits // 2
         self.populate_entities(Rabbit, num_rabbits)
         self.populate_entities(Fox, num_foxes)
         self.populate_entities(Carrot, max(3, self.grid.size // 5))
@@ -28,7 +28,7 @@ class Simulation:
         if self.should_update(force_update):
             self.update_entities()
             self.spawn_carrots()
-            self.print_turn_info()
+            #self.print_turn_info()
             self.update_count_population()
             self.turn += 1
             self.update_counter = 0

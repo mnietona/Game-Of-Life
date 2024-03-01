@@ -9,7 +9,7 @@ class WelcomeController:
         self.smart_level_fox = 1
         self.default_rabbits = None
         self.default_foxes = None
-        self.default_carrot_spawn = 2
+        self.default_carrot_spawn = 1
 
     def activate(self):
         if self.view is None:

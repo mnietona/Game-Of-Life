@@ -8,7 +8,7 @@ class Fauna:
         self.age = 0
         
     def get_info(self):
-        return f"{self.__class__.__name__}- Santé: {self.health}, Age: {self.age}- Radius: {self.radius}"
+        return f"{self.__class__.__name__}- Santé: {int(self.health)}- Age: {self.age}- Radius: {self.radius}"
 
     def update(self, i, j, env):
         grid = env.grid

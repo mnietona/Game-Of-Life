@@ -1,12 +1,10 @@
 from constants import *
+import random
 from model.fauna import Fauna
 
 # Constantes de renard
-GAMMA = 0.1 # Taux de mortalité des renards dû à la vieillesse
-DELTA = 0.02 # Taux de gain de santé des renards dû à la chasse
-FOX_HEALTH = 70
-FOX_SOME_REPRODUCTION_THRESHOLD = 50
-FOX_COST_OF_REPRODUCTION = 20
+GAMMA = 0.001 # Taux de mortalité des renards dû à la vieillesse
+DELTA =  5  # Taux de gain de santé des renards dû à la chasse
 
 
 class Fox(Fauna):
@@ -17,20 +15,26 @@ class Fox(Fauna):
     def interact_with_environment(self, i, j, env):
         # Mortalité naturelle due à la vieillesse
         self.health -= GAMMA * self.age
-        
+    
         # Manger des lapins pour gagner de la santé
         rabbits_eaten = self.eat_rabbits(i, j, env.grid)
-        if rabbits_eaten > 0:
-            self.health += DELTA * rabbits_eaten
+        if rabbits_eaten > 0 or env.count_population(Fox) < 2:
+            if env.count_population(Fox) <= 2:
+                print("Foxes are dying")
+                self.health += FOX_HEALTH
+                num_fox = 5
+            else:
+                self.health += DELTA * rabbits_eaten
+                num_fox = 1
             # Se reproduire si la santé est suffisante après avoir mangé
             if self.health > FOX_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= FOX_COST_OF_REPRODUCTION
-                env.populate_entities(Fox, 2)
-        
+                if env.count_population(Fox) < (env.grid.size**2)/4:
+                    env.populate_entities(Fox, num_fox)
         else:
-            # Mortalité naturelle due à la faim
             self.health -= DELTA
-    
+        
+            
     def eat_rabbits(self, i, j, grid):
         l_rabbits = grid.get_prey_around(i, j, "Rabbit")
         for rabbit in l_rabbits:

@@ -1,11 +1,10 @@
-import pygame
+import pygame, sys
 import pygame_widgets
 from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from constants import *
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 class SimulationView:
     def __init__(self, screen, grid, model):
@@ -154,8 +153,8 @@ class SimulationView:
     def draw_graph_axes(self, graph_surface):
         _, graph_height = graph_surface.get_size()
         pygame.draw.line(graph_surface, BLACK, (40, 0), (40, graph_height), 2)
-        tick_length = 10  
-        num_ticks = 10 
+        tick_length = 5  
+        num_ticks = 5 
         tick_interval = graph_height / num_ticks 
         for i in range(num_ticks + 1):
             y = i * tick_interval
@@ -176,7 +175,7 @@ class SimulationView:
         
         max_turns = 50  
         scale_x = graph_width / max_turns
-        scale_y = graph_height / max(100, max(self.rabbit_population + self.fox_population + self.carrot_population))
+        scale_y = graph_height / max(250, max(self.rabbit_population + self.fox_population + self.carrot_population))
 
 
         start_index = max(0, len(self.turns) - max_turns)
@@ -250,18 +249,6 @@ class SimulationView:
         self.load_background_images()
         self.init_ui_elements()
     
-    
-    def generate_graph_1(self):
-        plt.plot(self.turns, self.rabbit_population, label='Rabbits')
-        plt.plot(self.turns, self.fox_population, label='Foxes')
-
-        plt.xlabel('Turns')
-        plt.ylabel('Population')
-        plt.title('Population Dynamics')
-        plt.legend()
-
-        plt.show()
-    
     def generate_graph(self):
         plt.figure(figsize=(12, 6))  # Set the figure size to be larger for clarity
 
@@ -284,3 +271,4 @@ class SimulationView:
         # Show the combined plots
         plt.tight_layout()  # Adjust the layout so the titles and labels do not overlap
         plt.show()
+        plt.close()

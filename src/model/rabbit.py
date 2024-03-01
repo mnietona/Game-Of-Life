@@ -4,9 +4,6 @@ from model.fauna import Fauna
 # Constantes de lapin
 ALPHA = 0.08  # Taux de reproduction des lapins
 BETA = 0.05   # Taux de mortalité des lapins dû aux renards
-RABBIT_HEALTH = 50
-RABBIT_SOME_REPRODUCTION_THRESHOLD = 30
-RABBIT_COST_OF_REPRODUCTION = 10
 
 class Rabbit(Fauna):
     def __init__(self, grid_size):
@@ -15,15 +12,20 @@ class Rabbit(Fauna):
 
     def interact_with_environment(self, i, j, env):
         # Mortalité naturelle due aux prédateurs et à la vieillesse
-        self.health -= BETA * env.grid.count_predators_around(i, j)
+        if env.grid.count_predators_around(i, j) > 0:
+            self.health = 0
+            if env.count_population(Rabbit) <= 3:
+                env.populate_entities(Rabbit, 2)
+            return
         
         carrots_eaten = self.eat_carrots(i, j, env.grid)
-        
+        # Une reproduction a lieux tout les 7 tours
         if carrots_eaten > 0:
             self.health += ALPHA * carrots_eaten
             if self.health > RABBIT_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= RABBIT_COST_OF_REPRODUCTION
-                env.populate_entities(Rabbit, 5)
+                if env.count_population(Rabbit) < (env.grid.size**2)/4:
+                    env.populate_entities(Rabbit, 3)
                 
     def eat_carrots(self, i, j, grid):
         l_carrots = grid.get_prey_around(i, j, "Carrot")

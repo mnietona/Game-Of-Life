@@ -30,6 +30,8 @@ class Simulation:
             self.spawn_carrots()
             #self.print_turn_info()
             self.update_count_population()
+            if self.count_rabbits == 0 :
+                self.populate_entities(Rabbit, 3)
             self.turn += 1
             self.update_counter = 0
         else:

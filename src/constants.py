@@ -8,15 +8,19 @@ FPS = 30
 # RABBIT
 RABBIT_RADIUS = 5  # Rayon de déplacement des lapins
 RABBIT_DELTA_RADIUS = 2  # Rayon de déplacement des lapins
-
-
+RABBIT_HEALTH = 50
+RABBIT_SOME_REPRODUCTION_THRESHOLD = 30
+RABBIT_COST_OF_REPRODUCTION = 10
 
 # FOX
 FOX_RADIUS = 5  # Rayon de déplacement des renards
 FOX_DELTA_RADIUS = 0  # Rayon de déplacement des renards
+FOX_HEALTH = 70
+FOX_SOME_REPRODUCTION_THRESHOLD = 50
+FOX_COST_OF_REPRODUCTION = 20
 
 # CARROT
-CARROT_HEALTH = 200
+CARROT_HEALTH = 100
 
 # GRID
 SPEED_MAX = 11

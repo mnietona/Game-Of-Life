@@ -100,3 +100,10 @@ class Grid:
         elif target_type == "Rabbit":
             return Rabbit
         return None
+
+    def distance_to_closest_prey(self, i, j, prey_type):
+        pos_prey = self.find_nearest_target((i, j), 100, prey_type)
+        if pos_prey:
+            return abs(i - pos_prey[0]) + abs(j - pos_prey[1])
+        return 1
+        

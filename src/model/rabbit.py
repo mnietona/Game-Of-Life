@@ -10,22 +10,22 @@ class Rabbit(Fauna):
         super().__init__(grid_size, health=RABBIT_HEALTH, radius=RABBIT_RADIUS, delta=RABBIT_DELTA_RADIUS)
         self.prey = "Carrot"
 
-    def interact_with_environment(self, i, j, env):
+    def interact_with_environment(self, i, j, grid):
         # Mortalité naturelle due aux prédateurs et à la vieillesse
-        if env.grid.count_predators_around(i, j) > 0:
+        if grid.count_predators_around(i, j) > 0:
             self.health = 0
-            if env.grid.count_population(Rabbit) <= 3:
-                env.populate_entities(Rabbit, 2)
+            if grid.count_population(Rabbit) <= 3:
+                grid.populate_entities(Rabbit, 2)
             return
         
-        carrots_eaten = self.eat_carrots(i, j, env.grid)
+        carrots_eaten = self.eat_carrots(i, j, grid)
         # Une reproduction a lieux tout les 7 tours
         if carrots_eaten > 0:
             self.health += ALPHA * carrots_eaten
             if self.health > RABBIT_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= RABBIT_COST_OF_REPRODUCTION
-                if env.grid.count_population(Rabbit) < (env.grid.size**2)/4:
-                    env.populate_entities(Rabbit, 3)
+                if grid.count_population(Rabbit) < (grid.size**2)/4:
+                    grid.populate_entities(Rabbit, 3)
                 
     def eat_carrots(self, i, j, grid):
         l_carrots = grid.get_prey_around(i, j, "Carrot")

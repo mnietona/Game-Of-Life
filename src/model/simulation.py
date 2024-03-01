@@ -1,7 +1,7 @@
 import random
 from src.constants import *
 from model.grid import Grid
-from model.flora import Carrot
+from model.flora import Carrot, Burrow
 from model.rabbit import Rabbit
 from model.fox import Fox
 
@@ -18,30 +18,27 @@ class Simulation:
         self.update_count_population()
     
     def init_entities(self, default_rabbits, default_foxes):
+        num_burrows = max(1, self.grid.size // 20)
+        burrow_size = max(1, self.grid.size // 40)
+        self.grid.initialize_burrows(num_burrows, burrow_size)
+        
         num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.grid.size // 3)
         num_foxes = default_foxes if default_foxes is not None else num_rabbits // 2
-        self.populate_entities(Rabbit, num_rabbits)
-        self.populate_entities(Fox, num_foxes)
-        self.populate_entities(Carrot, max(3, self.grid.size // 5))
+        self.grid.populate_entities(Rabbit, num_rabbits)
+        self.grid.populate_entities(Fox, num_foxes)
+        self.grid.populate_entities(Carrot, max(3, self.grid.size // 5))
     
     def update_system(self, force_update=False):
         if self.should_update(force_update):
             self.update_entities()
             self.spawn_carrots()
-            #self.print_turn_info()
             self.update_count_population()
-            if self.count_rabbits == 0 :
-                self.populate_entities(Rabbit, 3)
+            self.ajust_population()
             self.turn += 1
             self.update_counter = 0
         else:
             self.update_counter += 1 
     
-    def populate_entities(self, entity_class, num_entities):
-        for _ in range(num_entities):
-            i, j = self.grid.get_random_valid_cell()
-            self.grid.add_entity(i, j, entity_class)
-
     def should_update(self, force_update):
         return self.update_counter >= (SPEED_MAX - self.speed) or self.turn == 0 or force_update
 
@@ -55,16 +52,19 @@ class Simulation:
 
     def spawn_carrots(self):
         if self.turn % (TURN_SPAWN_CARROT - self.carrot_spawn_speed) == 0:
-            self.populate_entities(Carrot, 1)
+            self.grid.populate_entities(Carrot, 1)
 
-    def print_turn_info(self):
-        print(f"Turn: {self.turn}")
-
-    
     def update_count_population(self):
         self.count_rabbits = self.grid.count_population(Rabbit)
         self.count_foxes = self.grid.count_population(Fox)
         self.count_carrots = self.grid.count_population(Carrot)
+    
+    def ajust_population(self):
+        # Ajuste la population qui disparait
+        if self.count_rabbits == 0:
+            self.grid.populate_entities(Rabbit, 3)
+        if self.count_foxes == 0:
+            self.grid.populate_entities(Fox, 3)
     
     def set_speed(self, speed):
         self.speed = speed

@@ -19,7 +19,7 @@ class Fauna:
         
         # interagie avec l'environnement
         new_i, new_j = new_position
-        self.interact_with_environment(new_i, new_j, env)
+        self.interact_with_environment(new_i, new_j, grid)
         
         # enleve si mort
         self.remove_if_dead(new_i, new_j, grid)
@@ -67,6 +67,6 @@ class Fauna:
     def get_valid_moves(self, position, grid):
         return [move for move in self.get_possible_moves(position, grid)]
 
-    def interact_with_environment(self, i, j, env):
+    def interact_with_environment(self, i, j, grid):
         # Methode a surcharger dans les classes filles
         pass

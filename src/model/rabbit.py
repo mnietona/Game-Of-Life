@@ -6,9 +6,10 @@ ALPHA = 0.08  # Taux de reproduction des lapins
 BETA = 0.05   # Taux de mortalité des lapins dû aux renards
 
 class Rabbit(Fauna):
-    def __init__(self, grid_size):
+    def __init__(self, grid_size, smart_level=1):
         super().__init__(grid_size, health=RABBIT_HEALTH, radius=RABBIT_RADIUS, delta=RABBIT_DELTA_RADIUS)
         self.prey = "Carrot"
+        self.smart_level = smart_level
 
     def interact_with_environment(self, i, j, grid):
         # Mortalité naturelle due aux prédateurs et à la vieillesse

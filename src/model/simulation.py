@@ -24,8 +24,8 @@ class Simulation:
         
         num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.grid.size // 3)
         num_foxes = default_foxes if default_foxes is not None else num_rabbits // 2
-        self.grid.populate_entities(Rabbit, num_rabbits)
-        self.grid.populate_entities(Fox, num_foxes)
+        self.grid.populate_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
+        self.grid.populate_entities(Fox, num_foxes, smart_level=self.smart_level_fox)
         self.grid.populate_entities(Carrot, max(3, self.grid.size // 5))
     
     def update_system(self, force_update=False):
@@ -74,7 +74,7 @@ class Simulation:
 
     def set_smart_level(self, smart_level_rabbit, smart_level_fox):
         self.smart_level_rabbit, self.smart_level_fox = smart_level_rabbit, smart_level_fox
-        #self.apply_smart_levels()
+        self.apply_smart_levels()
 
     def apply_smart_levels(self):
         for _, entity in self.grid.entity_positions.items():

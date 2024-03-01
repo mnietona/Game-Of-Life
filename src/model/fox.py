@@ -8,9 +8,10 @@ DELTA =  5  # Taux de gain de santé des renards dû à la chasse
 
 
 class Fox(Fauna):
-    def __init__(self, grid_size):
+    def __init__(self, grid_size, smart_level=1):
         super().__init__(grid_size, health=FOX_HEALTH, radius=FOX_RADIUS, delta=FOX_DELTA_RADIUS)
         self.prey = "Rabbit"
+        self.smart_level = smart_level
 
     def interact_with_environment(self, i, j,  grid):
         # Mortalité naturelle due à la vieillesse

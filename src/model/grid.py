@@ -20,18 +20,21 @@ class Grid:
                     break
             self.add_burrow(center_position, burrow_size, num+1)
     
-    def populate_entity_at_random_position(self, entity_class, count, reproduce=False):
+    def populate_entities(self, entity_class, count, smart_level=None, reproduce=False):
         for _ in range(count):
             position = self.get_random_position_for_entity(entity_class, reproduce)
-            self.add_entity_at_position(entity_class, position)
+            self.add_entity(entity_class, position, smart_level)
 
     def get_random_position_for_entity(self, entity_class, reproduce):
         if reproduce and entity_class == Rabbit:
             return self.get_random_burrow_position()
         return self.get_random_valid_cell()
 
-    def add_entity(self, i, j, entity_class):
+    def add_entity(self, entity_class, position, smart_level=None):
+        i, j = position
         kwargs = {'grid_size': self.size} if entity_class != Carrot else {}
+        if smart_level is not None:
+            kwargs['smart_level'] = smart_level
         entity = entity_class(**kwargs)
         self.cells[i][j].set_element(entity)
         self.entity_positions[(i, j)] = entity

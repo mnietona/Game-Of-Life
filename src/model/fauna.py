@@ -9,6 +9,9 @@ class Fauna:
         
     def get_info(self):
         return f"{self.__class__.__name__}- Santé: {int(self.health)}- Age: {self.age}"
+    
+    def set_smart_level(self, smart_level):
+        self.smart_level = smart_level
 
     def update(self, i, j, env):
         grid = env.grid

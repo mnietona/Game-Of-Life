@@ -28,7 +28,7 @@ class Grid:
         if not (0 <= i < self.size and 0 <= j < self.size):
             return False 
         cell_content = self.cells[i][j].element
-        return isinstance(cell_content, Plant) 
+        return isinstance(cell_content, Plant)
         
     def update_entity_position(self, old_position, new_position):
         entity = self.entity_positions.pop(old_position, None)
@@ -36,7 +36,10 @@ class Grid:
             self.entity_positions[new_position] = entity
             self.cells[new_position[0]][new_position[1]].set_element(entity)
             self.cells[old_position[0]][old_position[1]].set_element(Plant())
-                
+    
+    def count_population(self, entity_type):
+        return sum(isinstance(entity, entity_type) for entity in self.entity_positions.values())
+              
     def find_nearest_target(self, position, radius, target_type):
         i, j = position
         nearest_target = None
@@ -108,3 +111,4 @@ class Grid:
             return abs(i - pos_prey[0]) + abs(j - pos_prey[1])
         return 1
 # -------------------------------------------------------------#
+

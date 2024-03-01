@@ -14,7 +14,7 @@ class Rabbit(Fauna):
         # Mortalité naturelle due aux prédateurs et à la vieillesse
         if env.grid.count_predators_around(i, j) > 0:
             self.health = 0
-            if env.count_population(Rabbit) <= 3:
+            if env.grid.count_population(Rabbit) <= 3:
                 env.populate_entities(Rabbit, 2)
             return
         
@@ -24,7 +24,7 @@ class Rabbit(Fauna):
             self.health += ALPHA * carrots_eaten
             if self.health > RABBIT_SOME_REPRODUCTION_THRESHOLD:
                 self.health -= RABBIT_COST_OF_REPRODUCTION
-                if env.count_population(Rabbit) < (env.grid.size**2)/4:
+                if env.grid.count_population(Rabbit) < (env.grid.size**2)/4:
                     env.populate_entities(Rabbit, 3)
                 
     def eat_carrots(self, i, j, grid):

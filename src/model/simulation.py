@@ -59,14 +59,12 @@ class Simulation:
 
     def print_turn_info(self):
         print(f"Turn: {self.turn}")
-    
-    def count_population(self, entity_type):
-        return sum(isinstance(entity, entity_type) for entity in self.grid.entity_positions.values())
+
     
     def update_count_population(self):
-        self.count_rabbits = self.count_population(Rabbit)
-        self.count_foxes = self.count_population(Fox)
-        self.count_carrots = self.count_population(Carrot)
+        self.count_rabbits = self.grid.count_population(Rabbit)
+        self.count_foxes = self.grid.count_population(Fox)
+        self.count_carrots = self.grid.count_population(Carrot)
     
     def set_speed(self, speed):
         self.speed = speed

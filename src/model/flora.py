@@ -37,8 +37,8 @@ class Carrot(Flora):
         return ORANGE
     
 class Burrow(Flora):
-    def __init__(self, num, health_level=float('inf')):
-        super().__init__(health_level)
+    def __init__(self, num, health=float('inf')):
+        super().__init__(health)
         self.num = num
 
     @property

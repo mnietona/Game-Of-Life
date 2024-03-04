@@ -45,17 +45,22 @@ class SimulationView:
         self.info_box_background = self.load_image("assets/info_box.png", 330 * width_ratio, 365 * height_ratio)
         self.setting_background = self.load_image("assets/settings.png", 380 * width_ratio, 280 * height_ratio)
         self.legend_background = self.load_image("assets/legende.png", 330 * width_ratio, 280 * height_ratio)
+        #self.ajouter_background = self.load_image("assets/ajouter.png",  280 * width_ratio, 150 * height_ratio)
 
     def init_ui_elements(self):
         width_ratio, height_ratio = self.calculate_ratios()
         
         taille_x, taille_y = int(70 * width_ratio), int(70 * height_ratio)
         self.buttons = {
-            'back': self.create_button(int(1050 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'back_clicked', 200, 100),
-            'generate_graph': self.create_button(int(850 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'graph_clicked', 200, 100),
+            'back': self.create_button(int(1175* width_ratio), int(725 * height_ratio),220, 80, "assets/return.png", self.toggle_click_state, 'back_clicked', 275, 150),
+            'generate_graph': self.create_button(int(900 * width_ratio), int(725 * height_ratio), 220,80, "assets/graph_button.png", self.toggle_click_state, 'graph_clicked',275,150),
             'play': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/play.png", self.toggle_pause_play),
             'pause': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/pause.png", self.toggle_pause_play),
-            'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked')
+            'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked'),
+            #'supprimer' :  self.create_button(int(925* width_ratio), int(130* height_ratio), 130,35, "assets/supprimer3.png", self.toggle_click_state, 'graph_clicked',140,67), #bouton pour supprimer un élément
+            'add_fox' : self.create_button(int(875 * width_ratio), int(115 * height_ratio), 50, 50, "assets/plus_renard.png", self.toggle_click_state, 'next_step_clicked', 50, 50),  #bouton pour + fox et lapin
+            'add_rabbit' : self.create_button(int(960* width_ratio), int(115 * height_ratio), 50, 50, "assets/plus_lapin.png", self.toggle_click_state, 'next_step_clicked', 50, 50),
+            'add_carrot' : self.create_button(int(1046* width_ratio), int(115 * height_ratio), 50, 50, "assets/plus_carrot.png", self.toggle_click_state, 'next_step_clicked', 50, 50),
         }
         
         taille_x, taille_y = int(160 * width_ratio), int(15 * height_ratio)
@@ -89,6 +94,7 @@ class SimulationView:
 
     def draw_widgets(self):
         width_ratio, height_ratio = self.calculate_ratios()
+        #self.screen.blit(self.ajouter_background, (825 * width_ratio, 700 * height_ratio))  #panneau ajouter
         self.draw_turn(width_ratio, height_ratio)
         self.draw_info_box(width_ratio, height_ratio)
         self.draw_settings(width_ratio, height_ratio)

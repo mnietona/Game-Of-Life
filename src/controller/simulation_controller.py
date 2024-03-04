@@ -1,6 +1,6 @@
 import pygame
 from model.simulation import Simulation
-from src.view.simulation_view import SimulationView
+from view.simulation_view import SimulationView
 
 class SimulationController:
     def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits=None, default_foxes=None):

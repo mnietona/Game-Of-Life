@@ -9,7 +9,7 @@ class Fauna:
         self.age = 0
         
     def get_info(self):
-        return f"{self.__class__.__name__}- Santé: {int(self.health)}- Age: {self.age}- Rayon: {int(self.radius)}"
+        return f"{self.__class__.__name__}- Santé: {int(self.health)}, Age: {self.age}- Rayon: {int(self.radius)}"
     
     def adjust_radius_based_on_intelligence(self):
         self.radius = self.radius_base * self.smart_level

@@ -27,6 +27,7 @@ class SimulationController:
         i, j = self.get_cell_indices(position[0], position[1])
         if self.is_valid_cell(i, j):
             self.view.selected_cell = (i, j)
+            self.add_or_remove_entity(i, j)
     
     def update_view_from_model(self):
         if self.view.back_clicked:
@@ -43,6 +44,16 @@ class SimulationController:
         elif self.view.graph_clicked:
             self.graph_clicked()
             self.view.reset_click_states()
+    
+    def add_or_remove_entity(self, i, j):
+        # if add : # Si add est TRue donoc avoir un bouton qui ke met dans le vue 
+        #     choice = self.view.get_selected_entity() # Exempled de methode dans vue a voir 
+        #     self.model.grid.add_entity(choice, (i, j))
+        #     # remetre add a False
+        # elif remove: # pareil ici bouton remeove dans vue
+        #     self.model.grid.remove_element(i, j)
+        #     # remetre remove a False
+        ...
 
     def toggle_pause(self):
         self.paused = not self.paused

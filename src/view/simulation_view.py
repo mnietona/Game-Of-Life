@@ -3,10 +3,12 @@ import pygame_widgets
 from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from constants import *
+import matplotlib.pyplot as plt
 
-class GridView:
-    def __init__(self, screen, grid):
+class SimulationView:
+    def __init__(self, screen, grid, model):
         self.screen = screen
+        self.model = model
         self.grid = grid    
         self.grid_size = 800
         self.cell_size = self.grid_size // self.grid.size
@@ -50,6 +52,7 @@ class GridView:
         taille_x, taille_y = int(70 * width_ratio), int(70 * height_ratio)
         self.buttons = {
             'back': self.create_button(int(1050 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'back_clicked', 200, 100),
+            'generate_graph': self.create_button(int(850 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'graph_clicked', 200, 100),
             'play': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/play.png", self.toggle_pause_play),
             'pause': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/pause.png", self.toggle_pause_play),
             'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked')
@@ -57,10 +60,10 @@ class GridView:
         
         taille_x, taille_y = int(160 * width_ratio), int(15 * height_ratio)
         self.sliders = {
-            'speed': self.create_slider(int(920 * width_ratio), int(254 * height_ratio), taille_x, taille_y, 1, 10, 1, self.grid.speed),
-            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 2, 10, 2, self.grid.carrot_spawn_speed),
-            'smart_rabbit': self.create_slider(int(920 * width_ratio), int(362 * height_ratio), taille_x, taille_y, 1, 3, 1, self.grid.smart_level_rabbit),
-            'smart_fox': self.create_slider(int(920 * width_ratio), int(400 * height_ratio), taille_x, taille_y, 1, 3, 1, self.grid.smart_level_fox)
+            'speed': self.create_slider(int(920 * width_ratio), int(254 * height_ratio), taille_x, taille_y, 1, 10, 1, self.model.speed),
+            'carrot_spawn_speed': self.create_slider(int(920 * width_ratio), int(287 * height_ratio), taille_x, taille_y, 1, 10, 1, self.model.carrot_spawn_speed),
+            'smart_rabbit': self.create_slider(int(920 * width_ratio), int(362 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_rabbit),
+            'smart_fox': self.create_slider(int(920 * width_ratio), int(400 * height_ratio), taille_x, taille_y, 1, 3, 1, self.model.smart_level_fox)
         }
 
     def create_button(self, x, y, taille_x, taille_y, image_path, onclick_function, click_state=None, path_taille_x=120, path_taille_y=110):
@@ -149,8 +152,8 @@ class GridView:
     def draw_graph_axes(self, graph_surface):
         _, graph_height = graph_surface.get_size()
         pygame.draw.line(graph_surface, BLACK, (40, 0), (40, graph_height), 2)
-        tick_length = 10  
-        num_ticks = 10 
+        tick_length = 5  
+        num_ticks = 5 
         tick_interval = graph_height / num_ticks 
         for i in range(num_ticks + 1):
             y = i * tick_interval
@@ -171,7 +174,7 @@ class GridView:
         
         max_turns = 50  
         scale_x = graph_width / max_turns
-        scale_y = graph_height / max(100, max(self.rabbit_population + self.fox_population + self.carrot_population))
+        scale_y = graph_height / max(250, max(self.rabbit_population + self.fox_population + self.carrot_population))
 
 
         start_index = max(0, len(self.turns) - max_turns)
@@ -238,8 +241,27 @@ class GridView:
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
+        self.graph_clicked=False
     
     def resize_screen(self, width, height):
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         self.load_background_images()
         self.init_ui_elements()
+    
+    def generate_graph(self):
+        plt.figure(figsize=(12, 6))
+
+        # Plot the rabbit and fox populations over time with enhanced styling
+        plt.plot(self.turns, self.rabbit_population, label='Rabbits', linewidth=2, linestyle='-', marker='o', markersize=5)
+        plt.plot(self.turns, self.fox_population, label='Foxes', linewidth=2, linestyle='--', marker='x', markersize=5)
+        plt.xlabel('Time')
+        plt.ylabel('Population')
+        plt.title('Population Dynamics Over Time')
+        plt.legend()
+
+        plt.grid(True)  # Add gridlines
+
+        plt.tight_layout()
+
+        plt.show()
+        plt.close()

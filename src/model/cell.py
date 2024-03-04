@@ -1,4 +1,5 @@
 from model.flora import Plant
+
 class Cell:
     def __init__(self):
         self.element = Plant()  

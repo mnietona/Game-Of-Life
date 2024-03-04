@@ -1,17 +1,17 @@
 import pygame
-from model.grid import Grid  
-from view.grid_view import GridView 
+from model.simulation import Simulation
+from src.view.simulation_view import SimulationView
 
-class GridController:
+class SimulationController:
     def __init__(self, app, grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits=None, default_foxes=None):
         self.app = app
-        self.model = Grid(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
+        self.model = Simulation(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
         self.view = None
         self.paused = False
 
     def activate(self):
         if self.view is None:
-            self.view = GridView(self.app.screen, self.model)
+            self.view = SimulationView(self.app.screen, self.model.grid, self.model)
         self.view.reset_click_states() 
         self.view.init_values()
         self.view.show_widgets()  
@@ -27,6 +27,7 @@ class GridController:
         i, j = self.get_cell_indices(position[0], position[1])
         if self.is_valid_cell(i, j):
             self.view.selected_cell = (i, j)
+            self.add_or_remove_entity(i, j)
     
     def update_view_from_model(self):
         if self.view.back_clicked:
@@ -40,7 +41,20 @@ class GridController:
         elif self.view.next_step_clicked:
             self.next_step()
             self.view.reset_click_states() 
-        
+        elif self.view.graph_clicked:
+            self.graph_clicked()
+            self.view.reset_click_states()
+    
+    def add_or_remove_entity(self, i, j):
+        # if add : # Si add est TRue donoc avoir un bouton qui ke met dans le vue 
+        #     choice = self.view.get_selected_entity() # Exempled de methode dans vue a voir 
+        #     self.model.grid.add_entity(choice, (i, j))
+        #     # remetre add a False
+        # elif remove: # pareil ici bouton remeove dans vue
+        #     self.model.grid.remove_element(i, j)
+        #     # remetre remove a False
+        ...
+
     def toggle_pause(self):
         self.paused = not self.paused
 
@@ -53,6 +67,9 @@ class GridController:
         self.view.update_buttons_based_on_pause_state(self.paused)
         self.view.update_data_and_graph(self.model.turn, self.model.count_rabbits, self.model.count_foxes, self.model.count_carrots)
 
+    def graph_clicked(self):
+        self.view.generate_graph()
+        
     def get_cell_indices(self, x, y):
         cell_size = self.view.cell_size
         i = (y - 10) // cell_size
@@ -60,7 +77,7 @@ class GridController:
         return i, j
 
     def is_valid_cell(self, i, j):
-        return 0 <= i < self.model.size and 0 <= j < self.model.size
+        return 0 <= i < self.model.grid.size and 0 <= j < self.model.grid.size
     
     def update_widget_view(self):
         self.view.turn = self.model.turn
@@ -83,7 +100,7 @@ class GridController:
         
         if self.view.selected_cell:
             i, j = self.view.selected_cell
-            info = self.model.get_cell_info(i, j)
+            info = self.model.grid.get_cell_info(i, j)
             self.view.selected_cell_info = f"Case ({i}, {j}) : {info}"
         
         self.update_widget_view()

@@ -30,7 +30,6 @@ class SettingController:
         self.app.current_controller.update_settings(smart_rabbit, smart_fox, start_rabbit, start_fox, spawn_carrot)
     
     def update_settings(self, grid_size):
-        print("update_settings -> grid_size: ", grid_size)
         self.grid_size = grid_size
 
     def resize_screen(self, width, height):

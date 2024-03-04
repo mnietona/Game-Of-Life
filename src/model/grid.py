@@ -46,7 +46,6 @@ class Grid:
                 if 0 <= i < self.size and 0 <= j < self.size:
                     self.burrow_positions.add((i, j)) 
                     self.cells[i][j].set_element(Burrow(num_burrow))
-                    self.entity_positions[(i, j)] = self.cells[i][j].element
     
     def remove_element(self, i, j):
         if (i, j) in self.entity_positions:
@@ -86,7 +85,7 @@ class Grid:
                     if distance < min_distance:
                         min_distance = distance
                         nearest_target = (i + di, j + dj)
-        return nearest_target
+        return nearest_target if nearest_target else (i, j)
 
     def find_nearest_burrow(self, position):
         nearest_burrow = None
@@ -115,7 +114,6 @@ class Grid:
         return 0 <= i < self.size and 0 <= j < self.size and isinstance(self.cells[i][j].element, self.get_entity(target_type))
     
     def is_cell_overpopulated(self, i, j, max_neighbors=3):
-        # Compter le nombre d'entités dans les cellules adjacentes
         count = 0
         for di in [-1, 0, 1]:
             for dj in [-1, 0, 1]:
@@ -167,24 +165,4 @@ class Grid:
         if available_burrows:
             return random.choice(available_burrows)
         return self.get_random_valid_cell()
-
-#------------------- methods Lokta-volterra -------------------#
-    def count_predators_around(self, i, j):
-        return sum(isinstance(cell.element, Fox) for cell in self.get_neighbours(i, j))
     
-    def get_prey_around(self, i, j, prey_type):
-        return [cell.element for cell in self.get_neighbours(i, j) if isinstance(cell.element, self.get_entity(prey_type))]
-    
-    def get_neighbours(self, i, j):
-        neighbours = []
-        for di, dj in MOVES:
-            if 0 <= i + di < self.size and 0 <= j + dj < self.size:
-                neighbours.append(self.cells[i + di][j + dj])
-        return neighbours
-    
-    def distance_to_closest_prey(self, i, j, prey_type):
-        pos_prey = self.find_nearest_target((i, j), 100, prey_type)
-        if pos_prey:
-            return self.calculate_distance((i, j), pos_prey)
-        return 1
-# -------------------------------------------------------------#

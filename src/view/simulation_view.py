@@ -1,10 +1,9 @@
-import pygame, sys
+import pygame
 import pygame_widgets
 from pygame_widgets.button import Button
 from pygame_widgets.slider import Slider
 from constants import *
 import matplotlib.pyplot as plt
-import numpy as np
 
 class SimulationView:
     def __init__(self, screen, grid, model):
@@ -250,25 +249,19 @@ class SimulationView:
         self.init_ui_elements()
     
     def generate_graph(self):
-        plt.figure(figsize=(12, 6))  # Set the figure size to be larger for clarity
+        plt.figure(figsize=(12, 6))
 
-        # Plot the rabbit and fox populations over time
-        plt.subplot(1, 2, 1)  # This allows for a side-by-side subplot; this is the left plot
-        plt.plot(self.turns, self.rabbit_population, label='Rabbits')
-        plt.plot(self.turns, self.fox_population, label='Foxes')
+        # Plot the rabbit and fox populations over time with enhanced styling
+        plt.plot(self.turns, self.rabbit_population, label='Rabbits', linewidth=2, linestyle='-', marker='o', markersize=5)
+        plt.plot(self.turns, self.fox_population, label='Foxes', linewidth=2, linestyle='--', marker='x', markersize=5)
         plt.xlabel('Time')
         plt.ylabel('Population')
         plt.title('Population Dynamics Over Time')
         plt.legend()
 
-        # Create the phase plot (Rabbits vs. Foxes)
-        plt.subplot(1, 2, 2)  # This is the right plot
-        plt.plot(self.rabbit_population, self.fox_population)  
-        plt.xlabel('Rabbit Population')
-        plt.ylabel('Fox Population')
-        plt.title('Phase Plot')
+        plt.grid(True)  # Add gridlines
 
-        # Show the combined plots
-        plt.tight_layout()  # Adjust the layout so the titles and labels do not overlap
+        plt.tight_layout()
+
         plt.show()
         plt.close()

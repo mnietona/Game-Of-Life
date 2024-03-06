@@ -23,8 +23,8 @@ class Rabbit(Fauna):
         self.distance_to_nearest_predator = grid.find_nearest_target(position, self.radius, self.predator_type)
         self.distance_to_nearest_food = grid.find_nearest_target(position, self.radius, self.target_type)
         self.distance_to_nearest_burrow = grid.find_nearest_burrow(position)
-        self.predator_distance = grid.calculate_distance(position, self.distance_to_nearest_predator)
-        self.food_distance = grid.calculate_distance(position, self.distance_to_nearest_food)
+        self.predator_distance = grid.calculate_distance(position, self.distance_to_nearest_predator) if self.distance_to_nearest_predator else float('inf')
+        self.food_distance = grid.calculate_distance(position, self.distance_to_nearest_food) if self.distance_to_nearest_food else float('inf')
 
     def intelligent_behavior(self, i, j, grid):
         position = (i, j)

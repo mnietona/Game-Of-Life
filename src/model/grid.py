@@ -85,7 +85,7 @@ class Grid:
                     if distance < min_distance:
                         min_distance = distance
                         nearest_target = (i + di, j + dj)
-        return nearest_target if nearest_target else (i, j)
+        return nearest_target if nearest_target else None
 
     def find_nearest_burrow(self, position):
         nearest_burrow = None

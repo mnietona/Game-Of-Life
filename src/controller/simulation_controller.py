@@ -8,6 +8,8 @@ class SimulationController:
         self.model = Simulation(grid_size, speed, smart_level_fox, smart_level_rabbit, default_carrot_spawn, default_rabbits, default_foxes)
         self.view = None
         self.paused = False
+        self.i = None
+        self.j = None
 
     def activate(self):
         if self.view is None:
@@ -15,45 +17,55 @@ class SimulationController:
         self.view.reset_click_states() 
         self.view.init_values()
         self.view.show_widgets()  
+        self.view.hide_widgets_except()
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.handle_mouse_click(event.pos)
-            
-        self.view.handle_event(event)  
+        
+        self.view.handle_event(event) 
+        if self.i and self.j:
+            self.add_or_remove_entity(self.i, self.j) 
         self.update_view_from_model()
+        self.view.reset_click_states()
         
     def handle_mouse_click(self, position):
         i, j = self.get_cell_indices(position[0], position[1])
         if self.is_valid_cell(i, j):
             self.view.selected_cell = (i, j)
-            self.add_or_remove_entity(i, j)
+            self.update_view_add_remove(i, j)
+            self.i = i
+            self.j = j
     
     def update_view_from_model(self):
         if self.view.back_clicked:
             self.view.hide_widgets()
             self.app.switch_controller("welcome")
-            self.view.reset_click_states() 
         elif self.view.pause_play_clicked:
             self.toggle_pause() 
             self.view.update_buttons_based_on_pause_state(self.paused)
-            self.view.reset_click_states() 
         elif self.view.next_step_clicked:
             self.next_step()
-            self.view.reset_click_states() 
         elif self.view.graph_clicked:
             self.graph_clicked()
-            self.view.reset_click_states()
+    
+    def update_view_add_remove(self, i, j):
+        add, add_not_all = self.model.grid.possible_add_entity(i, j)
+        self.view.add_view = add or add_not_all
+        remove = self.model.grid.possible_remove_entity(i, j)
+        self.view.show_hide_add_remove_buttons(add, remove, add_not_all)
     
     def add_or_remove_entity(self, i, j):
-        # if add : # Si add est TRue donoc avoir un bouton qui ke met dans le vue 
-        #     choice = self.view.get_selected_entity() # Exempled de methode dans vue a voir 
-        #     self.model.grid.add_entity(choice, (i, j))
-        #     # remetre add a False
-        # elif remove: # pareil ici bouton remeove dans vue
-        #     self.model.grid.remove_element(i, j)
-        #     # remetre remove a False
-        ...
+        
+        if self.view.get_add_clicked():
+            choice = self.view.get_selected_entity() 
+            entity_choice = self.model.grid.get_entity(choice) 
+            self.model.grid.add_entity(entity_choice, (i, j))
+            self.update_view_add_remove(i, j)
+        elif self.view.remove_clicked:
+            self.model.grid.remove_element(i, j)
+            self.update_view_add_remove(i, j)
+        self.model.update_count_population()
 
     def toggle_pause(self):
         self.paused = not self.paused

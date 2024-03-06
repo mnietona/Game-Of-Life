@@ -166,3 +166,10 @@ class Grid:
             return random.choice(available_burrows)
         return self.get_random_valid_cell()
     
+    def possible_add_entity(self, i, j):
+        return isinstance(self.cells[i][j].element, Plant) , isinstance(self.cells[i][j].element, Burrow)
+    
+    def possible_remove_entity(self, i, j):
+        return (i, j) in self.entity_positions and not  isinstance(self.cells[i][j].element, Burrow) 
+
+    

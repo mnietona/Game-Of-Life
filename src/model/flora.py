@@ -6,9 +6,9 @@ class Flora:
 
     def get_info(self):
         if self.health == float('inf'):
-            return f"{self.__class__.__name__}- Durée de vie: éternelle"
+            return f"{self.name_fr()}- Durée de vie: éternelle"
         
-        return f"{self.__class__.__name__}- Durée de vie: {self.health}"
+        return f"{self.name_fr()}- Durée de vie: {self.health}"
 
     def update(self, i, j, env): 
         if self.health > 0 :
@@ -24,6 +24,9 @@ class Plant(Flora):
     def __init__(self, health=float('inf')):
         super().__init__(health)
     
+    def name_fr(self):
+        return "Plante"
+    
     @property
     def color(self):
         return GREEN
@@ -31,6 +34,9 @@ class Plant(Flora):
 class Carrot(Flora):
     def __init__(self, health=CARROT_HEALTH):
         super().__init__(health)
+    
+    def name_fr(self):
+        return "Carotte"
     
     @property
     def color(self):
@@ -40,6 +46,9 @@ class Burrow(Flora):
     def __init__(self, num, health=float('inf')):
         super().__init__(health)
         self.num = num
+    
+    def name_fr(self):
+        return f"Terrier"
 
     @property
     def color(self):

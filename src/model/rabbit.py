@@ -9,6 +9,9 @@ class Rabbit(Fauna):
         self.predator_type = "Fox"
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()
+    
+    def name_fr(self):
+        return "Lapin"
 
     def interact_with_environment(self, i, j, grid):
         self.precalculate_distances((i, j), grid)

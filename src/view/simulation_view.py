@@ -19,7 +19,8 @@ class SimulationView:
         self.hide_widgets()
         
     def init_values(self):
-        self.selected_cell = None  
+        self.selected_cell = None 
+        self.add_view = False
         self.selected_cell_info = ""
         self.turn = 0
         self.count_rabbit = 0
@@ -51,11 +52,15 @@ class SimulationView:
         
         taille_x, taille_y = int(70 * width_ratio), int(70 * height_ratio)
         self.buttons = {
-            'back': self.create_button(int(1050 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'back_clicked', 200, 100),
-            'generate_graph': self.create_button(int(850 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'graph_clicked', 200, 100),
+            'back': self.create_button(int(1150 * width_ratio), int(750 * height_ratio), 150, 40, "assets/return.png", self.toggle_click_state, 'back_clicked', 200, 100),
+            'generate_graph': self.create_button(int(950 * width_ratio), int(750 * height_ratio), 150, 40, "assets/graph_button.png", self.toggle_click_state, 'graph_clicked', 200, 100),
             'play': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/play.png", self.toggle_pause_play),
             'pause': self.create_button(int(1190 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/pause.png", self.toggle_pause_play),
-            'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked')
+            'next_step': self.create_button(int(1300 * width_ratio), int(110 * height_ratio), taille_x, taille_y, "assets/next.png", self.toggle_click_state, 'next_step_clicked'),
+            'supprimer' :  self.create_button(int(925* width_ratio), int(135* height_ratio), 130,30, "assets/remove.png", self.toggle_click_state, 'remove_clicked', 140,55), 
+            'add_fox' : self.create_button(int(975 * width_ratio), int(125 * height_ratio), 40, 40, "assets/plus_renard.png", self.toggle_click_state, 'add_fox_clicked', 40, 40),  #bouton pour + fox et lapin
+            'add_rabbit' : self.create_button(int(1025* width_ratio), int(125 * height_ratio), 40, 40, "assets/plus_lapin.png", self.toggle_click_state, 'add_rabbit_clicked', 40, 40),
+            'add_carrot' : self.create_button(int(1075* width_ratio), int(125 * height_ratio), 40, 40, "assets/plus_carrot.png", self.toggle_click_state, 'add_carrot_clicked', 40, 40)
         }
         
         taille_x, taille_y = int(160 * width_ratio), int(15 * height_ratio)
@@ -89,6 +94,7 @@ class SimulationView:
 
     def draw_widgets(self):
         width_ratio, height_ratio = self.calculate_ratios()
+        #self.screen.blit(self.ajouter_background, (825 * width_ratio, 700 * height_ratio))  #panneau ajouter
         self.draw_turn(width_ratio, height_ratio)
         self.draw_info_box(width_ratio, height_ratio)
         self.draw_settings(width_ratio, height_ratio)
@@ -148,34 +154,49 @@ class SimulationView:
             for line in lines:
                 self.draw_text(line, 983 * width_ratio, text_y, font_size=int(30 * height_ratio))
                 text_y += 25 * height_ratio
+            
+            if self.add_view:
+                self.draw_text("Ajouter : ", 910 * width_ratio, 145 * height_ratio, font_size=int(36 * height_ratio))
     
-    def draw_graph_axes(self, graph_surface):
+    def show_hide_add_remove_buttons(self, add, remove, add_not_all):
+        if add_not_all:
+            self.buttons["add_fox"].hide()
+            self.buttons["add_rabbit"].show()
+            self.buttons["add_carrot"].hide()
+            self.buttons["supprimer"].hide()
+        elif add:
+            self.buttons["add_fox"].show()
+            self.buttons["add_rabbit"].show()
+            self.buttons["add_carrot"].show()
+            self.buttons["supprimer"].hide()
+        elif remove:
+            self.buttons["add_fox"].hide()
+            self.buttons["add_rabbit"].hide()
+            self.buttons["add_carrot"].hide()
+            self.buttons["supprimer"].show()
+    
+    def draw_graph_axes(self, graph_surface, max_value):
         _, graph_height = graph_surface.get_size()
         pygame.draw.line(graph_surface, BLACK, (40, 0), (40, graph_height), 2)
-        tick_length = 5  
-        num_ticks = 5 
-        tick_interval = graph_height / num_ticks 
-        for i in range(num_ticks + 1):
-            y = i * tick_interval
-            pygame.draw.line(graph_surface, BLACK, (40 - tick_length / 2, y), (40 + tick_length / 2, y), 2)
         font = pygame.font.Font(None, 18)
         label_y = font.render('Population', True, BLACK)
-        graph_surface.blit(label_y, (10, 5))
-        
+        graph_surface.blit(label_y, (45, 5))
+
     def draw_graph(self, width_ratio, height_ratio):
         graph_width = 570 * width_ratio
         graph_height = 250 * height_ratio
         graph_origin = (835 * width_ratio, 470 * height_ratio)
-        
+
         graph_surface = pygame.Surface((graph_width, graph_height))
         graph_surface.fill((255, 167, 109))
 
-        self.draw_graph_axes(graph_surface)
-        
-        max_turns = 50  
-        scale_x = graph_width / max_turns
-        scale_y = graph_height / max(250, max(self.rabbit_population + self.fox_population + self.carrot_population))
+        # Trouver la valeur maximale pour l'ensemble des populations
+        max_population_value = max(max(self.rabbit_population, default=0), max(self.fox_population, default=0), max(self.carrot_population, default=0))
+        self.draw_graph_axes(graph_surface, max_population_value)
 
+        max_turns = len(self.turns)
+        scale_x = graph_width / max_turns
+        scale_y = graph_height / max(250, max_population_value)
 
         start_index = max(0, len(self.turns) - max_turns)
 
@@ -189,8 +210,9 @@ class SimulationView:
             pygame.draw.lines(graph_surface, RED, False, fox_points, 2)
         if len(carrot_points) > 1:
             pygame.draw.lines(graph_surface, ORANGE_GRAPH, False, carrot_points, 2)
-        
+
         self.screen.blit(graph_surface, graph_origin)
+
     
     def draw_text(self, text, x, y, font_size=36):
         font = pygame.font.Font(None, font_size)
@@ -221,6 +243,18 @@ class SimulationView:
     
     def get_slider_value(self, slider_name):
         return self.sliders[slider_name].getValue()
+    
+    def get_add_clicked(self):
+        return self.add_fox_clicked or self.add_rabbit_clicked or self.add_carrot_clicked
+
+    def get_selected_entity(self):
+        if self.add_fox_clicked:
+            return "Fox"
+        elif self.add_rabbit_clicked:
+            return "Rabbit"
+        elif self.add_carrot_clicked:
+            return "Carrot"
+        return None
 
     def handle_event(self, event):
         pygame_widgets.update([event])
@@ -237,11 +271,21 @@ class SimulationView:
         for slider in self.sliders.values():
             slider.hide()
     
+    def hide_widgets_except(self):
+        self.buttons["supprimer"].hide()
+        self.buttons["add_fox"].hide()
+        self.buttons["add_rabbit"].hide()
+        self.buttons["add_carrot"].hide()
+    
     def reset_click_states(self):
         self.back_clicked = False
         self.pause_play_clicked = False
         self.next_step_clicked = False
         self.graph_clicked=False
+        self.remove_clicked = False
+        self.add_fox_clicked = False
+        self.add_rabbit_clicked = False
+        self.add_carrot_clicked = False
     
     def resize_screen(self, width, height):
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)

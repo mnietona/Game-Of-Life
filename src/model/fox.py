@@ -9,6 +9,9 @@ class Fox(Fauna):
         self.smart_level = smart_level
         self.adjust_radius_based_on_intelligence()  
     
+    def name_fr(self):
+        return "Renard"
+    
     def interact_with_environment(self, i, j, grid):
         rabbit_position = grid.find_nearest_target((i, j), self.radius, self.target_type)
         nearest_burrow_position = grid.find_nearest_burrow((i, j))

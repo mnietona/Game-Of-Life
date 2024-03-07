@@ -50,15 +50,6 @@ poetry shell
 
 Cela permet d'exécuter des commandes Python dans l'environnement virtuel spécifique à ce projet.
 
-### Ajouter de Nouvelles Dépendances
-
-Pour ajouter une nouvelle dépendance :
-
-```shell
-poetry add [NOM_DE_LA_DEPENDANCE]
-```
-
-Poetry mettra à jour le fichier `pyproject.toml` et le fichier `poetry.lock`.
 
 ### Lancer le Projet
 

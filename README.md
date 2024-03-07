@@ -1,7 +1,7 @@
 # Simulation d'Écosystèmes 2
 
 ### Description du Projet
-Ce projet consiste à créer une simulation interactive d'écosystèmes 2D, intégrant des éléments tels que la faune et flore.
+Ce projet vise à simuler les interactions dynamiques au sein d'un écosystème impliquant des lapins, des renards, des carottes, et des terriers. Utilisant un modèle de simulation basé sur des règles précises, le système explore comment les populations de ces entités changent en réponse à des facteurs environnementaux et à leurs interactions mutuelles. Les lapins consomment des carottes pour survivre et utilisent des terriers pour se protéger des renards, qui, à leur tour, chassent les lapins comme source de nourriture. Le projet offre un aperçu des concepts écologiques tels que les chaînes alimentaires, la prédation, et la reproduction, tout en fournissant une plateforme pour étudier l'impact des différentes stratégies de survie et de reproduction sur la dynamique des populations au fil du temps.
 
 ## Prérequis
 

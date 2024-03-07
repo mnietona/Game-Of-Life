@@ -7,7 +7,7 @@ from constants import *
 class WelcomeView:
     def __init__(self, screen):
         self.screen = screen
-        self.init_gird_size = 40
+        self.init_grid_size = 40
         self.init_speed = 1
         self.create_ui_elements()
         self.load_background_images()
@@ -30,7 +30,7 @@ class WelcomeView:
         slider_x = button_x
         slider_grid_y, slider_speed_y = int(610 * height_ratio), int(700 * height_ratio)
 
-        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 40, 100, 20, self.init_gird_size)
+        self.slider_grid = self.create_slider(slider_x, slider_grid_y, slider_width, slider_height, 40, 100, 20, self.init_grid_size)
         self.slider_speed = self.create_slider(slider_x, slider_speed_y, slider_width, slider_height, 1, 10, 1, self.init_speed)
 
         self.font = pygame.font.Font(None, int(36 * height_ratio))
@@ -79,7 +79,7 @@ class WelcomeView:
         self.setting_clicked = True
     
     def set_initial_values(self):
-        self.init_gird_size = self.slider_grid.getValue()
+        self.init_grid_size = self.slider_grid.getValue()
         self.init_speed = self.slider_speed.getValue()
 
     def reset_clicked(self):

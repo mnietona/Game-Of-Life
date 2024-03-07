@@ -291,6 +291,7 @@ class SimulationView:
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         self.load_background_images()
         self.init_ui_elements()
+        self.hide_widgets_except()
     
     def generate_graph(self):
         plt.figure(figsize=(12, 6))

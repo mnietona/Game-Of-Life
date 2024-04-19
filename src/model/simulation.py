@@ -20,10 +20,10 @@ class Simulation:
     def init_entities(self, default_rabbits, default_foxes):
         num_burrows = max(1, self.grid.size // 20)
         burrow_size = max(1, self.grid.size // 40)
-        self.grid.initialize_burrows(num_burrows, burrow_size)
+        self.grid.initialize_burrows(num_burrows + 1, burrow_size)
         
         num_rabbits = default_rabbits if default_rabbits is not None else max(2, self.grid.size // 10)
-        num_foxes = default_foxes if default_foxes is not None else max(1, num_rabbits // 2)
+        num_foxes = default_foxes if default_foxes is not None else max(1, self.grid.size // 15)
         self.grid.populate_entities(Rabbit, num_rabbits, smart_level=self.smart_level_rabbit)
         self.grid.populate_entities(Fox, num_foxes, smart_level=self.smart_level_fox)
         self.grid.populate_entities(Carrot, max(3, self.grid.size // 5))

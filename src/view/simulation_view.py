@@ -87,7 +87,7 @@ class SimulationView:
 
     def render(self):
         self.screen.blit(self.background_image, (0, 0))
-        #self.draw_grid() pour debeug jour J
+        #self.draw_grid() #pour debeug jour J
         self.draw_cells()
         self.draw_widgets()
         pygame_widgets.update(pygame.event.get())

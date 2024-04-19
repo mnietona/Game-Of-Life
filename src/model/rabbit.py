@@ -44,7 +44,7 @@ class Rabbit(Fauna):
             return self.move_towards(position, food_position, grid)
         else:
             return self.move_randomly(position[0], position[1], grid)
-    
+
     def evaluate_threat_and_food(self, position, food_position, predator_position, grid):
 
         if self.predator_distance < self.food_distance:

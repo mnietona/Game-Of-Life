@@ -297,11 +297,12 @@ class SimulationView:
         plt.figure(figsize=(12, 6))
 
         # Plot the rabbit and fox populations over time with enhanced styling
-        plt.plot(self.turns, self.rabbit_population, label='Rabbits', linewidth=2, linestyle='-', marker='o', markersize=5)
-        plt.plot(self.turns, self.fox_population, label='Foxes', linewidth=2, linestyle='--', marker='x', markersize=5)
+        plt.plot(self.turns, self.rabbit_population, label='Lapins', linewidth=2, linestyle='-', marker='o', markersize=5)
+        plt.plot(self.turns, self.fox_population, label='Renards', linewidth=2, linestyle='--', marker='x', markersize=5)
+        plt.plot(self.turns, self.carrot_population, label='Carottes', linewidth=2, linestyle='-.', marker='s', markersize=5)
         plt.xlabel('Time')
         plt.ylabel('Population')
-        plt.title('Population Dynamics Over Time')
+        plt.title('')
         plt.legend()
 
         plt.grid(True)  # Add gridlines
